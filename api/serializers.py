@@ -18,7 +18,7 @@ class AccountSerializer(serializers.ModelSerializer):
 			'first_name',
 			'last_name',
 			'password',
-			'confirm_password',
+			#'confirm_password',
 		)
 		read_only_fields = ('created_at', 'updated_at',)
 
@@ -26,7 +26,7 @@ class AccountSerializer(serializers.ModelSerializer):
 		if instance is not None:
 			instance.username = attrs.get('username', instance.username)
 			password = attrs.get('password', None)
-			confirm_password = attrs('confirm_password', None)
+			confirm_password = attrs.get('confirm_password', None)
 
 			if password and confirm_password and password == confirm_password:
 				instance.set_password(password)

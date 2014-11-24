@@ -1,5 +1,6 @@
 from rest_framework import permissions, viewsets
 from rest_framework import status
+from rest_framework.response import Response
 
 from accounts.models import Account 
 
@@ -25,7 +26,7 @@ class AccountViewSet(viewsets.ModelViewSet):
 
 		if serializer.is_valid():
 			user = Account.objects.create_user(**request.DATA)
-			user.set_password(request.DAT.get('password'))
+			user.set_password(request.DATA.get('password'))
 			user.save()
 
 			return Response(serializer.data, status=status.HTTP_201_CREATED)

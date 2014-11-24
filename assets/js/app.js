@@ -15,7 +15,7 @@ var app = angular.module('ControlPanelApp',
 			.when('/register', {
 				controller: 'RegistrationController',
 				controllerAs: 'ctrl',
-				templateUrl: '/partials/register.html'
+				templateUrl: '/static/partials/register.html'
 			})
 			.otherwise({
 				redirectTo: '/'
