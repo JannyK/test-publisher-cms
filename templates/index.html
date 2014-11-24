@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html ng-app="ControlPanelApp">
+<head>
+  <title>Lilly Publisher Control Panel 2.0</title>
+  {% include 'css.html' %}
+</head>
+
+<body>
+  {% include 'navbar.html' %}
+
+  <div class="container-fluid">
+    <div class="row">
+      <!--<div class="col-xs-12" ng-view></div>-->
+
+      <ng-view></ng-view>
+
+    </div>
+  </div>
+
+  {% include 'js.html' %}
+</body>
+</html>
