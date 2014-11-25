@@ -26,14 +26,50 @@ ControlPanelApp.controllers = angular.module('publisherControllers', []);
  * A controller used for User registration
  */
 ControlPanelApp.controllers
- 	.controller('RegistrationController', ['AuthenticationService', function(AuthenticationService) {
+	.controller('MainController', ['AuthenticationService', function(AuthenticationService) {
+		var self = this;
+
+		self.logout = function() {
+			AuthenticationService.logout();
+		};
+	}])
+ 	.controller('RegistrationController', 
+ 		['AuthenticationService', '$location', function(AuthenticationService, $location) {
+
  		var self = this;
+ 		
 
 		self.email = "";
 		self.password = "";
-		self.password = "";
+		self.username = "";
 		
 		self.register = function() {
 			AuthenticationService.register(self.email, self.password, self.username);
 		};
- 	}]);
+
+		self.activate = function() {
+			if (AuthenticationService.isAuthenticated()) {
+				$location.url('/');
+			};
+		};
+
+		self.activate();
+ 	}])
+
+ 	.controller('LoginController', 
+ 		['AuthenticationService', '$location', function(AuthenticationService, $location) {
+
+ 		var self = this;
+
+ 		self.activate = function() {
+ 			if (AuthenticationService.isAuthenticated()) {
+ 				$location.url('/');
+ 			}
+ 		};
+
+ 		self.login = function() {
+ 			AuthenticationService.login(self.email, self.password);
+ 		};
+
+ 		self.activate();
+ 	}])

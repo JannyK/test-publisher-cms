@@ -5,6 +5,7 @@ from django.contrib.auth.models import BaseUserManager
 
 class AccountManager(BaseUserManager):
 	def create_user(self, email, password=None, **kwargs):
+
 		if not email:
 			raise ValueError('Users must have a valid email address.')
 
@@ -46,6 +47,10 @@ class Account(AbstractBaseUser):
 
 	def __unicode__(self):
 		return self.email
+
+	def save(self, *args, **kwargs):
+		super(Account, self).save(*args, **kwargs)
+
 
 	def get_full_name(self):
 		return ' '.join([self.first_name, self.last_name])

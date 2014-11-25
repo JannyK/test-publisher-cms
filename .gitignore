@@ -4,6 +4,20 @@
 # SQLite3 database
 *.sqlite3
 
+.DS_Store
+
+# Packaging files:
+*.egg*
+
+# Editor temp files:
+*.swp
+
+# Sphinx docs:
+build
+
+# local settings
+controlpanel/settings/local.py
+
 # Node modules
 node_modules/
 

@@ -17,6 +17,11 @@ var app = angular.module('ControlPanelApp',
 				controllerAs: 'ctrl',
 				templateUrl: '/static/partials/register.html'
 			})
+			.when('/login', {
+				controller: 'LoginController',
+				controllerAs: 'ctrl',
+				templateUrl: '/static/partials/login.html'
+			})
 			.otherwise({
 				redirectTo: '/'
 			});
@@ -32,16 +37,67 @@ var app = angular.module('ControlPanelApp',
  *
  */
 app.factory('AuthenticationService', ['$http', '$cookies', function($http, $cookies) {
- 		var self = this;
 
 		return {
+
 			register: function(email, password, username) {
+				var self = this;
+
 				return $http.post('/api/v1/accounts/', {
 					username: username,
 					password: password,
 					email: email
+				}).then(function(resp) {
+					self.login(email, password);
+				}, function(errorResp) {
+					console.error('Epic failure');
 				});
+			},
+
+			login: function(email, password) {
+				var self = this;
+
+				return $http.post('/api/v1/login/', {
+					email: email, password: password
+				}).then(function(resp) {
+					self.setAuthenticatedUser(resp.data);
+					window.location = '/';
+				}, function(errorResp) {
+					console.log('Epic failure...');
+				});
+			},
+
+			logout: function() {
+				var self = this;
+
+				return $http.post('/api/v1/logout/')
+					.then(function(resp) {
+						//redirect to loginView
+						self.unAuthenticate();
+						window.location = '/';
+
+					}, function(errorResp) {
+						console.error('Error occured while logging out');
+					});
+			},
+
+			getAuthenticatedUser: function() {
+				if (!$cookies.authenticatedUser) {
+					return;
+				}
+				return JSON.parse($cookies.authenticatedUser);
+			},
+
+			isAuthenticated: function() {
+				return !!$cookies.authenticatedUser;
+			},
+
+			setAuthenticatedUser: function(user) {
+				$cookies.authenticatedUser = JSON.stringify(user);
+			},
+
+			unAuthenticate: function() {
+				delete $cookies.authenticatedUser;
 			}
 		};
  	}]);
-

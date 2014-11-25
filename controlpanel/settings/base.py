@@ -10,7 +10,11 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
+here = lambda * x: os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
+PROJECT_ROOT = here('..')
+root = lambda * x: os.path.join(os.path.abspath(PROJECT_ROOT), *x)
+
 
 AUTH_USER_MODEL = 'accounts.Account'
 
@@ -21,9 +25,9 @@ AUTH_USER_MODEL = 'accounts.Account'
 SECRET_KEY = 'fj(jcj!ns6%)(b#mf^y-^frlq6n*h!%8wltr-irjxu(eg@xtkf'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', True)
+DEBUG = os.environ.get('DEBUG', False)
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = []
 
@@ -61,6 +65,7 @@ WSGI_APPLICATION = 'controlpanel.wsgi.application'
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 import dj_database_url
 
+DATABASES = {}
 
 #DATABASES = {
 #    'default': {
@@ -69,11 +74,11 @@ import dj_database_url
 #    }
 #}
 
-DATABASES = {
-    'default': dj_database_url.config(
-        default='sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
-    )
-}
+#DATABASES = {
+#    'default': dj_database_url.config(
+#        default='sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
+#    )
+#}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
@@ -88,16 +93,17 @@ USE_L10N = True
 
 USE_TZ = True
 
+DATABASES['default'] = dj_database_url.config()
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = 'staticfiles'
+STATIC_ROOT = root('..', 'staticfiles')
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'release/assets'),
-    os.path.join(BASE_DIR, 'assets'),
+    root('..', 'assets'),
+    root('..', 'release/assets'),
 )
 
 STATICFILES_FINDERS = (
@@ -109,7 +115,7 @@ STATICFILES_FINDERS = (
 COMPRESS_ENABLED = os.environ.get('COMPRESS_ENABLED', False)
 
 TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'templates'),
+    root('..', 'templates'),
 )
 
 REST_FRAMEWORK = {
