@@ -2,6 +2,8 @@ from django.contrib.auth import update_session_auth_hash
 from rest_framework import serializers
 
 from accounts.models import Account 
+from publisher.models import Category, Presentation, File, WebLink
+
 
 class AccountSerializer(serializers.ModelSerializer):
 	password = serializers.CharField(source='password', write_only=True, required=False)
@@ -36,3 +38,91 @@ class AccountSerializer(serializers.ModelSerializer):
 
 			return instance
 		return Account(**attrs)
+
+
+class CategorySerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Category
+		fields = ('id', 'name', 'description', 'picture',)
+		read_only_fields = ('id',)
+
+
+class PresentationSerializer(serializers.ModelSerializer):
+	category = CategorySerializer(required=True)
+	user = AccountSerializer(required=False)
+
+	class Meta:
+		model = Presentation
+		fields = (
+			'id', 
+			'title', 
+			'description', 
+			'thumbnail', 'file', 
+			'created', 
+			'pub_date', 
+			'expiry_date',
+			'category',
+			'user',
+		)
+		read_only_fields = ('id', 'created',)
+
+	def get_validation_exclusions(self, *args, **kwargs):
+		exclusions = super(PresentationSerializer, self).get_validation_exclusions(
+			*args, **kwargs)
+		return exclusions + ['user']
+
+
+class FileSerializer(serializers.ModelSerializer):
+	category = CategorySerializer(required=True)
+	user = AccountSerializer(required=False)
+
+	class Meta:
+		model = File
+		fields = (
+			'id', 
+			'title', 
+			'description', 
+			'thumbnail', 
+			'file', 
+			'created', 
+			'pub_date', 
+			'expiry_date',
+			'category',
+			'user',
+		)
+		read_only_fields = ('id', 'created',)
+
+	def get_validation_exclusions(self, *args, **kwargs):
+		exclusions = super(FileSerializer, self).get_validation_exclusions(
+			*args, **kwargs)
+		return exclusions + ['user']
+
+
+class WebLinkSerializer(serializers.ModelSerializer):
+	category = CategorySerializer(required=True)
+	user = AccountSerializer(required=False)
+
+	class Meta:
+		model = WebLink
+		fields = (
+			'id', 
+			'title', 
+			'description', 
+			'thumbnail', 
+			'link', 
+			'created', 
+			'pub_date', 
+			'expiry_date',
+			'category',
+			'user',
+		)
+		read_only_fields = ('id', 'created',)
+
+	def get_validation_exclusions(self, *args, **kwargs):
+		exclusions = super(WebLinkSerializer, self).get_validation_exclusions(
+			*args, **kwargs)
+		return exclusions + ['user']
+
+
+
+

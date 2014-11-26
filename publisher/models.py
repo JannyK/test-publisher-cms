@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
 
+from accounts.models import Account
+
 class Category(models.Model):
 	name = models.CharField(max_length=40, unique=True)
 	description = models.TextField(blank=True)
@@ -12,8 +14,10 @@ class Category(models.Model):
 	def save(self, *args, **kwargs):
 		super(Category, self).save(*args, **kwargs)
 
+
 class BaseEntry(models.Model):
 	category = models.ForeignKey(Category)
+	user = models.ForeignKey(Account)
 
 	title = models.CharField(max_length=255)
 	description = models.TextField()
@@ -40,8 +44,10 @@ class BaseEntry(models.Model):
 class Presentation(BaseEntry):
 	file = models.FileField(upload_to='presentation_files')
 
+
 class File(BaseEntry):
 	file = models.FileField(upload_to='files')
+
 
 class WebLink(BaseEntry):
 	link = models.URLField(max_length=255)

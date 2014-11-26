@@ -6,9 +6,21 @@ from rest_framework import status
 from rest_framework.response import Response
 
 from accounts.models import Account 
+from publisher.models import Category, Presentation, WebLink, File
 
-from .serializers import AccountSerializer
-from .permissions import IsAccountOwner
+from .serializers import (
+	AccountSerializer,
+	CategorySertializer,
+	PresentationSerializer,
+	FileSerializer,
+	WebLinkSerializer,
+)
+from .permissions import (
+	IsAccountOwner, 
+	IsPresentationOwner, 
+	IsFileOwner,
+	IsWebLinkOwner,
+)
 
 
 class AccountViewSet(viewsets.ModelViewSet):
@@ -86,6 +98,92 @@ class LogoutView(views.APIView):
 		logout(request)
 
 		return Response({}, status=status.HTTP_204_NO_CONTENT)
-		
-			
 
+
+#
+#	APIVIEWS for the CorePublisher Models
+#	Presentation, File, WebLink, Category
+#
+class CategoryViewSet(viewsets.ModelViewSet):
+	queryset = Category.objects.all()
+	serializer_class = CategorySertializer
+
+	def get_permissions(self):
+		if self.request.method in permissions.SAFE_METHODS:
+			return (permissions.AllowAny(),)
+		return (permissions.IsAuthenticated(),)
+
+
+class PresentationViewSet(viewsets.ModelViewSet):
+	queryset = Presentation.objects.all()
+	serializer_class = PresentationSerializer
+
+	def get_permissions(self):
+		if self.request.method in permissions.SAFE_METHODS:
+			return (permissions.AllowAny(),)
+		return (permissions.IsAuthenticated(), IsPresentationOwner(),)
+
+	def pre_save(self, obj):
+		obj.user = self.request.user
+		return super(CategoryViewSet, self).pre_save(obj)
+
+
+class UserPresentatonsViewSet(viewsets.ViewSet):
+	queryset = Presentation.objects.select_related('user').all()
+	serializer_class = PresentationSerializer
+
+	def list(self, request, user_email=None):
+		queryset = self.queryset.filter(user__email=user_email)
+		serializer = self.serializer_class(queryset, many=True)
+
+		return Response(serializer.data)
+
+
+class FileViewSet(viewsets.ModelViewSet):
+	queryset = Flie.objects.all()
+	serializer_class = FileSerializer
+
+	def get_permissions(self):
+		if self.request.method in permissions.SAFE_METHODS:
+			return (permissions.AllowAny(),)
+		return (permissions.IsAuthenticated(), IsFileOwner(),)
+
+	def pre_save(self, obj):
+		obj.user = self.request.user
+		return super(FileViewSet, self).pre_save(obj)
+
+
+class UserFilesViewSet(viewsets.ViewSet):
+	queryset = File.objects.select_related('user').all()
+	serializer_class = FileSerializer
+
+	def list(self, request, user_email=None):
+		queryset = self.queryset.filter(user__email=user_email)
+		serializer = self.serializer_class(queryset, many=True)
+
+		return Response(serializer.data)
+
+
+class WebLinkViewSet(viewsets.ModelViewSet):
+	queryset = WebLink.objects.all()
+	serializer_class = WebLinkSerializer
+
+	def get_permissions(self):
+		if self.request.method in permissions.SAFE_METHODS:
+			return (permissions.AllowAny(),)
+		return (permissions.IsAuthenticated(), IsWebLinkOwner(),)
+
+	def pre_save(self, obj):
+		obj.user = self.request.user
+		return super(WebLinkViewSet, self).pre_save(obj)
+
+
+class UserWebLinksViewSet(viewsets.ViewSet):
+	queryset = WebLink.objects.select_related('user').all()
+	serializer_class = WebLinkSerializer
+
+	def list(self, request, user_email=None):
+		queryset = self.queryset.filter(user__email=user_email)
+		serializer = self.serializer_class(queryset, many=True)
+
+		return Response(serializer.data)

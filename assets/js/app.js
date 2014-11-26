@@ -101,3 +101,68 @@ app.factory('AuthenticationService', ['$http', '$cookies', function($http, $cook
 			}
 		};
  	}]);
+
+app.factory('CorePublisherService', ['$http', function($http) {
+	return {
+		allPresentations: function() {
+			return $http.get('/api/v1/presentations/');
+		},
+
+		createPresentation: function(data) {
+			return $http.post('/api/v1/presentations/', data);
+		},
+
+		getPresentation: function(user_email) {
+			return $http.get('/api/v1/accounts/' + user_email + 'presentations');
+		},
+
+		allFiles: function() {
+			return $http.get('/api/v1/files/');
+		},
+
+		newFile: function(data) {
+			return $http.post('/api/v1/files/', data);
+		},
+
+		//TODO - Change the param to be: name of the current country
+		getFile: function(user_email) {
+			return $http.get('/api/v1/accounts/' + user_email + 'files');
+		},
+
+		allWebLinks: function() {
+			return $http.get('/api/v1/links/');
+		},
+
+		newWebLink: function(data) {
+			return $http.post('/api/v1/links/', data);
+		},
+
+		getWebLinks: function(user_email) {
+			return $http.get('/api/v1/accounts/' + user_email + 'links');
+		}
+	}
+}]);
+
+/*
+* Utility services: Snackbar
+* For displaying Message à la Google plus 
+*/
+
+app.factory('MessageNotificationService', ['$', '_', function($, _) {
+	return {
+		_snackbar: function(content, options) {
+			options = _.extends({timeout: 3000}, options);
+			options.content = content;
+
+			$.snackbar(options);
+		},
+
+		errorMessage: function(content, options) {
+			_snackbar('Error' + content, options);
+		},
+
+		show: function(content, options) {
+			_snackbar(content, options);
+		}
+	}
+}])

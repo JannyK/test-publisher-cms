@@ -73,3 +73,33 @@ ControlPanelApp.controllers
 
  		self.activate();
  	}])
+
+ 	.controller('CorePublisherController', [function() {
+ 		//TODO - Implement
+ 	}])
+
+ 	.controller('PresentationController', 
+ 		['AuthenticationService', 'CorePublisherService', 'NotificationMessageService', function(AuthenticationService ,CorePublisherService, NotificationMessageService) {
+
+ 		//ToDO -Implement
+ 		var self = this;
+
+ 		self.isAuthenticated = AuthenticationService.isAuthenticated();
+ 		self.presentations = [];
+
+ 		//fetch all presentations
+ 		CorePublisherService.allPresentations().then(function(resp) {
+ 			self.presentations = resp.data;
+ 		}, function(errorResp) {
+ 			NotificationMessageService.error(errorResp.error);
+ 		});
+
+ 		self.$on('presentation.created', function(event, pub) {
+ 			self.presentations.unshift(pub);
+ 		});
+
+ 		self.$on('presentation.created.error', function() {
+ 			self.presentations.shift();
+ 		});
+ 	}])
+
