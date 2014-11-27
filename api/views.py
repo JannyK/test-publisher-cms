@@ -10,7 +10,7 @@ from publisher.models import Category, Presentation, WebLink, File
 
 from .serializers import (
 	AccountSerializer,
-	CategorySertializer,
+	CategorySerializer,
 	PresentationSerializer,
 	FileSerializer,
 	WebLinkSerializer,
@@ -24,7 +24,7 @@ from .permissions import (
 
 
 class AccountViewSet(viewsets.ModelViewSet):
-	lookup_field = 'username'
+	lookup_field = 'country'
 	queryset = Account.objects.all()
 	serializer_class = AccountSerializer
 
@@ -43,14 +43,14 @@ class AccountViewSet(viewsets.ModelViewSet):
 			try:
 				email = request.DATA['email']
 				password = request.DATA['password']
-				username = request.DATA['username']
+				country = request.DATA['country']
 			except KeyError:
 				return Response({
 					'status': 'BAD REQUEST',
 					'message': 'Account could not be created with received data. Missing field(s)'
 				}, status=status.HTTP_400_BAD_REQUEST)
 
-			user = Account.objects.create_user(email, password, username=username)
+			user = Account.objects.create_user(email, password, country=country)
 
 			user.set_password(request.DATA.get('password'))
 
@@ -106,7 +106,7 @@ class LogoutView(views.APIView):
 #
 class CategoryViewSet(viewsets.ModelViewSet):
 	queryset = Category.objects.all()
-	serializer_class = CategorySertializer
+	serializer_class = CategorySerializer
 
 	def get_permissions(self):
 		if self.request.method in permissions.SAFE_METHODS:
@@ -128,19 +128,19 @@ class PresentationViewSet(viewsets.ModelViewSet):
 		return super(CategoryViewSet, self).pre_save(obj)
 
 
-class UserPresentatonsViewSet(viewsets.ViewSet):
+class UserPresentationsViewSet(viewsets.ViewSet):
 	queryset = Presentation.objects.select_related('user').all()
 	serializer_class = PresentationSerializer
 
-	def list(self, request, user_email=None):
-		queryset = self.queryset.filter(user__email=user_email)
+	def list(self, request, user_country=None):
+		queryset = self.queryset.filter(user__country=user_country)
 		serializer = self.serializer_class(queryset, many=True)
 
 		return Response(serializer.data)
 
 
 class FileViewSet(viewsets.ModelViewSet):
-	queryset = Flie.objects.all()
+	queryset = File.objects.all()
 	serializer_class = FileSerializer
 
 	def get_permissions(self):
@@ -157,8 +157,8 @@ class UserFilesViewSet(viewsets.ViewSet):
 	queryset = File.objects.select_related('user').all()
 	serializer_class = FileSerializer
 
-	def list(self, request, user_email=None):
-		queryset = self.queryset.filter(user__email=user_email)
+	def list(self, request, user_country=None):
+		queryset = self.queryset.filter(user__country=user_country)
 		serializer = self.serializer_class(queryset, many=True)
 
 		return Response(serializer.data)
@@ -182,8 +182,8 @@ class UserWebLinksViewSet(viewsets.ViewSet):
 	queryset = WebLink.objects.select_related('user').all()
 	serializer_class = WebLinkSerializer
 
-	def list(self, request, user_email=None):
-		queryset = self.queryset.filter(user__email=user_email)
+	def list(self, request, user_country=None):
+		queryset = self.queryset.filter(user__country=user_country)
 		serializer = self.serializer_class(queryset, many=True)
 
 		return Response(serializer.data)

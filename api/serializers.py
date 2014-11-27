@@ -14,7 +14,7 @@ class AccountSerializer(serializers.ModelSerializer):
 		fields = (
 			'id',
 			'email',
-			'username',
+			'country',
 			'created_at',
 			'updated_at',
 			'first_name',
@@ -26,7 +26,7 @@ class AccountSerializer(serializers.ModelSerializer):
 
 	def restore_object(self, attrs, instance=None):
 		if instance is not None:
-			instance.username = attrs.get('username', instance.username)
+			instance.country = attrs.get('country', instance.country)
 			password = attrs.get('password', None)
 			confirm_password = attrs.get('confirm_password', None)
 
@@ -48,7 +48,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class PresentationSerializer(serializers.ModelSerializer):
-	category = CategorySerializer(required=True)
+	categories = CategorySerializer(required=True)
 	user = AccountSerializer(required=False)
 
 	class Meta:
@@ -61,7 +61,7 @@ class PresentationSerializer(serializers.ModelSerializer):
 			'created', 
 			'pub_date', 
 			'expiry_date',
-			'category',
+			'categories',
 			'user',
 		)
 		read_only_fields = ('id', 'created',)
@@ -73,7 +73,7 @@ class PresentationSerializer(serializers.ModelSerializer):
 
 
 class FileSerializer(serializers.ModelSerializer):
-	category = CategorySerializer(required=True)
+	categories = CategorySerializer(required=True)
 	user = AccountSerializer(required=False)
 
 	class Meta:
@@ -87,7 +87,7 @@ class FileSerializer(serializers.ModelSerializer):
 			'created', 
 			'pub_date', 
 			'expiry_date',
-			'category',
+			'categories',
 			'user',
 		)
 		read_only_fields = ('id', 'created',)
@@ -99,7 +99,7 @@ class FileSerializer(serializers.ModelSerializer):
 
 
 class WebLinkSerializer(serializers.ModelSerializer):
-	category = CategorySerializer(required=True)
+	categories = CategorySerializer(required=True)
 	user = AccountSerializer(required=False)
 
 	class Meta:
@@ -113,7 +113,7 @@ class WebLinkSerializer(serializers.ModelSerializer):
 			'created', 
 			'pub_date', 
 			'expiry_date',
-			'category',
+			'categories',
 			'user',
 		)
 		read_only_fields = ('id', 'created',)

@@ -12,6 +12,11 @@ var app = angular.module('ControlPanelApp',
 		//$locationProvider.hashPrefix('!');
 
 		$routeProvider
+			.when('/', {
+				controller: 'MainController',
+				controllerAs: 'ctrl',
+				templateUrl: '/static/partials/start.html'
+			})
 			.when('/register', {
 				controller: 'RegistrationController',
 				controllerAs: 'ctrl',
@@ -22,11 +27,15 @@ var app = angular.module('ControlPanelApp',
 				controllerAs: 'ctrl',
 				templateUrl: '/static/partials/login.html'
 			})
+			.when('/dashboard', {
+				controller: 'DashboardController',
+				controllerAs: 'ctrl',
+				templateUrl: '/static/partials/dashboard.html'
+			})
 			.otherwise({
 				redirectTo: '/'
 			});
 	}]);
-
 
 /**
  * @ngdoc service
@@ -40,11 +49,11 @@ app.factory('AuthenticationService', ['$http', '$cookies', function($http, $cook
 
 		return {
 
-			register: function(email, password, username) {
+			register: function(email, password, country) {
 				var self = this;
 
 				return $http.post('/api/v1/accounts/', {
-					username: username,
+					country: country,
 					password: password,
 					email: email
 				}).then(function(resp) {
@@ -88,6 +97,19 @@ app.factory('AuthenticationService', ['$http', '$cookies', function($http, $cook
 				return JSON.parse($cookies.authenticatedUser);
 			},
 
+			getSelectedCountry: function() {
+				if (!$cookies.selectedCountry) {
+					return null;
+				}
+				return JSON.parse($cookies.selectedCountry);
+			},
+
+			setSelectedCountry: function(country) {
+				$cookies.selectedCountry = JSON.stringify(country);
+				return true;
+				//window.location('/login');
+			},
+
 			isAuthenticated: function() {
 				return !!$cookies.authenticatedUser;
 			},
@@ -98,6 +120,7 @@ app.factory('AuthenticationService', ['$http', '$cookies', function($http, $cook
 
 			unAuthenticate: function() {
 				delete $cookies.authenticatedUser;
+				delete $cookies.selectedCountry;
 			}
 		};
  	}]);
@@ -112,8 +135,8 @@ app.factory('CorePublisherService', ['$http', function($http) {
 			return $http.post('/api/v1/presentations/', data);
 		},
 
-		getPresentation: function(user_email) {
-			return $http.get('/api/v1/accounts/' + user_email + 'presentations');
+		getPresentation: function(user_country) {
+			return $http.get('/api/v1/accounts/' + user_country + 'presentations');
 		},
 
 		allFiles: function() {
@@ -125,8 +148,8 @@ app.factory('CorePublisherService', ['$http', function($http) {
 		},
 
 		//TODO - Change the param to be: name of the current country
-		getFile: function(user_email) {
-			return $http.get('/api/v1/accounts/' + user_email + 'files');
+		getFile: function(user_country) {
+			return $http.get('/api/v1/accounts/' + user_country + 'files');
 		},
 
 		allWebLinks: function() {
@@ -137,8 +160,8 @@ app.factory('CorePublisherService', ['$http', function($http) {
 			return $http.post('/api/v1/links/', data);
 		},
 
-		getWebLinks: function(user_email) {
-			return $http.get('/api/v1/accounts/' + user_email + 'links');
+		getWebLinks: function(user_country) {
+			return $http.get('/api/v1/accounts/' + user_country + 'links');
 		}
 	}
 }]);

@@ -2,6 +2,11 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import BaseUserManager
 
+COUNTRY_CHOICES = (
+	('NO', 'NORGE'),
+	('SE', 'SVERIGE'),
+	('DK', 'DANMARK'),
+)
 
 class AccountManager(BaseUserManager):
 	def create_user(self, email, password=None, **kwargs):
@@ -9,11 +14,11 @@ class AccountManager(BaseUserManager):
 		if not email:
 			raise ValueError('Users must have a valid email address.')
 
-		if not kwargs.get('username'):
-			raise ValueError('Users must have a valid username')
+		if not kwargs.get('country'):
+			raise ValueError('Users must have a valid country')
 
 		user = self.model(
-			email=self.normalize_email(email), username=kwargs['username']
+			email=self.normalize_email(email), country=kwargs['country']
 		)
 
 		user.set_password(password)
@@ -32,7 +37,8 @@ class AccountManager(BaseUserManager):
 
 class Account(AbstractBaseUser):
 	email = models.EmailField(unique=True)
-	username = models.CharField(max_length=40, unique=True)
+	#username = models.CharField(max_length=40, unique=True)
+	country = models.CharField(max_length=40, choices=COUNTRY_CHOICES, default='NO')
 	first_name = models.CharField(max_length=40, blank=True)
 	last_name = models.CharField(max_length=40, blank=True)
 
@@ -43,10 +49,10 @@ class Account(AbstractBaseUser):
 	objects = AccountManager()
 
 	USERNAME_FIELD = 'email'
-	REQUIRED_FIELDS = ['username']
+	REQUIRED_FIELDS = ['country']
 
 	def __unicode__(self):
-		return self.email
+		return '%s (%s)' % (self.email, self.country)
 
 	def save(self, *args, **kwargs):
 		super(Account, self).save(*args, **kwargs)

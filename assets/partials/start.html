@@ -1,0 +1,7 @@
+<div class="row">
+	<ul id="countries">
+		<li class="country-item" ng-repeat="country in ctrl.countries">
+			<a href="" class="country-item-link" id="{{ country.name }}" ng-click="ctrl.setCurrentCountry(country)"></a>
+		</li>
+	</ul>
+</div>

@@ -16,7 +16,7 @@ class Category(models.Model):
 
 
 class BaseEntry(models.Model):
-	category = models.ForeignKey(Category)
+	categories = models.ManyToManyField(Category)
 	user = models.ForeignKey(Account)
 
 	title = models.CharField(max_length=255)
