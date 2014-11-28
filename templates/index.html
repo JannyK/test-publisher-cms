@@ -8,20 +8,21 @@
 	<body ng-controller="MainController as mainCtrl">
   		{% include 'navbar.html' %}
 
-  		<div class="container-fluid">
+  		<div class="container">
     		<div class="row">
     			<div class="col-xs-3" ng-show="mainCtrl.isAuthenticated">
     				<ul class="nav nav-pills nav-stacked">
   						<li class="active"><a href="#">Files</a></li>
-  						<li><a href="#">Presentations</a></li>
+  						<li><a href="#/presentations">Presentations</a></li>
   						<li><a href="#">Web links</a></li>
   						<li class="dropdown">
     						<a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
-      							Settings <span class="caret"></span>
+      							Extras <span class="caret"></span>
     						</a>
     						<ul class="dropdown-menu">
-								<li><a href="#">Application variables</a></li>
-								<li><a href="#">My profile</a></li>
+								<li><a href="">Categories/Products</a></li>
+								<li><a href="">Application variables</a></li>
+								<li><a href="">My profile</a></li>
     						</ul>
   						</li>
 					</ul>

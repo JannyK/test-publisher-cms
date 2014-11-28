@@ -1,0 +1,62 @@
+<form class="form-horizontal" ng-submit="submitNewPresentation()">
+    <fieldset>
+        <legend>New Presentation</legend>
+        <div class="form-group">
+            <label for="title" class="col-md-2 control-label">Title</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" id="title" placeholder="Presentation's title" ng-model="presentationItem.title">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="description" class="col-md-2 control-label">Description</label>
+            <div class="col-md-10">
+                <textarea class="form-control" rows="3" id="description" ng-model="presentationItem.description"></textarea>
+                <span class="help-block">A brief description of the presentation.</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="thumbnail" class="col-md-2 control-label">Thumbnail</label>
+            <div class="col-md-10">
+                <input type="file" class="form-control" id="thumbnail" placeholder="Select an image to use as thumbnail" file-field="presentationItem.thumbnail">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="file" class="col-md-2 control-label">Presentation file</label>
+            <div class="col-md-10">
+                <input type="file" class="form-control" id="file" placeholder="Add the presentation file" file-field="presentationItem.file">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="pub_data" class="col-md-2 control-label">Publication date</label>
+            <div class="col-md-10">
+                <input type="date" class="form-control" id="pub_date" placeholder="Publication date" ng-model="presentationItem.pub_date">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="expiry_data" class="col-md-2 control-label">Expiration date</label>
+            <div class="col-md-10">
+                <input type="date" class="form-control" id="expiry_date" placeholder="Expiration date" ng-model="presentationItem.expiry_date">
+            </div>
+        </div>
+
+        
+        <div class="form-group">
+            <label for="categpries" class="col-md-2 control-label">Select categories/products</label>
+            <div class="col-md-10">
+                <select multiple="" class="form-control" ng-model="presentationItem.categories" ng-options="c.id as c.name for c in categories">
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-10 col-md-offset-2">
+                <button class="btn btn-default" ng-click="closeThisDialog()">Cancel</button>
+                <input type="submit" value="Submit" class="btn btn-primary">
+            </div>
+        </div>
+    </fieldset>
+</form>

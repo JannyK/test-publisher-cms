@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from rest_framework import permissions, viewsets, views
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.parsers import FormParser, MultiPartParser
 
 from accounts.models import Account 
 from publisher.models import Category, Presentation, WebLink, File
@@ -117,6 +118,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class PresentationViewSet(viewsets.ModelViewSet):
 	queryset = Presentation.objects.all()
 	serializer_class = PresentationSerializer
+	parser_classes = (FormParser, MultiPartParser,)
 
 	def get_permissions(self):
 		if self.request.method in permissions.SAFE_METHODS:

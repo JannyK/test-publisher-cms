@@ -6,6 +6,7 @@ from .views import (
 	AccountViewSet, 
 	LoginView, 
 	LogoutView,
+	CategoryViewSet,
 	PresentationViewSet,
 	UserPresentationsViewSet,
 	FileViewSet,
@@ -16,6 +17,7 @@ from .views import (
 
 router = routers.SimpleRouter()
 router.register(r'accounts', AccountViewSet)
+router.register(r'categories', CategoryViewSet)
 router.register(r'presentations', PresentationViewSet)
 router.register(r'files', FileViewSet)
 router.register(r'links', WebLinkViewSet)

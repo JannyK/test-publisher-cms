@@ -119,21 +119,77 @@ ControlPanelApp.controllers
  	}])
 
  	.controller('PresentationController', 
- 		['AuthenticationService', 'CorePublisherService', 'NotificationMessageService', function(AuthenticationService ,CorePublisherService, NotificationMessageService) {
+ 		['$scope', 'AuthenticationService', 
+ 		'CorePublisherService', 
+ 		//'MessageNotificationService', 
+ 		'$location', 
+ 		'ngDialog',
+ 		function($scope, AuthenticationService ,CorePublisherService, $location, ngDialog) {
 
  		//ToDO -Implement
  		var self = this;
 
  		self.isAuthenticated = AuthenticationService.isAuthenticated();
  		self.presentations = [];
+ 		self.categories = []
+
+ 		//fetch all categories and make them availbale for use
+ 		CorePublisherService.allCategories().then(function(resp) {
+ 			self.categories = resp.data;
+ 		}, function(errorResp) {
+ 			console.error('Failed to fetch categories');
+ 		});
 
  		//fetch all presentations
  		CorePublisherService.allPresentations().then(function(resp) {
  			self.presentations = resp.data;
  		}, function(errorResp) {
- 			NotificationMessageService.error(errorResp.error);
+ 			//MessageNotificationService.error(errorResp.error);
  		});
 
+ 		self.presentationItem = {
+ 			title: '',
+ 			description: '',
+ 			thumbnail: '',
+ 			file: '',
+ 			pub_date: '',
+ 			expiry_date: '',
+ 			categories: []
+ 		};
+
+ 		self.createNewItem = function() {
+ 			ngDialog.open({
+ 				template: '/static/partials/new-presentation.html',
+ 				scope: $scope
+ 			});
+ 		};
+
+ 		self.submitNewPresentation = function() {
+ 			console.log('Submit function called');
+
+ 			if (self.isAuthenticated) {
+
+	 			CorePublisherService.newPresentation({
+	 				title: self.presentationItem.title,
+	 				description: self.presentationItem.description,
+	 				thumbnail: self.presentationItem.thumbnail,
+	 				file: self.presentationItem.presentationFile,
+	 				pub_date: self.presentationItem.pub_date,
+	 				categories: self.presentationItem.categories
+	 			}).then(function(resp) {
+	 				//Hande the response...
+	 				console.log('Presentation created successfully...');
+	 			}, function(errorResp) {
+	 				//Error handling...
+	 				console.error('Failed creating a new presentation');
+	 			});
+	 		} else {
+	 			//redirect to the login page
+	 			$location.url('/login');
+	 		}
+ 		};
+
+ 		/*
  		self.$on('presentation.created', function(event, pub) {
  			self.presentations.unshift(pub);
  		});
@@ -141,5 +197,6 @@ ControlPanelApp.controllers
  		self.$on('presentation.created.error', function() {
  			self.presentations.shift();
  		});
- 	}])
+		*/
+ 	}]);
 

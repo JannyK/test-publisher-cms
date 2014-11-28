@@ -2,11 +2,14 @@
 'use strict';
 
 var app = angular.module('ControlPanelApp', 
-	['publisherControllers','ngRoute', 'ngCookies'])
-	.config(['$routeProvider', '$locationProvider', '$httpProvider', function($routeProvider, $locationProvider, $httpProvider) {
+	['publisherControllers','ngRoute', 'ngCookies', 'ngDialog'])
+	.config(['$routeProvider', '$locationProvider', '$httpProvider', '$interpolateProvider', function($routeProvider, $locationProvider, $httpProvider, $interpolateProvider) {
 
 		$httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 		$httpProvider.defaults.xsrfCookieName = 'csrftoken';
+
+		$interpolateProvider.startSymbol('[[');
+		$interpolateProvider.endSymbol(']]');
 
 		//$locationProvider.html5Mode(true);
 		//$locationProvider.hashPrefix('!');
@@ -31,6 +34,11 @@ var app = angular.module('ControlPanelApp',
 				controller: 'DashboardController',
 				controllerAs: 'ctrl',
 				templateUrl: '/static/partials/dashboard.html'
+			})
+			.when('/presentations', {
+				controller: 'PresentationController',
+				controllerAs: 'ctrl',
+				templateUrl: '/static/partials/presentations.html'
 			})
 			.otherwise({
 				redirectTo: '/'
@@ -127,12 +135,19 @@ app.factory('AuthenticationService', ['$http', '$cookies', function($http, $cook
 
 app.factory('CorePublisherService', ['$http', function($http) {
 	return {
+		allCategories: function() {
+			return $http.get('/api/v1/categories');
+		},
+
 		allPresentations: function() {
 			return $http.get('/api/v1/presentations/');
 		},
 
-		createPresentation: function(data) {
-			return $http.post('/api/v1/presentations/', data);
+		newPresentation: function(data) {
+			return $http.post('/api/v1/presentations/', data, {
+				transformRequest: angular.identity,
+				headers: {'Content-Type': undefined}
+			});
 		},
 
 		getPresentation: function(user_country) {
@@ -189,3 +204,34 @@ app.factory('MessageNotificationService', ['$', '_', function($, _) {
 		}
 	}
 }])
+
+/**
+* Custome directives
+**/
+
+app.directive('fileField', ['$parse', function($parse) {
+	return {
+		restrict: 'A',
+		link: function($scope, element, attrs) {
+
+			var field = $parse(attrs.fileField);
+			var fieldSetter = field.assign;
+
+			element.bind('change', function() {
+				$scope.$apply(function() {
+					fieldSetter($scope, element[0].files[0]);
+					console.log('FILE: ' + JSON.stringify(element[0].files[0]));
+				});
+			});
+		}
+	};
+}]);
+
+
+
+
+
+
+
+
+
