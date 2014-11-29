@@ -40,14 +40,19 @@ class AccountSerializer(serializers.ModelSerializer):
 		return Account(**attrs)
 
 
+
 class CategorySerializer(serializers.ModelSerializer):
+	#picture = serializers.Field('picture.url')
 	class Meta:
 		model = Category
 		fields = ('id', 'name', 'description', 'picture',)
 		read_only_fields = ('id',)
 
 
+
 class PresentationSerializer(serializers.ModelSerializer):
+	thumbnail = serializers.Field('thumbnail.url')
+	file = serializers.Field('file.url')
 	categories = CategorySerializer(required=True)
 	user = AccountSerializer(required=False)
 
@@ -57,7 +62,8 @@ class PresentationSerializer(serializers.ModelSerializer):
 			'id', 
 			'title', 
 			'description', 
-			'thumbnail', 'file', 
+			'thumbnail', 
+			'file', 
 			'created', 
 			'pub_date', 
 			'expiry_date',
@@ -73,6 +79,8 @@ class PresentationSerializer(serializers.ModelSerializer):
 
 
 class FileSerializer(serializers.ModelSerializer):
+	thumbnail = serializers.Field('thumbnail.url')
+	file = serializers.Field('file.url')
 	categories = CategorySerializer(required=True)
 	user = AccountSerializer(required=False)
 
@@ -99,6 +107,7 @@ class FileSerializer(serializers.ModelSerializer):
 
 
 class WebLinkSerializer(serializers.ModelSerializer):
+	thumbnail = serializers.Field('thumbnail.url')
 	categories = CategorySerializer(required=True)
 	user = AccountSerializer(required=False)
 
@@ -122,7 +131,3 @@ class WebLinkSerializer(serializers.ModelSerializer):
 		exclusions = super(WebLinkSerializer, self).get_validation_exclusions(
 			*args, **kwargs)
 		return exclusions + ['user']
-
-
-
-

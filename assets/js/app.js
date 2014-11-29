@@ -40,6 +40,11 @@ var app = angular.module('ControlPanelApp',
 				controllerAs: 'ctrl',
 				templateUrl: '/static/partials/presentations.html'
 			})
+			.when('/presentations/new', {
+				controller: 'PresentationController',
+				controllerAs: 'ctrl',
+				templateUrl: '/static/partials/new-presentation.html'
+			})
 			.otherwise({
 				redirectTo: '/'
 			});
@@ -136,11 +141,11 @@ app.factory('AuthenticationService', ['$http', '$cookies', function($http, $cook
 app.factory('CorePublisherService', ['$http', function($http) {
 	return {
 		allCategories: function() {
-			return $http.get('/api/v1/categories');
+			return $http.get('/api/v1/categories/?format=json');
 		},
 
 		allPresentations: function() {
-			return $http.get('/api/v1/presentations/');
+			return $http.get('/api/v1/presentations/?format=json');
 		},
 
 		newPresentation: function(data) {

@@ -118,9 +118,10 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class PresentationViewSet(viewsets.ModelViewSet):
 	queryset = Presentation.objects.all()
 	serializer_class = PresentationSerializer
-	parser_classes = (FormParser, MultiPartParser,)
+	#parser_classes = (FormParser, MultiPartParser,)
 
 	def get_permissions(self):
+
 		if self.request.method in permissions.SAFE_METHODS:
 			return (permissions.AllowAny(),)
 		return (permissions.IsAuthenticated(), IsPresentationOwner(),)

@@ -114,38 +114,20 @@ ControlPanelApp.controllers
  		self.message = 'This is the dashboard: Content coming soon...';
  	}])
 
- 	.controller('CorePublisherController', [function() {
- 		//TODO - Implement
- 	}])
-
  	.controller('PresentationController', 
- 		['$scope', 'AuthenticationService', 
+ 		['AuthenticationService', 
  		'CorePublisherService', 
  		//'MessageNotificationService', 
  		'$location', 
  		'ngDialog',
- 		function($scope, AuthenticationService ,CorePublisherService, $location, ngDialog) {
+ 		function(AuthenticationService ,CorePublisherService, $location, ngDialog) {
 
  		//ToDO -Implement
  		var self = this;
 
  		self.isAuthenticated = AuthenticationService.isAuthenticated();
  		self.presentations = [];
- 		self.categories = []
-
- 		//fetch all categories and make them availbale for use
- 		CorePublisherService.allCategories().then(function(resp) {
- 			self.categories = resp.data;
- 		}, function(errorResp) {
- 			console.error('Failed to fetch categories');
- 		});
-
- 		//fetch all presentations
- 		CorePublisherService.allPresentations().then(function(resp) {
- 			self.presentations = resp.data;
- 		}, function(errorResp) {
- 			//MessageNotificationService.error(errorResp.error);
- 		});
+ 		self.categories = [];
 
  		self.presentationItem = {
  			title: '',
@@ -157,32 +139,72 @@ ControlPanelApp.controllers
  			categories: []
  		};
 
+ 		//fetch all categories and make them availbale for use
+ 		CorePublisherService.allCategories().then(function(resp) {
+ 			self.categories = resp.data;
+ 			console.log('Categories loaded successfully: '+ resp.data);
+ 		}, function(errorResp) {
+ 			console.error('Failed to fetch categories:');
+ 		});
+
+ 		//fetch all presentations
+ 		CorePublisherService.allPresentations().then(function(resp) {
+ 			self.presentations = resp.data;
+ 			console.log('allPresentations loaded successfully: '+ resp.data);
+ 		}, function(errorResp) {
+ 			//MessageNotificationService.error(errorResp.error);
+ 			console.error('Error fetching data...');
+ 		});
+
+ 		/*
  		self.createNewItem = function() {
  			ngDialog.open({
  				template: '/static/partials/new-presentation.html',
- 				scope: $scope
+ 				controller: 'PresentationController'
  			});
  		};
+ 		*/
 
  		self.submitNewPresentation = function() {
- 			console.log('Submit function called');
 
+ 			console.log('Submit function called');
  			if (self.isAuthenticated) {
 
+ 				var fd = new FormData();
+
+ 				fd.append('title', self.presentationItem.title);
+ 				fd.append('description', self.presentationItem.description);
+ 				fd.append('thumbnail', self.presentationItem.thumbnail);
+ 				fd.append('file', self.presentationItem.file);
+ 				fd.append('pub_data', self.presentationItem.pub_date);
+ 				fd.append('expiry_date', self.presentationItem.expiry_date);
+ 				fd.append('categories', self.presentationItem.categories);
+
+ 				CorePublisherService.newPresentation(fd).then(function(resp) {
+ 					console.log('Presentation created successfully');
+ 				}, function(errorResp) {
+ 					console.error('Failed to create Presdentation: '+ JSON.stringify(errorResp));
+ 				});
+
+
+ 				/*
 	 			CorePublisherService.newPresentation({
 	 				title: self.presentationItem.title,
 	 				description: self.presentationItem.description,
 	 				thumbnail: self.presentationItem.thumbnail,
-	 				file: self.presentationItem.presentationFile,
+	 				file: self.presentationItem.file,
 	 				pub_date: self.presentationItem.pub_date,
 	 				categories: self.presentationItem.categories
+
 	 			}).then(function(resp) {
 	 				//Hande the response...
+
 	 				console.log('Presentation created successfully...');
 	 			}, function(errorResp) {
 	 				//Error handling...
 	 				console.error('Failed creating a new presentation');
 	 			});
+				*/
 	 		} else {
 	 			//redirect to the login page
 	 			$location.url('/login');

@@ -23,8 +23,8 @@ class BaseEntry(models.Model):
 	description = models.TextField()
 	thumbnail = models.ImageField(upload_to='_thumbnails_', blank=True)
 	created = models.DateTimeField(auto_now_add=True)
-	pub_data = models.DateTimeField()
-	expiry_data = models.DateTimeField(blank=True)
+	pub_date = models.DateTimeField()
+	expiry_date = models.DateTimeField(blank=True)
 
 	class Meta:
 		abstract = True
@@ -33,9 +33,9 @@ class BaseEntry(models.Model):
 		return 'Entry: %s' % (self.title,)
 
 	def save(self, *args, **kwargs):
-		if not self.pub_data:
-			self.pub_data = timezone.now()
-		if not self.expiry_data:
+		if not self.pub_date:
+			self.pub_date = timezone.now()
+		if not self.expiry_date:
 			pass
 
 		super(Entry, self).save(*args, **kwargs)
