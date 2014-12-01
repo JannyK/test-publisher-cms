@@ -52,7 +52,6 @@ class AccountViewSet(viewsets.ModelViewSet):
 				}, status=status.HTTP_400_BAD_REQUEST)
 
 			user = Account.objects.create_user(email, password, country=country)
-
 			user.set_password(request.DATA.get('password'))
 
 			user.save()
@@ -118,17 +117,30 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class PresentationViewSet(viewsets.ModelViewSet):
 	queryset = Presentation.objects.all()
 	serializer_class = PresentationSerializer
-	#parser_classes = (FormParser, MultiPartParser,)
+	parser_classes = (FormParser, MultiPartParser,)
 
 	def get_permissions(self):
-
+		print 'Request DATA: ', self.request
 		if self.request.method in permissions.SAFE_METHODS:
 			return (permissions.AllowAny(),)
 		return (permissions.IsAuthenticated(), IsPresentationOwner(),)
 
+
 	def pre_save(self, obj):
 		obj.user = self.request.user
-		return super(CategoryViewSet, self).pre_save(obj)
+
+		return super(PresentationViewSet, self).pre_save(obj)
+
+
+	def post_save(self, obj, created=False):
+		categories = self.request.DATA['categories']
+
+		for c in categories.split(','):
+			category = Category.objects.get(pk=int(c))
+			obj.categories.add(category)
+
+		return super(PresentationViewSet, self).post_save(obj, created)
+
 
 
 class UserPresentationsViewSet(viewsets.ViewSet):
@@ -145,6 +157,7 @@ class UserPresentationsViewSet(viewsets.ViewSet):
 class FileViewSet(viewsets.ModelViewSet):
 	queryset = File.objects.all()
 	serializer_class = FileSerializer
+	parser_classes = (FormParser, MultiPartParser,)
 
 	def get_permissions(self):
 		if self.request.method in permissions.SAFE_METHODS:
@@ -154,6 +167,16 @@ class FileViewSet(viewsets.ModelViewSet):
 	def pre_save(self, obj):
 		obj.user = self.request.user
 		return super(FileViewSet, self).pre_save(obj)
+
+	def post_save(self, obj, created=False):
+		categories = self.request.DATA['categories']
+
+		for c in categories.split(','):
+			category = Category.objects.get(pk=int(c))
+			obj.categories.add(category)
+
+		return super(FileViewSet, self).post_save(obj, created)
+
 
 
 class UserFilesViewSet(viewsets.ViewSet):
@@ -167,9 +190,11 @@ class UserFilesViewSet(viewsets.ViewSet):
 		return Response(serializer.data)
 
 
+
 class WebLinkViewSet(viewsets.ModelViewSet):
 	queryset = WebLink.objects.all()
 	serializer_class = WebLinkSerializer
+	parser_classes = (FormParser, MultiPartParser,)
 
 	def get_permissions(self):
 		if self.request.method in permissions.SAFE_METHODS:
@@ -179,6 +204,16 @@ class WebLinkViewSet(viewsets.ModelViewSet):
 	def pre_save(self, obj):
 		obj.user = self.request.user
 		return super(WebLinkViewSet, self).pre_save(obj)
+
+	def post_save(self, obj, created=False):
+		categories = self.request.DATA['categories']
+
+		for c in categories.split(','):
+			category = Category.objects.get(pk=int(c))
+			obj.categories.add(category)
+
+		return super(UserWebLinksViewSet, self).post_save(obj, created)
+
 
 
 class UserWebLinksViewSet(viewsets.ViewSet):

@@ -114,43 +114,176 @@ ControlPanelApp.controllers
  		self.message = 'This is the dashboard: Content coming soon...';
  	}])
 
- 	.controller('PresentationController', 
- 		['AuthenticationService', 
- 		'CorePublisherService', 
- 		//'MessageNotificationService', 
- 		'$location', 
- 		'ngDialog',
- 		function(AuthenticationService ,CorePublisherService, $location, ngDialog) {
+ 	.controller('PresentationCreateController',
+ 		['AuthenticationService', 'CorePublisherService', '$location', function(AuthenticationService, CorePublisherService, $location) {
+ 			var self = this;
+ 			self.isAuthenticated = AuthenticationService.isAuthenticated();
+	 		self.categories = [];
+
+	 		self.presentationItem = {
+	 			title: '',
+	 			description: '',
+	 			thumbnail: '',
+	 			file: '',
+	 			pub_date: '',
+	 			expiry_date: '',
+	 			categories: []
+	 		};
+
+	 		//fetch all categories and make them availbale for use
+	 		CorePublisherService.allCategories().then(function(resp) {
+	 			self.categories = resp.data;
+	 		}, function(errorResp) {
+	 			console.error('Failed to fetch categories:');
+	 		});
+
+	 		self.create = function() {
+	 			console.log('DATA TO BE POSTED: '+ JSON.stringify(self.presentationItem));
+	 			
+	 			if (self.isAuthenticated) {
+
+	 				var fd = new FormData();
+
+	 				fd.append('title', self.presentationItem.title);
+	 				fd.append('description', self.presentationItem.description);
+	 				fd.append('thumbnail', self.presentationItem.thumbnail);
+	 				fd.append('file', self.presentationItem.file);
+	 				fd.append('pub_date', self.presentationItem.pub_date);
+	 				fd.append('expiry_date', self.presentationItem.expiry_date);
+	 				fd.append('categories', self.presentationItem.categories);
+
+	 				CorePublisherService.newPresentation(fd).then(function(resp) {
+	 					console.log('Presentation created successfully');
+	 					$location.url('/presentations');
+
+	 				}, function(errorResp) {
+	 					console.error('Failed to create Presdentation:');
+	 				});
+
+		 		} else {
+		 			//redirect to the login page
+		 			$location.url('/login');
+		 		}
+	 		};
+ 	}])
+
+	.controller('FileCreateController', 
+		['AuthenticationService', 'CorePublisherService', '$location', function(AuthenticationService, CorePublisherService, $location) {
+			var self = this;
+			self.isAuthenticated = AuthenticationService.isAuthenticated();
+			self.categories = [];
+
+			self.newFile = {
+	 			title: '',
+	 			description: '',
+	 			thumbnail: '',
+	 			file: '',
+	 			pub_date: '',
+	 			expiry_date: '',
+	 			categories: []
+	 		};
+
+	 		//fetch all categories and make them availbale for use
+	 		CorePublisherService.allCategories().then(function(resp) {
+	 			self.categories = resp.data;
+	 		}, function(errorResp) {
+	 			console.error('Failed to fetch categories:');
+	 		});
+
+	 		self.create = function() {
+	 			console.log('DATA TO BE POSTED: '+ JSON.stringify(self.newFile));
+	 			
+	 			if (self.isAuthenticated) {
+
+	 				var fd = new FormData();
+
+	 				fd.append('title', self.newFile.title);
+	 				fd.append('description', self.newFile.description);
+	 				fd.append('thumbnail', self.newFile.thumbnail);
+	 				fd.append('file', self.newFile.file);
+	 				fd.append('pub_date', self.newFile.pub_date);
+	 				fd.append('expiry_date', self.newFile.expiry_date);
+	 				fd.append('categories', self.newFile.categories);
+
+	 				CorePublisherService.newFile(fd).then(function(resp) {
+	 					console.log('Presentation created successfully');
+	 					$location.url('/files');
+
+	 				}, function(errorResp) {
+	 					console.error('Failed to create Presdentation:');
+	 				});
+
+		 		} else {
+		 			//redirect to the login page
+		 			$location.url('/login');
+		 		}
+	 		};
+	}])
+
+	.controller('LinkCreateController', 
+		['AuthenticationService', 'CorePublisherService', '$location', function(AuthenticationService, CorePublisherService, $location) {
+			var self = this;
+			self.isAuthenticated = AuthenticationService.isAuthenticated();
+			self.categories = [];
+
+			self.newLink = {
+	 			title: '',
+	 			description: '',
+	 			thumbnail: '',
+	 			link: '',
+	 			pub_date: '',
+	 			expiry_date: '',
+	 			categories: []
+	 		};
+
+	 		//fetch all categories and make them availbale for use
+	 		CorePublisherService.allCategories().then(function(resp) {
+	 			self.categories = resp.data;
+	 		}, function(errorResp) {
+	 			console.error('Failed to fetch categories:');
+	 		});
+
+	 		self.create = function() {
+	 			console.log('DATA TO BE POSTED: '+ JSON.stringify(self.newLink));
+	 			
+	 			if (self.isAuthenticated) {
+
+	 				var fd = new FormData();
+
+	 				fd.append('title', self.newLink.title);
+	 				fd.append('description', self.newLink.description);
+	 				fd.append('thumbnail', self.newLink.thumbnail);
+	 				fd.append('link', self.newLink.link);
+	 				fd.append('pub_date', self.newLink.pub_date);
+	 				fd.append('expiry_date', self.newLink.expiry_date);
+	 				fd.append('categories', self.newLink.categories);
+
+	 				CorePublisherService.newLink(fd).then(function(resp) {
+	 					console.log('Presentation created successfully');
+	 					$location.url('/links');
+
+	 				}, function(errorResp) {
+	 					console.error('Failed to create Presdentation:');
+	 				});
+
+		 		} else {
+		 			//redirect to the login page
+		 			$location.url('/login');
+		 		}
+	 		};
+	}])
+	
+ 	.controller('PresentationListController', 
+ 		['CorePublisherService', '$location', 'ngDialog',function(CorePublisherService, $location, ngDialog) {
 
  		//ToDO -Implement
  		var self = this;
-
- 		self.isAuthenticated = AuthenticationService.isAuthenticated();
  		self.presentations = [];
- 		self.categories = [];
-
- 		self.presentationItem = {
- 			title: '',
- 			description: '',
- 			thumbnail: '',
- 			file: '',
- 			pub_date: '',
- 			expiry_date: '',
- 			categories: []
- 		};
-
- 		//fetch all categories and make them availbale for use
- 		CorePublisherService.allCategories().then(function(resp) {
- 			self.categories = resp.data;
- 			console.log('Categories loaded successfully: '+ resp.data);
- 		}, function(errorResp) {
- 			console.error('Failed to fetch categories:');
- 		});
 
  		//fetch all presentations
  		CorePublisherService.allPresentations().then(function(resp) {
  			self.presentations = resp.data;
- 			console.log('allPresentations loaded successfully: '+ resp.data);
+ 			console.log('allPresentations loaded successfully:');
  		}, function(errorResp) {
  			//MessageNotificationService.error(errorResp.error);
  			console.error('Error fetching data...');
@@ -164,63 +297,30 @@ ControlPanelApp.controllers
  			});
  		};
  		*/
+ 	}])
 
- 		self.submitNewPresentation = function() {
+ 	.controller('FileListController', ['CorePublisherService', '$location', function(CorePublisherService, $location) {
+ 		var self = this;
+ 		self.files = [];
 
- 			console.log('Submit function called');
- 			console.log('DATA TO BE POSTED: '+ JSON.stringify(self.presentationItem));
- 			
- 			if (self.isAuthenticated) {
+ 		CorePublisherService.allFiles().then(function(resp) {
+ 			self.files = resp.data;
+ 			console.log('Files loaded successfully...');
+ 		}, function(errorResp) {
+ 			console.error('Error fetching files...');
+ 		});
+ 	}])
 
- 				var fd = new FormData();
+ 	.controller('LinkListController', ['CorePublisherService', '$location', function(CorePublisherService, $location) {
+ 		var self = this;
+ 		self.links = [];
 
- 				fd.append('title', self.presentationItem.title);
- 				fd.append('description', self.presentationItem.description);
- 				fd.append('thumbnail', self.presentationItem.thumbnail);
- 				fd.append('file', self.presentationItem.file);
- 				fd.append('pub_data', self.presentationItem.pub_date);
- 				fd.append('expiry_date', self.presentationItem.expiry_date);
- 				fd.append('categories', self.presentationItem.categories);
-
- 				CorePublisherService.newPresentation(fd).then(function(resp) {
- 					console.log('Presentation created successfully');
- 				}, function(errorResp) {
- 					console.error('Failed to create Presdentation: '+ JSON.stringify(errorResp));
- 				});
-
-
- 				/*
-	 			CorePublisherService.newPresentation({
-	 				title: self.presentationItem.title,
-	 				description: self.presentationItem.description,
-	 				thumbnail: self.presentationItem.thumbnail,
-	 				file: self.presentationItem.file,
-	 				pub_date: self.presentationItem.pub_date,
-	 				categories: self.presentationItem.categories
-
-	 			}).then(function(resp) {
-	 				//Hande the response...
-
-	 				console.log('Presentation created successfully...');
-	 			}, function(errorResp) {
-	 				//Error handling...
-	 				console.error('Failed creating a new presentation');
-	 			});
-				*/
-	 		} else {
-	 			//redirect to the login page
-	 			$location.url('/login');
-	 		}
- 		};
-
- 		/*
- 		self.$on('presentation.created', function(event, pub) {
- 			self.presentations.unshift(pub);
+ 		CorePublisherService.allWebLinks().then(function(resp) {
+ 			self.links = resp.data;
+ 			console.log('Liks loaded successfully');
+ 		}, function(errorResp) {
+ 			console.error('Error fetching links...');
  		});
 
- 		self.$on('presentation.created.error', function() {
- 			self.presentations.shift();
- 		});
-		*/
- 	}]);
+ 	}])
 

@@ -16,15 +16,15 @@ class Category(models.Model):
 
 
 class BaseEntry(models.Model):
-	categories = models.ManyToManyField(Category)
+	categories = models.ManyToManyField(Category, blank=True)
 	user = models.ForeignKey(Account)
 
 	title = models.CharField(max_length=255)
 	description = models.TextField()
 	thumbnail = models.ImageField(upload_to='_thumbnails_', blank=True)
-	created = models.DateTimeField(auto_now_add=True)
-	pub_date = models.DateTimeField()
-	expiry_date = models.DateTimeField(blank=True)
+	created = models.DateField(auto_now_add=True)
+	pub_date = models.DateField()
+	expiry_date = models.DateField(blank=True)
 
 	class Meta:
 		abstract = True
@@ -38,7 +38,7 @@ class BaseEntry(models.Model):
 		if not self.expiry_date:
 			pass
 
-		super(Entry, self).save(*args, **kwargs)
+		super(BaseEntry, self).save(*args, **kwargs)
 
 
 class Presentation(BaseEntry):

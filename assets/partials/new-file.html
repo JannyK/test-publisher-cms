@@ -1,0 +1,77 @@
+<div class="row">
+    <div class="col-xs-12">
+        <ul class="breadcrumb">
+            <li><a href="#">Home</a></li>
+            <li><a href="/presentations">Files</a></li>
+            <li class="active"><a href="#">new file</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+
+        <form class="form-horizontal" ng-submit="ctrl.create()">
+            <fieldset>
+                <legend>New File</legend>
+                <div class="form-group">
+                    <label for="title" class="col-md-2 control-label">Title</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" id="title" placeholder="File title" ng-model="ctrl.newFile.title">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="description" class="col-md-2 control-label">Description</label>
+                    <div class="col-md-10">
+                        <textarea class="form-control" rows="3" id="description" ng-model="ctrl.newFile.description"></textarea>
+                        <span class="help-block">A brief description of the presentation.</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="thumbnail" class="col-md-2 control-label">Thumbnail</label>
+                    <div class="col-md-10">
+                        <input type="file" class="form-control" id="thumbnail" placeholder="Select an image to use as thumbnail" file-field="ctrl.newFile.thumbnail">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="file" class="col-md-2 control-label">File</label>
+                    <div class="col-md-10">
+                        <input type="file" class="form-control" id="file" placeholder="Attach the file" file-field="ctrl.newFile.file">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="pub_data" class="col-md-2 control-label">Publication date</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control datePicker" id="pub_date" placeholder="Publication date" ng-model="ctrl.newFile.pub_date">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="expiry_data" class="col-md-2 control-label">Expiration date</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control datePicker" id="expiry_date" placeholder="Expiration date" ng-model="ctrl.newFile.expiry_date">
+                    </div>
+                </div>
+
+                
+                <div class="form-group">
+                    <label for="categpries" class="col-md-2 control-label">Select categories/products</label>
+                    <div class="col-md-10">
+                        <select multiple="" class="form-control" ng-model="ctrl.newFile.categories" ng-options="c.id as c.name for c in ctrl.categories">
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-10 col-md-offset-2">
+                        <a class="btn btn-default" href="/files">Cancel</a>
+                        <input type="submit" value="Submit" class="btn btn-primary">
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>

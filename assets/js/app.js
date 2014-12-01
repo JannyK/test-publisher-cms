@@ -36,14 +36,34 @@ var app = angular.module('ControlPanelApp',
 				templateUrl: '/static/partials/dashboard.html'
 			})
 			.when('/presentations', {
-				controller: 'PresentationController',
+				controller: 'PresentationListController',
 				controllerAs: 'ctrl',
 				templateUrl: '/static/partials/presentations.html'
 			})
 			.when('/presentations/new', {
-				controller: 'PresentationController',
+				controller: 'PresentationCreateController',
 				controllerAs: 'ctrl',
 				templateUrl: '/static/partials/new-presentation.html'
+			})
+			.when('/links', {
+				controller: 'LinkListController',
+				controllerAs: 'ctrl',
+				templateUrl: '/static/partials/links.html'
+			})
+			.when('/links/new', {
+				controller: 'LinkCreateController',
+				controllerAs: 'ctrl',
+				templateUrl: '/static/partials/new-link.html'
+			})
+			.when('/files', {
+				controller: 'FileListController',
+				controllerAs: 'ctrl',
+				templateUrl: '/static/partials/files.html'
+			})
+			.when('/files/new', {
+				controller: 'FileCreateController',
+				controllerAs: 'ctrl',
+				templateUrl: '/static/partials/new-file.html'
 			})
 			.otherwise({
 				redirectTo: '/'
@@ -148,6 +168,14 @@ app.factory('CorePublisherService', ['$http', function($http) {
 			return $http.get('/api/v1/presentations/?format=json');
 		},
 
+		allFiles: function() {
+			return $http.get('/api/v1/files/');
+		},
+
+		allWebLinks: function() {
+			return $http.get('/api/v1/links/');
+		},
+
 		newPresentation: function(data) {
 			return $http.post('/api/v1/presentations/', data, {
 				transformRequest: angular.identity,
@@ -155,29 +183,27 @@ app.factory('CorePublisherService', ['$http', function($http) {
 			});
 		},
 
-		getPresentation: function(user_country) {
-			return $http.get('/api/v1/accounts/' + user_country + 'presentations');
-		},
-
-		allFiles: function() {
-			return $http.get('/api/v1/files/');
-		},
-
 		newFile: function(data) {
-			return $http.post('/api/v1/files/', data);
-		},
-
-		//TODO - Change the param to be: name of the current country
-		getFile: function(user_country) {
-			return $http.get('/api/v1/accounts/' + user_country + 'files');
-		},
-
-		allWebLinks: function() {
-			return $http.get('/api/v1/links/');
+			return $http.post('/api/v1/files/', data, {
+				transformRequest: angular.identity,
+				headers: {'Content-Type': undefined}
+			});
 		},
 
 		newWebLink: function(data) {
-			return $http.post('/api/v1/links/', data);
+			return $http.post('/api/v1/links/', data, {
+				transformRequest: angular.identity,
+				headers: {'Content-Type': undefined}
+			});
+		},
+
+		getPresentations: function(user_country) {
+			return $http.get('/api/v1/accounts/' + user_country + 'presentations');
+		},
+
+		//TODO - Change the param to be: name of the current country
+		getFiles: function(user_country) {
+			return $http.get('/api/v1/accounts/' + user_country + 'files');
 		},
 
 		getWebLinks: function(user_country) {

@@ -51,16 +51,13 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class PresentationSerializer(serializers.ModelSerializer):
-	thumbnail = serializers.Field('thumbnail.url')
-	file = serializers.Field('file.url')
-	categories = CategorySerializer(required=True)
+	#pub_date = serializers.DateTimeField(
+		#format='YYYY-MM-DD', input_formats=['YYYY-MM-DD'])
+	#expiry_date = serializers.DateTimeField(
+		#format='YYYY-MM-DD', input_formats=['YYYY-MM-DD'])
+	#categories = serializers.SlugRelatedField(
+		#slug_field='id', many=True, required=False, read_only=True)
 	user = AccountSerializer(required=False)
-
-	
-	pub_date = serializers.DateTimeField(
-		format='YYYY-MM-DDTHH:mm:ss.sssZ', input_formats=['YYYY-MM-DDTHH:mm:ss.sssZ'])
-	expiry_date = serializers.DateTimeField(
-		format='YYYY-MM-DDTHH:mm:ss.sssZ', input_formats=['YYYY-MM-DDTHH:mm:ss.sssZ'])
 
 	class Meta:
 		model = Presentation
@@ -76,7 +73,7 @@ class PresentationSerializer(serializers.ModelSerializer):
 			'categories',
 			'user',
 		)
-		read_only_fields = ('id', 'created',)
+		read_only_fields = ('id', 'created', 'categories',)
 
 	def get_validation_exclusions(self, *args, **kwargs):
 		exclusions = super(PresentationSerializer, self).get_validation_exclusions(
@@ -85,15 +82,7 @@ class PresentationSerializer(serializers.ModelSerializer):
 
 
 class FileSerializer(serializers.ModelSerializer):
-	thumbnail = serializers.Field('thumbnail.url')
-	file = serializers.Field('file.url')
-	categories = CategorySerializer(required=True)
 	user = AccountSerializer(required=False)
-
-	pub_date = serializers.DateTimeField(
-		format='YYYY-MM-DDTHH:mm:ss.sssZ', input_formats=['YYYY-MM-DDTHH:mm:ss.sssZ'])
-	expiry_date = serializers.DateTimeField(
-		format='YYYY-MM-DDTHH:mm:ss.sssZ', input_formats=['YYYY-MM-DDTHH:mm:ss.sssZ'])
 
 	class Meta:
 		model = File
@@ -109,7 +98,7 @@ class FileSerializer(serializers.ModelSerializer):
 			'categories',
 			'user',
 		)
-		read_only_fields = ('id', 'created',)
+		read_only_fields = ('id', 'created', 'categories',)
 
 	def get_validation_exclusions(self, *args, **kwargs):
 		exclusions = super(FileSerializer, self).get_validation_exclusions(
@@ -118,14 +107,7 @@ class FileSerializer(serializers.ModelSerializer):
 
 
 class WebLinkSerializer(serializers.ModelSerializer):
-	thumbnail = serializers.Field('thumbnail.url')
-	categories = CategorySerializer(required=True)
 	user = AccountSerializer(required=False)
-
-	pub_date = serializers.DateTimeField(
-		format='YYYY-MM-DDTHH:mm:ss.sssZ', input_formats=['YYYY-MM-DDTHH:mm:ss.sssZ'])
-	expiry_date = serializers.DateTimeField(
-		format='YYYY-MM-DDTHH:mm:ss.sssZ', input_formats=['YYYY-MM-DDTHH:mm:ss.sssZ'])
 
 	class Meta:
 		model = WebLink
@@ -141,7 +123,7 @@ class WebLinkSerializer(serializers.ModelSerializer):
 			'categories',
 			'user',
 		)
-		read_only_fields = ('id', 'created',)
+		read_only_fields = ('id', 'created', 'categories',)
 
 	def get_validation_exclusions(self, *args, **kwargs):
 		exclusions = super(WebLinkSerializer, self).get_validation_exclusions(

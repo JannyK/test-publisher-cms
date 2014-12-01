@@ -1,0 +1,51 @@
+<div class="row">
+	<div class="col-xs-12">
+		<ul class="breadcrumb">
+	  		<li><a href="#">Home</a></li>
+	  		<li class="active">Files</li>
+		</ul>
+	</div>
+</div>
+
+<div class="row"></div>
+
+<div class="row">
+	<div class="col-xs-12">
+		
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-list"></span>Files
+                <div class="pull-right action-buttons">
+                    <div class="btn-group pull-right">
+                        <a class="btn btn-primary btn-xs pull-right" href="#/files/new">Create new</a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="f in ctrl.files">
+                        <div class="checkbox">
+   
+                            <label for="checkbox">
+                                [[ f.title ]]
+                            </label>
+                        </div>
+                        <div class="pull-right action-buttons">
+                            <a href="#/files/edit/:[[ f.id ]]"><span class="glyphicon glyphicon-pencil"></span></a>
+                            <a href="#/files/delete/:[[ f.id ]]" class="trash"><span class="glyphicon glyphicon-trash"></span></a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="panel-footer">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h6>
+                            Total Count <span class="label label-info" ng-bind="ctrl.files.length"></span>
+                        </h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
+</div>
