@@ -56,6 +56,12 @@ class PresentationSerializer(serializers.ModelSerializer):
 	categories = CategorySerializer(required=True)
 	user = AccountSerializer(required=False)
 
+	
+	pub_date = serializers.DateTimeField(
+		format='YYYY-MM-DDTHH:mm:ss.sssZ', input_formats=['YYYY-MM-DDTHH:mm:ss.sssZ'])
+	expiry_date = serializers.DateTimeField(
+		format='YYYY-MM-DDTHH:mm:ss.sssZ', input_formats=['YYYY-MM-DDTHH:mm:ss.sssZ'])
+
 	class Meta:
 		model = Presentation
 		fields = (
@@ -84,6 +90,11 @@ class FileSerializer(serializers.ModelSerializer):
 	categories = CategorySerializer(required=True)
 	user = AccountSerializer(required=False)
 
+	pub_date = serializers.DateTimeField(
+		format='YYYY-MM-DDTHH:mm:ss.sssZ', input_formats=['YYYY-MM-DDTHH:mm:ss.sssZ'])
+	expiry_date = serializers.DateTimeField(
+		format='YYYY-MM-DDTHH:mm:ss.sssZ', input_formats=['YYYY-MM-DDTHH:mm:ss.sssZ'])
+
 	class Meta:
 		model = File
 		fields = (
@@ -110,6 +121,11 @@ class WebLinkSerializer(serializers.ModelSerializer):
 	thumbnail = serializers.Field('thumbnail.url')
 	categories = CategorySerializer(required=True)
 	user = AccountSerializer(required=False)
+
+	pub_date = serializers.DateTimeField(
+		format='YYYY-MM-DDTHH:mm:ss.sssZ', input_formats=['YYYY-MM-DDTHH:mm:ss.sssZ'])
+	expiry_date = serializers.DateTimeField(
+		format='YYYY-MM-DDTHH:mm:ss.sssZ', input_formats=['YYYY-MM-DDTHH:mm:ss.sssZ'])
 
 	class Meta:
 		model = WebLink

@@ -168,6 +168,8 @@ ControlPanelApp.controllers
  		self.submitNewPresentation = function() {
 
  			console.log('Submit function called');
+ 			console.log('DATA TO BE POSTED: '+ JSON.stringify(self.presentationItem));
+ 			
  			if (self.isAuthenticated) {
 
  				var fd = new FormData();
