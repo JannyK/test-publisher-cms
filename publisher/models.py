@@ -29,6 +29,7 @@ class BaseEntry(models.Model):
 	class Meta:
 		abstract = True
 
+
 	def __unicode__(self):
 		return 'Entry: %s' % (self.title,)
 
@@ -44,10 +45,19 @@ class BaseEntry(models.Model):
 class Presentation(BaseEntry):
 	file = models.FileField(upload_to='presentation_files')
 
+	class Meta:
+		ordering = ('-created',)
+
 
 class File(BaseEntry):
 	file = models.FileField(upload_to='files')
 
+	class Meta:
+		ordering = ('-created',)
+
 
 class WebLink(BaseEntry):
 	link = models.URLField(max_length=255)
+
+	class Meta:
+		ordering = ('-created',)

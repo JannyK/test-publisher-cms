@@ -1,9 +1,9 @@
 <div class="row">
     <div class="col-xs-12">
         <ul class="breadcrumb">
-            <li><a href="#">Home</a></li>
-            <li><a href="/presentations">Links</a></li>
-            <li class="active"><a href="#">new weblink</a></li>
+            <li><a href="#/">Home</a></li>
+            <li><a href="#/links">Links</a></li>
+            <li class="active"><a href="#">Detail</a></li>
         </ul>
     </div>
 </div>
@@ -11,64 +11,72 @@
 <div class="row">
     <div class="col-xs-12">
 
-        <form class="form-horizontal" ng-submit="ctrl.create()">
+        <form class="form-horizontal" ng-submit="ctrl.update()">
             <fieldset>
-                <legend>New Weblink</legend>
+                <legend>[[ ctrl.object.title ]]</legend>
                 <div class="form-group">
                     <label for="title" class="col-md-2 control-label">Title</label>
                     <div class="col-md-10">
-                        <input type="text" class="form-control" id="title" placeholder="Title" ng-model="ctrl.newLink.title">
+                        <input type="text" class="form-control" id="title" placeholder="Title" ng-model="ctrl.object.title">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="description" class="col-md-2 control-label">Description</label>
                     <div class="col-md-10">
-                        <textarea class="form-control" rows="3" id="description" ng-model="ctrl.newLink.description"></textarea>
+                        <textarea class="form-control" rows="3" id="description" ng-model="ctrl.object.description"></textarea>
                         <span class="help-block">A brief description.</span>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="thumbnail" class="col-md-2 control-label">Thumbnail</label>
-                    <div class="col-md-10">
-                        <input type="file" class="form-control" id="thumbnail" file-field="ctrl.newLink.thumbnail">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <img src="">
+                    </div>
+
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                            <label for="thumbnail" class="col-md-2 control-label">Change Thumbnail?</label>
+                            <div class="col-md-10">
+                                <input type="file" class="form-control" id="thumbnail" file-field="ctrl.object.thumbnail">
+                            </div>
+                        </div>
                     </div>
                 </div>
-
+                
                 <div class="form-group">
                     <label for="link" class="col-md-2 control-label">Link</label>
                     <div class="col-md-10">
-                        <input type="url" class="form-control" id="link" placeholder="URL" ng-model="ctrl.newLink.link">
+                        <input type="url" class="form-control" id="link" placeholder="URL" ng-model="ctrl.object.link">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="pub_data" class="col-md-2 control-label">Publication date</label>
                     <div class="col-md-10">
-                        <input type="text" class="form-control datePicker" id="pub_date" placeholder="Publication date" ng-model="ctrl.newLink.pub_date">
+                        <input type="text" class="form-control datePicker" id="pub_date" placeholder="Publication date" ng-model="ctrl.object.pub_date">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="expiry_data" class="col-md-2 control-label">Expiration date</label>
                     <div class="col-md-10">
-                        <input type="text" class="form-control datePicker" id="expiry_date" placeholder="Expiration date" ng-model="ctrl.newLink.expiry_date">
+                        <input type="text" class="form-control datePicker" id="expiry_date" placeholder="Expiration date" ng-model="ctrl.object.expiry_date">
                     </div>
                 </div>
 
-                
                 <div class="form-group">
                     <label for="categpries" class="col-md-2 control-label">Select categories/products</label>
                     <div class="col-md-10">
-                        <select multiple="" class="form-control" ng-model="ctrl.newLink.categories" ng-options="c.id as c.name for c in ctrl.categories">
+                        <select multiple="" class="form-control" ng-model="ctrl.object.categories" ng-options="c.id as c.name for c in ctrl.categories">
                         </select>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-md-10 col-md-offset-2">
-                        <a class="btn btn-default" href="/link">Cancel</a>
+                        <a class="btn btn-default" href="#/links">Cancel</a>
                         <input type="submit" value="Submit" class="btn btn-primary">
+                        <a class="btn btn-danger pull-right" ng-click="ctrl.delete()">Delete</a>
                     </div>
                 </div>
             </fieldset>

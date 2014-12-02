@@ -45,6 +45,11 @@ var app = angular.module('ControlPanelApp',
 				controllerAs: 'ctrl',
 				templateUrl: '/static/partials/new-presentation.html'
 			})
+			.when('/presentations/:id', {
+				controller: 'PresentationDetailController',
+				controllerAs: 'ctrl',
+				templateUrl: '/static/partials/detail-presentation.html'
+			})
 			.when('/links', {
 				controller: 'LinkListController',
 				controllerAs: 'ctrl',
@@ -55,6 +60,11 @@ var app = angular.module('ControlPanelApp',
 				controllerAs: 'ctrl',
 				templateUrl: '/static/partials/new-link.html'
 			})
+			.when('/links/:linkID', {
+				controller: 'WeblinkDetailController',
+				controllerAs: 'ctrl',
+				templateUrl: '/static/partials/detail-link.html'
+			})
 			.when('/files', {
 				controller: 'FileListController',
 				controllerAs: 'ctrl',
@@ -64,6 +74,11 @@ var app = angular.module('ControlPanelApp',
 				controller: 'FileCreateController',
 				controllerAs: 'ctrl',
 				templateUrl: '/static/partials/new-file.html'
+			})
+			.when('/files/:id', {
+				controller: 'FileDetailController',
+				controllerAs: 'ctrl',
+				templateUrl: '/static/partials/detail-file.html'
 			})
 			.otherwise({
 				redirectTo: '/'
@@ -183,11 +198,41 @@ app.factory('CorePublisherService', ['$http', function($http) {
 			});
 		},
 
+		fetchPresentation: function(pID) {
+			return $http.get('/api/v1/presentations/' + pID);
+		},
+
+		updatePresentation: function(pID, data) {
+			return $http.patch('/api/v1/presentations/' + pID + '/', data, {
+				transformRequest: angular.identity,
+				headers: {'Content-Type': undefined}
+			});
+		},
+
+		deletePresentation: function(pID) {
+			return $http.delete('/api/v1/presentations/' + pID);
+		},
+
 		newFile: function(data) {
 			return $http.post('/api/v1/files/', data, {
 				transformRequest: angular.identity,
 				headers: {'Content-Type': undefined}
 			});
+		},
+
+		fetchFile: function(fID) {
+			return $http.get('/api/v1/files/' + fID);
+		},
+
+		updateFile: function(fID, data) {
+			return $http.patch('/api/v1/files/' + fID + '/', data, {
+				transformRequest: angular.identity,
+				headers: {'Content-Type': undefined}
+			});
+		},
+
+		deleteFile: function(fID) {
+			return $http.delete('/api/v1/files/' + fID);
 		},
 
 		newWebLink: function(data) {
@@ -197,6 +242,23 @@ app.factory('CorePublisherService', ['$http', function($http) {
 			});
 		},
 
+		fetchWeblink: function(itemID) {
+			return $http.get('/api/v1/links/' + itemID + '/?format=json');
+		},
+
+		updateWeblink: function(itemID, data) {
+
+			return $http.patch('/api/v1/links/' + itemID + '/', data, {
+				transformRequest: angular.identity,
+				headers: {'Content-Type': undefined}
+			});		
+		},
+
+		deleteWeblink: function(itemID) {
+			return $http.delete('/api/v1/links/' + itemID + '/?format=json');
+		},
+
+		//Fetch Items by country (from current logged user)
 		getPresentations: function(user_country) {
 			return $http.get('/api/v1/accounts/' + user_country + 'presentations');
 		},

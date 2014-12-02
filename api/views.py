@@ -120,7 +120,6 @@ class PresentationViewSet(viewsets.ModelViewSet):
 	parser_classes = (FormParser, MultiPartParser,)
 
 	def get_permissions(self):
-		print 'Request DATA: ', self.request
 		if self.request.method in permissions.SAFE_METHODS:
 			return (permissions.AllowAny(),)
 		return (permissions.IsAuthenticated(), IsPresentationOwner(),)
@@ -134,7 +133,8 @@ class PresentationViewSet(viewsets.ModelViewSet):
 
 	def post_save(self, obj, created=False):
 		categories = self.request.DATA['categories']
-
+		obj.categories.add(category)
+		
 		for c in categories.split(','):
 			category = Category.objects.get(pk=int(c))
 			obj.categories.add(category)
@@ -170,6 +170,7 @@ class FileViewSet(viewsets.ModelViewSet):
 
 	def post_save(self, obj, created=False):
 		categories = self.request.DATA['categories']
+		obj.categories.add(category)
 
 		for c in categories.split(','):
 			category = Category.objects.get(pk=int(c))
@@ -201,18 +202,20 @@ class WebLinkViewSet(viewsets.ModelViewSet):
 			return (permissions.AllowAny(),)
 		return (permissions.IsAuthenticated(), IsWebLinkOwner(),)
 
+
 	def pre_save(self, obj):
 		obj.user = self.request.user
 		return super(WebLinkViewSet, self).pre_save(obj)
 
 	def post_save(self, obj, created=False):
 		categories = self.request.DATA['categories']
+		obj.categories.clear()
 
 		for c in categories.split(','):
 			category = Category.objects.get(pk=int(c))
 			obj.categories.add(category)
 
-		return super(UserWebLinksViewSet, self).post_save(obj, created)
+		return super(WebLinkViewSet, self).post_save(obj, created)
 
 
 

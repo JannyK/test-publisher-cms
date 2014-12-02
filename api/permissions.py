@@ -25,4 +25,4 @@ class IsWebLinkOwner(permissions.BasePermission):
 	def has_object_permission(self, request, view, l):
 		if request.user:
 			return l.user == request.user
-		return False
+		return True

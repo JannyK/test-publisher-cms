@@ -244,7 +244,6 @@ ControlPanelApp.controllers
 	 		});
 
 	 		self.create = function() {
-	 			console.log('DATA TO BE POSTED: '+ JSON.stringify(self.newLink));
 	 			
 	 			if (self.isAuthenticated) {
 
@@ -258,7 +257,7 @@ ControlPanelApp.controllers
 	 				fd.append('expiry_date', self.newLink.expiry_date);
 	 				fd.append('categories', self.newLink.categories);
 
-	 				CorePublisherService.newLink(fd).then(function(resp) {
+	 				CorePublisherService.newWebLink(fd).then(function(resp) {
 	 					console.log('Presentation created successfully');
 	 					$location.url('/links');
 
@@ -323,4 +322,258 @@ ControlPanelApp.controllers
  		});
 
  	}])
+
+ 	.controller('PresentationDetailController', 
+ 		['AuthenticationService', 'CorePublisherService', '$location', '$routeParams', 'ngDialog', function(AuthenticationService, CorePublisherService, $location, $routeParams, ngDialog) {
+
+ 			var self = this;
+ 			self.isAuthenticated = AuthenticationService.isAuthenticated();
+ 			self.objectID = $routeParams.id;
+ 			self.object = {};
+ 			self.categories = [];
+
+ 			//fetch all categories and make them availbale for use
+	 		CorePublisherService.allCategories().then(function(resp) {
+	 			self.categories = resp.data;
+	 		}, function(errorResp) {
+	 			console.error('Failed to fetch categories:');
+	 		});
+
+ 			self.retrieve = function(objID) {
+ 				CorePublisherService.fetchPresentation(objID).then(function(resp) {
+ 					self.object = resp.data;
+ 					console.log('Object fecthed and set correctly');
+ 				}, function(errorResp) {
+ 					console.error('Failed to load resource from the remote server');
+ 				});
+ 			};
+
+ 			self.update = function() {
+	 			if (self.isAuthenticated) {
+
+	 				var fd = new FormData();
+	 				//var isMultipart = false;
+
+	 				fd.append('title', self.object.title);
+	 				fd.append('description', self.object.description);
+
+	 				//Hack---> Append the file attribute only if updated
+	 				if (typeof(self.object.thumbnail) === 'object') {
+	 					console.log('SENDING MULTIPART');
+
+	 					fd.append('thumbnail', self.object.thumbnail);
+	 					//isMultipart = true;
+	 				}
+
+	 				if (typeof(self.object.file) === 'object') {
+	 					console.log('SENDING MULTIPART');
+	 					fd.append('file', self.object.file);
+	 				}
+
+	 				fd.append('pub_date', self.object.pub_date);
+	 				fd.append('expiry_date', self.object.expiry_date);
+	 				fd.append('categories', self.object.categories);
+
+	 				CorePublisherService.updatePresentation(self.objectID, fd).then(function(resp) {
+	 					console.log('Presentation updated successfully');
+	 					//$location.url('/links');
+
+	 				}, function(errorResp) {
+	 					console.error('Failed to update presentation:');
+	 				});
+
+		 		} else {
+		 			//redirect to the login page
+		 			$location.url('/login');
+		 		}
+ 			};
+
+ 			self.delete = function() {
+ 				if (self.isAuthenticated) {
+	 				CorePublisherService.deletePresentation(self.objectID).then(function(resp) {
+	 					console.log('Presentation deleted successfully');
+	 					$location.url('/presentations');
+
+	 				}, function(errorResp) {
+	 					console.error('Failed to delete the presentation');
+	 				});
+	 			} else {
+	 				console.error('Does not have permission');
+	 			}
+ 			};
+
+ 			//fetch the object after instanciation
+ 			self.retrieve(self.objectID);
+
+ 	}])
+
+	.controller('FileDetailController', 
+ 		['AuthenticationService', 'CorePublisherService', '$location', '$routeParams', 'ngDialog', function(AuthenticationService, CorePublisherService, $location, $routeParams, ngDialog) {
+
+ 			var self = this;
+ 			self.isAuthenticated = AuthenticationService.isAuthenticated();
+ 			self.objectID = $routeParams.id;
+ 			self.object = {};
+ 			self.categories = [];
+
+ 			//fetch all categories and make them availbale for use
+	 		CorePublisherService.allCategories().then(function(resp) {
+	 			self.categories = resp.data;
+	 		}, function(errorResp) {
+	 			console.error('Failed to fetch categories:');
+	 		});
+
+ 			self.retrieve = function(objID) {
+ 				CorePublisherService.fetchFile(objID).then(function(resp) {
+ 					self.object = resp.data;
+ 					console.log('Object fecthed and set correctly');
+ 				}, function(errorResp) {
+ 					console.error('Failed to load resource from the remote server');
+ 				});
+ 			};
+
+ 			self.update = function() {
+	 			if (self.isAuthenticated) {
+
+	 				var fd = new FormData();
+	 				//var isMultipart = false;
+
+	 				fd.append('title', self.object.title);
+	 				fd.append('description', self.object.description);
+
+	 				//Hack---> Append the file attribute only if updated
+	 				if (typeof(self.object.thumbnail) === 'object') {
+	 					console.log('SENDING MULTIPART');
+
+	 					fd.append('thumbnail', self.object.thumbnail);
+	 					//isMultipart = true;
+	 				}
+
+	 				if (typeof(self.object.file) === 'object') {
+	 					fd.append('file', self.object.file);
+	 				}
+
+	 				fd.append('pub_date', self.object.pub_date);
+	 				fd.append('expiry_date', self.object.expiry_date);
+	 				fd.append('categories', self.object.categories);
+
+	 				CorePublisherService.updateFile(self.objectID, fd).then(function(resp) {
+	 					console.log('File updated successfully');
+	 					//$location.url('/links');
+
+	 				}, function(errorResp) {
+	 					console.error('Failed to update file:');
+	 				});
+
+		 		} else {
+		 			//redirect to the login page
+		 			$location.url('/login');
+		 		}
+ 			};
+
+
+ 			self.delete = function() {
+ 				if (self.isAuthenticated) {
+	 				CorePublisherService.deleteFile(self.objectID).then(function(resp) {
+	 					console.log('File deleted successfully');
+	 				}, function(errorResp) {
+	 					console.error('Failed to delete the file');
+	 				});
+	 			} else {
+	 				console.error('Does not have permission');
+	 			}
+ 			};
+
+ 			//fetch the object after instanciation
+ 			self.retrieve(self.objectID);
+
+ 	}])
+
+	.controller('WeblinkDetailController', 
+ 		['AuthenticationService', 'CorePublisherService', '$location', '$routeParams', 'ngDialog', function(AuthenticationService, CorePublisherService, $location, $routeParams, ngDialog) {
+
+ 			var self = this;
+ 			self.isAuthenticated = AuthenticationService.isAuthenticated();
+ 			self.objectID = $routeParams.linkID;
+ 			self.categories = [];
+ 			self.object = {};
+
+ 			//fetch all categories and make them availbale for use
+	 		CorePublisherService.allCategories().then(function(resp) {
+	 			self.categories = resp.data;
+	 		}, function(errorResp) {
+	 			console.error('Failed to fetch categories:');
+	 		});
+
+ 			self.retrieve = function(objID) {
+ 				CorePublisherService.fetchWeblink(objID).then(function(resp) {
+ 					self.object = resp.data;
+ 					console.log('Object fecthed and set correctly: '+ JSON.stringify(self.object));
+ 				}, function(errorResp) {
+ 					console.error('Failed to load resource from the remote server');
+ 				});
+ 			};
+
+ 			self.update = function() {
+	 			if (self.isAuthenticated) {
+
+	 				var fd = new FormData();
+	 				//var isMultipart = false;
+
+	 				fd.append('title', self.object.title);
+	 				fd.append('description', self.object.description);
+	 				
+	 				fd.append('link', self.object.link);
+
+	 				//Hack---> Append the file attribute only if updated
+	 				if (typeof(self.object.thumbnail) === 'object') {
+	 					console.log('SENDING MULTIPART');
+
+	 					fd.append('thumbnail', self.object.thumbnail);
+	 					//isMultipart = true;
+	 				}
+
+	 				fd.append('pub_date', self.object.pub_date);
+	 				fd.append('expiry_date', self.object.expiry_date);
+	 				fd.append('categories', self.object.categories);
+
+	 				CorePublisherService.updateWeblink(self.objectID, fd).then(function(resp) {
+	 					console.log('Link updated successfully');
+	 					//$location.url('/links');
+
+	 				}, function(errorResp) {
+	 					console.error('Failed to create Presdentation:');
+	 				});
+
+		 		} else {
+		 			//redirect to the login page
+		 			$location.url('/login');
+		 		}
+ 			};
+
+ 			self.delete = function() {
+ 				if (self.isAuthenticated) {
+	 				CorePublisherService.deleteWeblink(self.objectID).then(function(resp) {
+	 					console.log('link deleted successfully');
+	 					$location.url('#/links');
+
+	 				}, function(errorResp) {
+	 					console.error('Failed to delete the link');
+	 				});
+	 			} else {
+	 				console.error('Does not have permission');
+	 			}
+ 			};
+
+ 			self.isSelectedCategory = function(c) {
+ 				if (self.object) {
+ 					return self.object.categories.indexOf(c.id) > -1;
+ 				}
+ 				return false;
+ 			};
+
+ 			//fetch the object after instanciation
+ 			self.retrieve(self.objectID);
+ 	}]);
+
 
