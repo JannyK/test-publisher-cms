@@ -21,14 +21,25 @@
                     </div>
                 </div>
             </div>
+
             <div class="panel-body">
-                <ul class="list-group">
-                    <li class="list-group-item" ng-repeat="f in ctrl.files">
-                        <div class="checkbox">
-   
-                            <label for="checkbox">
-                                [[ f.title ]]
-                            </label>
+                <ul class="list-group custom-list">
+                    <li class="list-group-item custom-item" ng-repeat="f in ctrl.files">
+                        <img src="http://placehold.it/140x100" class="item-thumbnail">
+
+                        <div class="item-infos">
+                            <p class="item-title"><a href="#/files/[[ f.id ]]">[[ f.title ]]</a></p>
+
+                            <p class="info-item">
+                                <span class="info-title">Pub Date: </span><span class="info">[[ f.pub_date | date:medium ]]</span>
+                            </p>
+                            <p>
+                                <span class="info-title">Expiry Date: </span><span class="info">[[ f.expiry_date | date:medium ]]</span>
+                            </p>
+                            <p>
+                                <span class="info-title">Categories/Products: </span><span class="info">[[ f.categories.join(" | ")]]</span>
+                            </p>
+
                         </div>
                         <div class="pull-right action-buttons">
                             <a href="#/files/[[ f.id ]]"><span class="glyphicon glyphicon-pencil"></span></a>
@@ -36,6 +47,7 @@
                     </li>
                 </ul>
             </div>
+
             <div class="panel-footer">
                 <div class="row">
                     <div class="col-xs-12">

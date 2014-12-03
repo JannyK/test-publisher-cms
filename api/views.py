@@ -133,8 +133,8 @@ class PresentationViewSet(viewsets.ModelViewSet):
 
 	def post_save(self, obj, created=False):
 		categories = self.request.DATA['categories']
-		obj.categories.add(category)
-		
+		obj.categories.clear()
+
 		for c in categories.split(','):
 			category = Category.objects.get(pk=int(c))
 			obj.categories.add(category)
@@ -170,7 +170,7 @@ class FileViewSet(viewsets.ModelViewSet):
 
 	def post_save(self, obj, created=False):
 		categories = self.request.DATA['categories']
-		obj.categories.add(category)
+		obj.categories.clear()
 
 		for c in categories.split(','):
 			category = Category.objects.get(pk=int(c))

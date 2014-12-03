@@ -41,3 +41,45 @@
 .panel-body input[type=checkbox]:checked + label { text-decoration: line-through;color: rgb(128, 144, 160); }
 .list-group-item:hover, a.list-group-item:focus {text-decoration: none;background-color: rgb(245, 245, 245);}
 .list-group { margin-bottom:0px; }
+
+.item-thumbnail {
+	display: inline-block;
+	float: left;
+	margin-top: 3px;
+}
+
+.item-infos {
+	display: inline-block;
+	margin: 5px;
+}
+
+.item-title {
+	font-size: 17px;
+	font-weight: 600;
+	color: #1377A5;
+}
+
+.item-title a {
+	text-decoration: none;
+}
+
+.info-item {
+	margin: -3px 0 0.5px;
+}
+
+.info-title {
+	font-size: 10px;
+	font-weight: 600;
+	color: #7C7979;
+}
+
+.info {
+	font-size: 10px;
+	color: #7C7979;
+}
+
+.custom-item {
+	height: 120px;
+	padding: 5px;
+	margin-bottom: 0px;
+}

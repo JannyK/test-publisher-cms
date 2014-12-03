@@ -22,13 +22,23 @@
                 </div>
             </div>
             <div class="panel-body">
-                <ul class="list-group">
-                    <li class="list-group-item" ng-repeat="p in ctrl.presentations">
-                        <div class="checkbox">
-   
-                            <label for="checkbox">
-                                [[ p.title ]]
-                            </label>
+                <ul class="list-group custom-list">
+                    <li class="list-group-item custom-item" ng-repeat="p in ctrl.presentations">
+                        <img src="http://placehold.it/140x100" class="item-thumbnail">
+
+                        <div class="item-infos">
+                            <p class="item-title"><a href="#/presentations/[[ p.id ]]">[[ p.title ]]</a></p>
+
+                            <p class="info-item">
+                                <span class="info-title">Pub Date: </span><span class="info">[[ p.pub_date | date:medium ]]</span>
+                            </p>
+                            <p>
+                                <span class="info-title">Expiry Date: </span><span class="info">[[ p.expiry_date | date:medium ]]</span>
+                            </p>
+                            <p>
+                                <span class="info-title">Categories/Products: </span><span class="info">[[ p.categories.join(" | ") ]]</span>
+                            </p>
+
                         </div>
                         <div class="pull-right action-buttons">
                             <a href="#/presentations/[[ p.id ]]"><span class="glyphicon glyphicon-pencil"></span></a>

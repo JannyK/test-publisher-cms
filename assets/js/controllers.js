@@ -328,7 +328,7 @@ ControlPanelApp.controllers
 
  			var self = this;
  			self.isAuthenticated = AuthenticationService.isAuthenticated();
- 			self.objectID = $routeParams.id;
+ 			self.objectID = $routeParams.presentationId;
  			self.object = {};
  			self.categories = [];
 
@@ -342,7 +342,7 @@ ControlPanelApp.controllers
  			self.retrieve = function(objID) {
  				CorePublisherService.fetchPresentation(objID).then(function(resp) {
  					self.object = resp.data;
- 					console.log('Object fecthed and set correctly');
+ 					console.log('Object fecthed and set correctly:'+  JSON.stringify(self.object));
  				}, function(errorResp) {
  					console.error('Failed to load resource from the remote server');
  				});
@@ -384,7 +384,7 @@ ControlPanelApp.controllers
 
 		 		} else {
 		 			//redirect to the login page
-		 			$location.url('/login');
+		 			$location.url('#/login');
 		 		}
  			};
 
@@ -412,7 +412,7 @@ ControlPanelApp.controllers
 
  			var self = this;
  			self.isAuthenticated = AuthenticationService.isAuthenticated();
- 			self.objectID = $routeParams.id;
+ 			self.objectID = $routeParams.fileId;
  			self.object = {};
  			self.categories = [];
 
@@ -476,6 +476,8 @@ ControlPanelApp.controllers
  				if (self.isAuthenticated) {
 	 				CorePublisherService.deleteFile(self.objectID).then(function(resp) {
 	 					console.log('File deleted successfully');
+	 					$location.url('/files');
+
 	 				}, function(errorResp) {
 	 					console.error('Failed to delete the file');
 	 				});
@@ -554,8 +556,7 @@ ControlPanelApp.controllers
  			self.delete = function() {
  				if (self.isAuthenticated) {
 	 				CorePublisherService.deleteWeblink(self.objectID).then(function(resp) {
-	 					console.log('link deleted successfully');
-	 					$location.url('#/links');
+	 					$location.url('/links');
 
 	 				}, function(errorResp) {
 	 					console.error('Failed to delete the link');

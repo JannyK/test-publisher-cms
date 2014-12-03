@@ -45,7 +45,7 @@ var app = angular.module('ControlPanelApp',
 				controllerAs: 'ctrl',
 				templateUrl: '/static/partials/new-presentation.html'
 			})
-			.when('/presentations/:id', {
+			.when('/presentations/:presentationId', {
 				controller: 'PresentationDetailController',
 				controllerAs: 'ctrl',
 				templateUrl: '/static/partials/detail-presentation.html'
@@ -75,7 +75,7 @@ var app = angular.module('ControlPanelApp',
 				controllerAs: 'ctrl',
 				templateUrl: '/static/partials/new-file.html'
 			})
-			.when('/files/:id', {
+			.when('/files/:fileId', {
 				controller: 'FileDetailController',
 				controllerAs: 'ctrl',
 				templateUrl: '/static/partials/detail-file.html'
@@ -199,7 +199,7 @@ app.factory('CorePublisherService', ['$http', function($http) {
 		},
 
 		fetchPresentation: function(pID) {
-			return $http.get('/api/v1/presentations/' + pID);
+			return $http.get('/api/v1/presentations/' + pID + '/?format=json');
 		},
 
 		updatePresentation: function(pID, data) {
@@ -210,7 +210,7 @@ app.factory('CorePublisherService', ['$http', function($http) {
 		},
 
 		deletePresentation: function(pID) {
-			return $http.delete('/api/v1/presentations/' + pID);
+			return $http.delete('/api/v1/presentations/' + pID + '/?format=json');
 		},
 
 		newFile: function(data) {
@@ -221,7 +221,7 @@ app.factory('CorePublisherService', ['$http', function($http) {
 		},
 
 		fetchFile: function(fID) {
-			return $http.get('/api/v1/files/' + fID);
+			return $http.get('/api/v1/files/' + fID + '/?format=json');
 		},
 
 		updateFile: function(fID, data) {
@@ -232,7 +232,7 @@ app.factory('CorePublisherService', ['$http', function($http) {
 		},
 
 		deleteFile: function(fID) {
-			return $http.delete('/api/v1/files/' + fID);
+			return $http.delete('/api/v1/files/' + fID + '/?format=json');
 		},
 
 		newWebLink: function(data) {
