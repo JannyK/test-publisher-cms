@@ -13,6 +13,7 @@ from .views import (
 	UserFilesViewSet,
 	WebLinkViewSet,
 	UserWebLinksViewSet,
+	ResourceByCategoryView,
 )
 
 router = routers.SimpleRouter()
@@ -35,5 +36,6 @@ urlpatterns = patterns('',
 	url(r'v1/', include(router.urls)),
 	url(r'v1/login/$', LoginView.as_view(), name='login'),
 	url(r'v1/logout/$', LogoutView.as_view(), name='logout'),
+	url(r'v1/categorized_resources/$', ResourceByCategoryView.as_view(), name='categorized_resources'),
 	url(r'v1/', include(account_router.urls)),
 )

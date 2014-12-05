@@ -92,12 +92,14 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = False
+USE_TZ = True
 
 DATABASES['default'] = dj_database_url.config()
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
+
+MEDIA_ROOT = root('..', 'uploads')
 
 STATIC_URL = '/static/'
 STATIC_ROOT = root('..', 'staticfiles')

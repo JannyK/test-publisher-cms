@@ -228,3 +228,35 @@ class UserWebLinksViewSet(viewsets.ViewSet):
 		serializer = self.serializer_class(queryset, many=True)
 
 		return Response(serializer.data)
+
+
+
+class ResourceByCategoryView(views.APIView):
+	def get(self, request, *args, **kwargs):
+		try:
+			categoryID = int(self.request.GET['categoryID'])
+			userID = int(self.request.GET['userID'])
+			country = self.request.GET['country']
+		except KeyError:
+			return Response({
+					'status': 'BAD REQUEST',
+					'message': 'Could not parse the request. Missing field(s)'
+				}, status=status.HTTP_400_BAD_REQUEST)
+
+		c = Category.objects.get(pk=categoryID)
+
+		pres = [p for p in c.presentation_set.all() if (p.user.id == userID) and (p.user.country == country)]
+		pSerializer = PresentationSerializer(pres, many=True)
+
+		files = [f for f in c.file_set.all() if (f.user.id == userID) and (f.user.country == country)]
+		fSerializer = FileSerializer(files, many=True)
+
+		links = [l for l in c.weblink_set.all() if (l.user.id == userID) and (l.user.country == country)]
+		lSerializer = WebLinkSerializer(links, many=True)
+
+		return Response({
+			'presentations': pSerializer.data,
+			'files': fSerializer.data,
+			'links': lSerializer.data
+		})
+
