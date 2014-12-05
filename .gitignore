@@ -21,6 +21,9 @@ controlpanel/settings/local.py
 # Node modules
 node_modules/
 
+
+
+
 # Bower components
 assets/bower_components/
 
@@ -28,5 +31,6 @@ assets/bower_components/
 release/
 
 #generated upload folders
+uploads/
 _thumbnails_
 presentation_files
