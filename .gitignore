@@ -21,7 +21,12 @@ controlpanel/settings/local.py
 # Node modules
 node_modules/
 
-
+#.bowerrc
+#.buildpacks
+#bower.json
+#gulpfile.json
+#package.json
+#scripts
 
 
 # Bower components
