@@ -106,7 +106,7 @@ STATIC_ROOT = root('..', 'staticfiles')
 
 STATICFILES_DIRS = (
     root('..', 'assets'),
-    root('..', 'release/assets'),
+    #root('..', 'release/assets'),
 )
 
 STATICFILES_FINDERS = (
