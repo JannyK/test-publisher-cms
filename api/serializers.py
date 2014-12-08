@@ -45,8 +45,13 @@ class CategorySerializer(serializers.ModelSerializer):
 	#picture = serializers.Field('picture.url')
 	class Meta:
 		model = Category
-		fields = ('id', 'name', 'description', 'picture',)
+		fields = ('id', 'name', 'description', 'picture', 'country',)
 		read_only_fields = ('id',)
+
+	def get_validation_exclusions(self, *args, **kwargs):
+		ex = super(CategorySerializer, self).get_validation_exclusions(
+			*args, **kwargs)
+		return ex + ['country']
 
 
 
@@ -58,6 +63,8 @@ class PresentationSerializer(serializers.ModelSerializer):
 	#categories = serializers.SlugRelatedField(
 		#slug_field='id', many=True, required=False, read_only=True)
 	user = AccountSerializer(required=False)
+	categories = serializers.SlugRelatedField(
+		many=True, slug_field='name', required=False, read_only=True)
 
 	class Meta:
 		model = Presentation
@@ -73,16 +80,17 @@ class PresentationSerializer(serializers.ModelSerializer):
 			'categories',
 			'user',
 		)
-		read_only_fields = ('id', 'created', 'categories',)
+		read_only_fields = ('id', 'created',)
 
 	def get_validation_exclusions(self, *args, **kwargs):
 		exclusions = super(PresentationSerializer, self).get_validation_exclusions(
 			*args, **kwargs)
-		return exclusions + ['user']
+		return exclusions + ['user', 'categories']
 
 
 class FileSerializer(serializers.ModelSerializer):
 	user = AccountSerializer(required=False)
+	categories = serializers.SlugRelatedField(many=True, slug_field='name', read_only=True)
 
 	class Meta:
 		model = File
@@ -98,16 +106,17 @@ class FileSerializer(serializers.ModelSerializer):
 			'categories',
 			'user',
 		)
-		read_only_fields = ('id', 'created', 'categories',)
+		read_only_fields = ('id', 'created',)
 
 	def get_validation_exclusions(self, *args, **kwargs):
 		exclusions = super(FileSerializer, self).get_validation_exclusions(
 			*args, **kwargs)
-		return exclusions + ['user']
+		return exclusions + ['user', 'categories']
 
 
 class WebLinkSerializer(serializers.ModelSerializer):
 	user = AccountSerializer(required=False)
+	categories = serializers.SlugRelatedField(many=True, slug_field='name', read_only=True)
 
 	class Meta:
 		model = WebLink
@@ -123,9 +132,9 @@ class WebLinkSerializer(serializers.ModelSerializer):
 			'categories',
 			'user',
 		)
-		read_only_fields = ('id', 'created', 'categories',)
+		read_only_fields = ('id', 'created',)
 
 	def get_validation_exclusions(self, *args, **kwargs):
 		exclusions = super(WebLinkSerializer, self).get_validation_exclusions(
 			*args, **kwargs)
-		return exclusions + ['user']
+		return exclusions + ['user', 'categories']

@@ -25,4 +25,11 @@ class IsWebLinkOwner(permissions.BasePermission):
 	def has_object_permission(self, request, view, l):
 		if request.user:
 			return l.user == request.user
-		return True
+		return False
+
+
+class IsProductCategoryOwner(permissions.BasePermission):
+	def has_object_permission(self, request, view, c):
+		if request.user:
+			return c.country == request.user.country
+		return False

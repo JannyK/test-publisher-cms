@@ -27,7 +27,9 @@
                         <img src="http://placehold.it/140x100" class="item-thumbnail">
 
                         <div class="item-infos">
-                            <p class="item-title"><a href="#/presentations/[[ p.id ]]">[[ p.title ]]</a></p>
+                            <p class="item-title">
+                                <a href="#/presentations/[[ p.id ]]">[[ p.title | limitTo : 60 ]]</a> 
+                            </p>
 
                             <p class="info-item">
                                 <span class="info-title">Pub Date: </span><span class="info">[[ p.pub_date | date:medium ]]</span>
@@ -40,9 +42,7 @@
                             </p>
 
                         </div>
-                        <div class="pull-right action-buttons">
-                            <a href="#/presentations/[[ p.id ]]"><span class="glyphicon glyphicon-pencil"></span></a>
-                        </div>
+                       
                     </li>
                 </ul>
             </div>

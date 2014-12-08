@@ -28,7 +28,7 @@
                         <img src="http://placehold.it/140x100" class="item-thumbnail">
 
                         <div class="item-infos">
-                            <p class="item-title"><a href="#/files/[[ f.id ]]">[[ f.title ]]</a></p>
+                            <p class="item-title"><a href="#/files/[[ f.id ]]">[[ f.title | limitTo : 60 ]]</a></p>
 
                             <p class="info-item">
                                 <span class="info-title">Pub Date: </span><span class="info">[[ f.pub_date | date:medium ]]</span>
@@ -41,9 +41,7 @@
                             </p>
 
                         </div>
-                        <div class="pull-right action-buttons">
-                            <a href="#/files/[[ f.id ]]"><span class="glyphicon glyphicon-pencil"></span></a>
-                        </div>
+                
                     </li>
                 </ul>
             </div>

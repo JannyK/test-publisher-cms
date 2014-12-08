@@ -575,6 +575,118 @@ ControlPanelApp.controllers
 
  			//fetch the object after instanciation
  			self.retrieve(self.objectID);
- 	}]);
+ 	}])
+	
+	.controller('CategoryListController', ['CorePublisherService', '$location', function(CorePublisherService, $location) {
+		var self = this;
+		self.categories = [];
+
+		CorePublisherService.allCategories().then(function(resp) {
+			self.categories = resp.data;
+			console.log('categories load successfully: '+ JSON.stringify(self.categories));
+		}, function(errorResp) {
+			console.error('Failed loading categories...');
+		});
+	}])
+	.controller('CategoryCreateController', 
+		['AuthenticationService', 'CorePublisherService', '$location', function(AuthenticationService, CorePublisherService, $location) {
+
+		var self = this;
+		self.isAuthenticated = AuthenticationService.isAuthenticated();
+
+		self.newCategory = {
+ 			name: '',
+ 			description: '',
+ 			picture: '',
+ 		};
+
+ 		self.create = function() {
+ 			
+ 			if (self.isAuthenticated) {
+
+ 				var fd = new FormData();
+
+ 				fd.append('name', self.newCategory.name);
+ 				fd.append('description', self.newCategory.description);
+ 				fd.append('picture', self.newCategory.picture);
+
+ 				CorePublisherService.newCategory(fd).then(function(resp) {
+ 					console.log('Product Category created successfully');
+ 					$location.url('/categories');
+
+ 				}, function(errorResp) {
+ 					console.error('Failed to create Category:');
+ 				});
+
+	 		} else {
+	 			//redirect to the login page
+	 			$location.url('/login');
+	 		}
+ 		};
+	}])
+	.controller('CategoryDetailController', 
+		['AuthenticationService', 'CorePublisherService', '$location', '$routeParams', 'ngDialog', function(AuthenticationService, CorePublisherService, $location, $routeParams, ngDialog) {
+
+		var self = this;
+		self.isAuthenticated = AuthenticationService.isAuthenticated();
+		self.objectID = $routeParams.categoryId;
+		self.object = {};
+
+		self.retrieve = function(objID) {
+			CorePublisherService.fetchCategory(objID).then(function(resp) {
+				self.object = resp.data;
+				console.log('Object fecthed and set correctly: '+ JSON.stringify(self.object));
+			}, function(errorResp) {
+				console.error('Failed to load resource from the remote server');
+			});
+		};
+
+		self.update = function() {
+			if (self.isAuthenticated) {
+
+				var fd = new FormData();
+				//var isMultipart = false;
+
+				fd.append('name', self.object.name);
+				fd.append('description', self.object.description);
+
+				//Hack---> Append the file attribute only if updated
+				if (typeof(self.object.picture) === 'object') {
+					console.log('SENDING MULTIPART');
+
+					fd.append('picture', self.object.picture);
+					//isMultipart = true;
+				}
+
+				CorePublisherService.updateCategory(self.objectID, fd).then(function(resp) {
+					console.log('Category updated successfully');
+					//$location.url('/links');
+
+				}, function(errorResp) {
+					console.error('Failed to update category');
+				});
+
+	 		} else {
+	 			//redirect to the login page
+	 			$location.url('/login');
+	 		}
+		};
+
+		self.delete = function() {
+			if (self.isAuthenticated) {
+				CorePublisherService.deleteCategory(self.objectID).then(function(resp) {
+					$location.url('/categories');
+
+				}, function(errorResp) {
+					console.error('Failed to delete category');
+				});
+			} else {
+				console.error('Does not have permission');
+			}
+		};
+
+		//fetch the object after instanciation
+		self.retrieve(self.objectID);
+	}]);
 
 

@@ -3,10 +3,17 @@ from django.utils import timezone
 
 from accounts.models import Account
 
+COUNTRY_CHOICES = (
+	('NO', 'NORGE'),
+	('SE', 'SVERIGE'),
+	('DK', 'DANMARK'),
+)
+
 class Category(models.Model):
 	name = models.CharField(max_length=40, unique=True)
 	description = models.TextField(blank=True)
 	picture = models.ImageField(upload_to="categories_thumbnails", blank=True)
+	country = models.CharField(max_length=10, choices=COUNTRY_CHOICES, default='NO')
 
 	def __unicode__(self):
 		return self.name

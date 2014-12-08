@@ -19,7 +19,7 @@ build
 controlpanel/settings/local.py
 
 # Node modules
-node_modules/
+#node_modules/
 
 #.bowerrc
 #.buildpacks
@@ -30,7 +30,7 @@ node_modules/
 
 
 # Bower components
-assets/bower_components/
+#assets/bower_components/
 
 # Uglified JavaScript
 release/

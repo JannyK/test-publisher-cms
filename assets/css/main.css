@@ -46,10 +46,11 @@
 	display: inline-block;
 	float: left;
 	margin-top: 3px;
+	margin-right: 15px;
 }
 
 .item-infos {
-	display: inline-block;
+	/*display: inline-block;*/
 	margin: 5px;
 }
 

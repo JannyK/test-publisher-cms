@@ -21,6 +21,7 @@ from .permissions import (
 	IsPresentationOwner, 
 	IsFileOwner,
 	IsWebLinkOwner,
+	IsProductCategoryOwner,
 )
 
 
@@ -111,7 +112,11 @@ class CategoryViewSet(viewsets.ModelViewSet):
 	def get_permissions(self):
 		if self.request.method in permissions.SAFE_METHODS:
 			return (permissions.AllowAny(),)
-		return (permissions.IsAuthenticated(),)
+		return (permissions.IsAuthenticated(), IsProductCategoryOwner(),)
+
+	def pre_save(self, obj):
+		obj.country = self.request.user.country
+
 
 
 class PresentationViewSet(viewsets.ModelViewSet):
@@ -136,7 +141,7 @@ class PresentationViewSet(viewsets.ModelViewSet):
 		obj.categories.clear()
 
 		for c in categories.split(','):
-			category = Category.objects.get(pk=int(c))
+			category = Category.objects.get(name=c)
 			obj.categories.add(category)
 
 		return super(PresentationViewSet, self).post_save(obj, created)
@@ -173,7 +178,7 @@ class FileViewSet(viewsets.ModelViewSet):
 		obj.categories.clear()
 
 		for c in categories.split(','):
-			category = Category.objects.get(pk=int(c))
+			category = Category.objects.get(name=c)
 			obj.categories.add(category)
 
 		return super(FileViewSet, self).post_save(obj, created)
@@ -212,7 +217,7 @@ class WebLinkViewSet(viewsets.ModelViewSet):
 		obj.categories.clear()
 
 		for c in categories.split(','):
-			category = Category.objects.get(pk=int(c))
+			category = Category.objects.get(name=c)
 			obj.categories.add(category)
 
 		return super(WebLinkViewSet, self).post_save(obj, created)

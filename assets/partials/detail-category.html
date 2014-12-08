@@ -1,0 +1,51 @@
+<div class="row">
+    <div class="col-xs-12">
+        <ul class="breadcrumb">
+            <li><a href="#/">Home</a></li>
+            <li><a href="#/categories">Product Categories</a></li>
+            <li class="active">Details</li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+
+        <form class="form-horizontal" ng-submit="ctrl.update()">
+            <fieldset>
+                <legend>[[ ctrl.object.name ]]</legend>
+                <div class="form-group">
+                    <label for="title" class="col-md-2 control-label">Name</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" id="title" placeholder="Product title" ng-model="ctrl.object.name">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="description" class="col-md-2 control-label">Description</label>
+                    <div class="col-md-10">
+                        <textarea class="form-control" rows="3" id="description" ng-model="ctrl.object.description"></textarea>
+                        <span class="help-block">A brief description of the product</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="thumbnail" class="col-md-2 control-label">Picture</label>
+                    <img src="" class="col-md-5">
+                    <div class="col-md-5">
+                        <input type="file" class="form-control" id="thumbnail" file-field="ctrl.object.picture">
+                    </div>
+                    <span class="help-block">Select an image to use as thumbnail</span>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-10 col-md-offset-2">
+                        <a class="btn btn-default" href="#/categories">Cancel</a>
+                        <input type="submit" value="Submit" class="btn btn-primary">
+                        <a class="btn btn-danger pull-right" ng-click="ctrl.delete()">Delete</a>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>

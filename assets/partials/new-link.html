@@ -2,8 +2,8 @@
     <div class="col-xs-12">
         <ul class="breadcrumb">
             <li><a href="#">Home</a></li>
-            <li><a href="/presentations">Links</a></li>
-            <li class="active"><a href="#">new weblink</a></li>
+            <li><a href="#/links">Links</a></li>
+            <li class="active">new weblink</li>
         </ul>
     </div>
 </div>
@@ -60,14 +60,14 @@
                 <div class="form-group">
                     <label for="categpries" class="col-md-2 control-label">Select categories/products</label>
                     <div class="col-md-10">
-                        <select multiple="" class="form-control" ng-model="ctrl.newLink.categories" ng-options="c.id as c.name for c in ctrl.categories">
+                        <select multiple="" class="form-control" ng-model="ctrl.newLink.categories" ng-options="c.name as c.name for c in ctrl.categories">
                         </select>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-md-10 col-md-offset-2">
-                        <a class="btn btn-default" href="/link">Cancel</a>
+                        <a class="btn btn-default" href="#/link">Cancel</a>
                         <input type="submit" value="Submit" class="btn btn-primary">
                     </div>
                 </div>

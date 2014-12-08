@@ -80,6 +80,21 @@ var app = angular.module('ControlPanelApp',
 				controllerAs: 'ctrl',
 				templateUrl: '/static/partials/detail-file.html'
 			})
+			.when('/categories', {
+				controller: 'CategoryListController',
+				controllerAs: 'ctrl',
+				templateUrl: '/static/partials/categories.html'
+			})
+			.when('/categories/new', {
+				controller: 'CategoryCreateController',
+				controllerAs: 'ctrl',
+				templateUrl: '/static/partials/new-category.html'
+			})
+			.when('/categories/:categoryId', {
+				controller: 'CategoryDetailController',
+				controllerAs: 'ctrl',
+				templateUrl: '/static/partials/detail-category.html'
+			})
 			.otherwise({
 				redirectTo: '/'
 			});
@@ -189,6 +204,28 @@ app.factory('CorePublisherService', ['$http', function($http) {
 
 		allWebLinks: function() {
 			return $http.get('/api/v1/links/');
+		},
+
+		newCategory: function(data) {
+			return $http.post('/api/v1/categories/', data, {
+				transformRequest: angular.identity,
+				headers: {'Content-Type': undefined}
+			});
+		},
+
+		fetchCategory: function(cId) {
+			return $http.get('/api/v1/categories/'+ cId + '/?format=json');
+		},
+
+		updateCategory: function(cId, data) {
+			return $http.patch('/api/v1/categories/'+ cId +'/', data, {
+				transformRequest: angular.identity,
+				headers: {'Content-Type': undefined}
+			});
+		},
+
+		deleteCategory: function(cId) {
+			return $http.delete('/api/v1/categories/'+ cId + '/?format=jaon');
 		},
 
 		newPresentation: function(data) {
