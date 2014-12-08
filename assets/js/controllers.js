@@ -117,6 +117,8 @@ ControlPanelApp.controllers
  	.controller('PresentationCreateController',
  		['AuthenticationService', 'CorePublisherService', '$location', function(AuthenticationService, CorePublisherService, $location) {
  			var self = this;
+ 			var selectedCountry = AuthenticationService.getSelectedCountry();
+
  			self.isAuthenticated = AuthenticationService.isAuthenticated();
 	 		self.categories = [];
 
@@ -131,7 +133,7 @@ ControlPanelApp.controllers
 	 		};
 
 	 		//fetch all categories and make them availbale for use
-	 		CorePublisherService.allCategories().then(function(resp) {
+	 		CorePublisherService.allCategories(selectedCountry.code).then(function(resp) {
 	 			self.categories = resp.data;
 	 		}, function(errorResp) {
 	 			console.error('Failed to fetch categories:');
@@ -170,6 +172,8 @@ ControlPanelApp.controllers
 	.controller('FileCreateController', 
 		['AuthenticationService', 'CorePublisherService', '$location', function(AuthenticationService, CorePublisherService, $location) {
 			var self = this;
+			var selectedCountry = AuthenticationService.getSelectedCountry();
+
 			self.isAuthenticated = AuthenticationService.isAuthenticated();
 			self.categories = [];
 
@@ -184,7 +188,7 @@ ControlPanelApp.controllers
 	 		};
 
 	 		//fetch all categories and make them availbale for use
-	 		CorePublisherService.allCategories().then(function(resp) {
+	 		CorePublisherService.allCategories(selectedCountry.code).then(function(resp) {
 	 			self.categories = resp.data;
 	 		}, function(errorResp) {
 	 			console.error('Failed to fetch categories:');
@@ -223,6 +227,7 @@ ControlPanelApp.controllers
 	.controller('LinkCreateController', 
 		['AuthenticationService', 'CorePublisherService', '$location', function(AuthenticationService, CorePublisherService, $location) {
 			var self = this;
+			var selectedCountry = AuthenticationService.getSelectedCountry();
 			self.isAuthenticated = AuthenticationService.isAuthenticated();
 			self.categories = [];
 
@@ -237,7 +242,7 @@ ControlPanelApp.controllers
 	 		};
 
 	 		//fetch all categories and make them availbale for use
-	 		CorePublisherService.allCategories().then(function(resp) {
+	 		CorePublisherService.allCategories(selectedCountry.code).then(function(resp) {
 	 			self.categories = resp.data;
 	 		}, function(errorResp) {
 	 			console.error('Failed to fetch categories:');
@@ -273,67 +278,74 @@ ControlPanelApp.controllers
 	}])
 	
  	.controller('PresentationListController', 
- 		['CorePublisherService', '$location', 'ngDialog',function(CorePublisherService, $location, ngDialog) {
+ 		['AuthenticationService', 'CorePublisherService', '$location', 'ngDialog',function(AuthenticationService, CorePublisherService, $location, ngDialog) {
 
  		//ToDO -Implement
  		var self = this;
+ 		var selectedCountry = AuthenticationService.getSelectedCountry();
+
  		self.presentations = [];
 
- 		//fetch all presentations
- 		CorePublisherService.allPresentations().then(function(resp) {
- 			self.presentations = resp.data;
- 			console.log('allPresentations loaded successfully:');
- 		}, function(errorResp) {
- 			//MessageNotificationService.error(errorResp.error);
- 			console.error('Error fetching data...');
- 		});
+ 		if (AuthenticationService.isAuthenticated()) {
 
- 		/*
- 		self.createNewItem = function() {
- 			ngDialog.open({
- 				template: '/static/partials/new-presentation.html',
- 				controller: 'PresentationController'
- 			});
- 		};
- 		*/
+
+	 		//fetch all presentations
+	 		CorePublisherService.allPresentations(selectedCountry.code).then(function(resp) {
+	 			self.presentations = resp.data;
+	 			console.log('allPresentations loaded successfully:');
+	 		}, function(errorResp) {
+	 			//MessageNotificationService.error(errorResp.error);
+	 			console.error('Error fetching data...');
+	 		});
+	 	}
  	}])
 
- 	.controller('FileListController', ['CorePublisherService', '$location', function(CorePublisherService, $location) {
+ 	.controller('FileListController', ['AuthenticationService', 'CorePublisherService', '$location', function(AuthenticationService, CorePublisherService, $location) {
  		var self = this;
+ 		var selectedCountry = AuthenticationService.getSelectedCountry();
+
  		self.files = [];
 
- 		CorePublisherService.allFiles().then(function(resp) {
- 			self.files = resp.data;
- 			console.log('Files loaded successfully...');
- 		}, function(errorResp) {
- 			console.error('Error fetching files...');
- 		});
+ 		if (AuthenticationService.isAuthenticated()) {
+
+	 		CorePublisherService.allFiles(selectedCountry.code).then(function(resp) {
+	 			self.files = resp.data;
+	 			console.log('Files loaded successfully...');
+	 		}, function(errorResp) {
+	 			console.error('Error fetching files...');
+	 		});
+	 	}
  	}])
 
- 	.controller('LinkListController', ['CorePublisherService', '$location', function(CorePublisherService, $location) {
+ 	.controller('LinkListController', ['AuthenticationService','CorePublisherService', '$location', function(AuthenticationService, CorePublisherService, $location) {
  		var self = this;
+ 		var selectedCountry = AuthenticationService.getSelectedCountry();
  		self.links = [];
 
- 		CorePublisherService.allWebLinks().then(function(resp) {
- 			self.links = resp.data;
- 			console.log('Liks loaded successfully');
- 		}, function(errorResp) {
- 			console.error('Error fetching links...');
- 		});
+ 		if (AuthenticationService.isAuthenticated()) {
 
+	 		CorePublisherService.allWebLinks(selectedCountry.code).then(function(resp) {
+	 			self.links = resp.data;
+	 			console.log('Liks loaded successfully');
+	 		}, function(errorResp) {
+	 			console.error('Error fetching links...');
+	 		});
+	 	}
  	}])
 
  	.controller('PresentationDetailController', 
  		['AuthenticationService', 'CorePublisherService', '$location', '$routeParams', 'ngDialog', function(AuthenticationService, CorePublisherService, $location, $routeParams, ngDialog) {
 
  			var self = this;
+ 			var selectedCountry = AuthenticationService.getSelectedCountry();
+
  			self.isAuthenticated = AuthenticationService.isAuthenticated();
  			self.objectID = $routeParams.presentationId;
  			self.object = {};
  			self.categories = [];
 
  			//fetch all categories and make them availbale for use
-	 		CorePublisherService.allCategories().then(function(resp) {
+	 		CorePublisherService.allCategories(selectedCountry.code).then(function(resp) {
 	 			self.categories = resp.data;
 	 		}, function(errorResp) {
 	 			console.error('Failed to fetch categories:');
@@ -411,13 +423,15 @@ ControlPanelApp.controllers
  		['AuthenticationService', 'CorePublisherService', '$location', '$routeParams', 'ngDialog', function(AuthenticationService, CorePublisherService, $location, $routeParams, ngDialog) {
 
  			var self = this;
+ 			var selectedCountry = AuthenticationService.getSelectedCountry();
+
  			self.isAuthenticated = AuthenticationService.isAuthenticated();
  			self.objectID = $routeParams.fileId;
  			self.object = {};
  			self.categories = [];
 
  			//fetch all categories and make them availbale for use
-	 		CorePublisherService.allCategories().then(function(resp) {
+	 		CorePublisherService.allCategories(selectedCountry.code).then(function(resp) {
 	 			self.categories = resp.data;
 	 		}, function(errorResp) {
 	 			console.error('Failed to fetch categories:');
@@ -495,13 +509,15 @@ ControlPanelApp.controllers
  		['AuthenticationService', 'CorePublisherService', '$location', '$routeParams', 'ngDialog', function(AuthenticationService, CorePublisherService, $location, $routeParams, ngDialog) {
 
  			var self = this;
+ 			var selectedCountry = AuthenticationService.getSelectedCountry();
+
  			self.isAuthenticated = AuthenticationService.isAuthenticated();
  			self.objectID = $routeParams.linkID;
  			self.categories = [];
  			self.object = {};
 
  			//fetch all categories and make them availbale for use
-	 		CorePublisherService.allCategories().then(function(resp) {
+	 		CorePublisherService.allCategories(selectedCountry.code).then(function(resp) {
 	 			self.categories = resp.data;
 	 		}, function(errorResp) {
 	 			console.error('Failed to fetch categories:');
@@ -576,18 +592,26 @@ ControlPanelApp.controllers
  			//fetch the object after instanciation
  			self.retrieve(self.objectID);
  	}])
-	
-	.controller('CategoryListController', ['CorePublisherService', '$location', function(CorePublisherService, $location) {
+
+	.controller('CategoryListController', 
+		['AuthenticationService', 'CorePublisherService', '$location', function(AuthenticationService, CorePublisherService, $location) {
 		var self = this;
+		var selectedCountry = AuthenticationService.getSelectedCountry();
+
 		self.categories = [];
 
-		CorePublisherService.allCategories().then(function(resp) {
-			self.categories = resp.data;
-			console.log('categories load successfully: '+ JSON.stringify(self.categories));
-		}, function(errorResp) {
-			console.error('Failed loading categories...');
-		});
+		if (AuthenticationService.isAuthenticated()) {
+			//var user = AuthenticationService.getAuthenticatedUser();
+
+			CorePublisherService.allCategories(selectedCountry.code).then(function(resp) {
+				self.categories = resp.data;
+				console.log('categories load successfully: '+ JSON.stringify(self.categories));
+			}, function(errorResp) {
+				console.error('Failed loading categories...');
+			});
+		}
 	}])
+
 	.controller('CategoryCreateController', 
 		['AuthenticationService', 'CorePublisherService', '$location', function(AuthenticationService, CorePublisherService, $location) {
 
@@ -624,10 +648,12 @@ ControlPanelApp.controllers
 	 		}
  		};
 	}])
+
 	.controller('CategoryDetailController', 
 		['AuthenticationService', 'CorePublisherService', '$location', '$routeParams', 'ngDialog', function(AuthenticationService, CorePublisherService, $location, $routeParams, ngDialog) {
 
 		var self = this;
+
 		self.isAuthenticated = AuthenticationService.isAuthenticated();
 		self.objectID = $routeParams.categoryId;
 		self.object = {};
@@ -643,7 +669,7 @@ ControlPanelApp.controllers
 
 		self.update = function() {
 			if (self.isAuthenticated) {
-
+				
 				var fd = new FormData();
 				//var isMultipart = false;
 
@@ -688,5 +714,3 @@ ControlPanelApp.controllers
 		//fetch the object after instanciation
 		self.retrieve(self.objectID);
 	}]);
-
-

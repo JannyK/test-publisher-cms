@@ -190,20 +190,20 @@ app.factory('AuthenticationService', ['$http', '$cookies', function($http, $cook
 
 app.factory('CorePublisherService', ['$http', function($http) {
 	return {
-		allCategories: function() {
-			return $http.get('/api/v1/categories/?format=json');
+		allCategories: function(countryCode) {
+			return $http.get('/api/v1/categories/?country=' +countryCode+ '&format=json');
 		},
 
-		allPresentations: function() {
-			return $http.get('/api/v1/presentations/?format=json');
+		allPresentations: function(countryCode) {
+			return $http.get('/api/v1/presentations/?country=' +countryCode+ '&format=json');
 		},
 
-		allFiles: function() {
-			return $http.get('/api/v1/files/');
+		allFiles: function(countryCode) {
+			return $http.get('/api/v1/files/?country=' +countryCode+ '&format=json');
 		},
 
-		allWebLinks: function() {
-			return $http.get('/api/v1/links/');
+		allWebLinks: function(countryCode) {
+			return $http.get('/api/v1/links/?country=' +countryCode+ '&format=json');
 		},
 
 		newCategory: function(data) {

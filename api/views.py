@@ -114,6 +114,22 @@ class CategoryViewSet(viewsets.ModelViewSet):
 			return (permissions.AllowAny(),)
 		return (permissions.IsAuthenticated(), IsProductCategoryOwner(),)
 
+
+	def list(self, request, *args, **kwargs):
+		try:
+			c = request.GET['country']
+		except KeyError:
+			return Response({
+				'status': 'Bad Request',
+				'message': 'Request parameters missing ...'
+				}, status=status.HTTP_400_BAD_REQUEST)
+
+		queryset = self.queryset.filter(country=c)
+		serializer = self.serializer_class(queryset, many=True)
+
+		return Response(serializer.data)
+
+
 	def pre_save(self, obj):
 		obj.country = self.request.user.country
 
@@ -128,6 +144,21 @@ class PresentationViewSet(viewsets.ModelViewSet):
 		if self.request.method in permissions.SAFE_METHODS:
 			return (permissions.AllowAny(),)
 		return (permissions.IsAuthenticated(), IsPresentationOwner(),)
+
+
+	def list(self, request, *args, **kwargs):
+		try:
+			c = request.GET['country']
+		except KeyError:
+			return Response({
+				'status': 'Bad Request',
+				'message': 'Request parameters missing ...'
+				}, status=status.HTTP_400_BAD_REQUEST)
+
+		queryset = self.queryset.filter(user__country=c)
+		serializer = self.serializer_class(queryset, many=True)
+
+		return Response(serializer.data)
 
 
 	def pre_save(self, obj):
@@ -169,9 +200,25 @@ class FileViewSet(viewsets.ModelViewSet):
 			return (permissions.AllowAny(),)
 		return (permissions.IsAuthenticated(), IsFileOwner(),)
 
+	def list(self, request, *args, **kwargs):
+		try:
+			c = request.GET['country']
+		except KeyError:
+			return Response({
+				'status': 'Bad Request',
+				'message': 'Request parameters missing ...'
+				}, status=status.HTTP_400_BAD_REQUEST)
+
+		queryset = self.queryset.filter(user__country=c)
+		serializer = self.serializer_class(queryset, many=True)
+
+		return Response(serializer.data)
+
+
 	def pre_save(self, obj):
 		obj.user = self.request.user
 		return super(FileViewSet, self).pre_save(obj)
+
 
 	def post_save(self, obj, created=False):
 		categories = self.request.DATA['categories']
@@ -206,6 +253,21 @@ class WebLinkViewSet(viewsets.ModelViewSet):
 		if self.request.method in permissions.SAFE_METHODS:
 			return (permissions.AllowAny(),)
 		return (permissions.IsAuthenticated(), IsWebLinkOwner(),)
+
+
+	def list(self, request, *args, **kwargs):
+		try:
+			c = request.GET['country']
+		except KeyError:
+			return Response({
+				'status': 'Bad Request',
+				'message': 'Request parameters missing ...'
+				}, status=status.HTTP_400_BAD_REQUEST)
+
+		queryset = self.queryset.filter(user__country=c)
+		serializer = self.serializer_class(queryset, many=True)
+
+		return Response(serializer.data)
 
 
 	def pre_save(self, obj):
