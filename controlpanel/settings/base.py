@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'rest_framework',
     'compressor',
+    'storages',
     'accounts',
     'publisher',
 )
@@ -56,6 +57,10 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
+
+#TEMPLATE_CONTEXT_PROCESSOR += (
+ #   'django.core.context_processors.media',
+#)
 
 ROOT_URLCONF = 'controlpanel.urls'
 
@@ -84,9 +89,9 @@ DATABASES = {}
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'nb-no'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Oslo'
 
 USE_I18N = True
 
@@ -97,13 +102,38 @@ USE_TZ = True
 DATABASES['default'] = dj_database_url.config()
 DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
 
+
+# STORAGES CONFIG
+AWS_ACCESS_KEY_ID = 'AKIAILO2HWO3ZGPDYBYA'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'controlpanel-dev'
+AWS_AUTO_CREATE_BUCKET = True
+AWS_QUERYSTRING_AUTH = False
+
+# AWS cache settings, don't change unless you know what you're doing:
+AWS_EXPIREY = 60 * 60 * 24 * 7
+AWS_HEADERS = {
+    'Cache-Control': 'max-age=%d, s-maxage=%d, must-revalidate' % (AWS_EXPIREY,
+        AWS_EXPIREY)
+}
+
+# See: http://django-storages.readthedocs.org/en/latest/backends/amazon-S3.html#settings
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+#STATICFILES_STORAGE = DEFAULT_FILE_STORAGE
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 MEDIA_ROOT = root('..', 'uploads')
+#MEDIA_URL = '/media/'
+STATIC_URL = 'https://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
+
 
 STATIC_URL = '/static/'
 STATIC_ROOT = root('..', 'staticfiles')
+#STATIC_URL = 'https://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
+ADMIN_MEDIA_PREFIX = '/static/admin'
 
 STATICFILES_DIRS = (
     root('..', 'assets'),
