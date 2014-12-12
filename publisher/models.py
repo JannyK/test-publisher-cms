@@ -51,6 +51,14 @@ class BaseEntry(models.Model):
 
 class Presentation(BaseEntry):
 	file = models.FileField(upload_to='presentation_files')
+	file_size = models.PositiveIntegerField(default=0)
+
+	def save(self, *args, **kwargs):
+		if self.file:
+			self.file_size = self.file.size 
+
+		super(Presentation, self).save(*args, **kwargs)
+
 
 	class Meta:
 		ordering = ('-created',)
@@ -58,6 +66,13 @@ class Presentation(BaseEntry):
 
 class File(BaseEntry):
 	file = models.FileField(upload_to='files')
+	file_size = models.PositiveIntegerField(default=0)
+
+	def save(self, *args, **kwargs):
+		if self.file:
+			self.file_size = self.file.size
+		super(File, self).save(*args, **kwargs)
+
 
 	class Meta:
 		ordering = ('-created',)

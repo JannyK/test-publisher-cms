@@ -1,3 +1,4 @@
+import os
 from django.contrib.auth import update_session_auth_hash
 from rest_framework import serializers
 
@@ -65,6 +66,12 @@ class PresentationSerializer(serializers.ModelSerializer):
 	user = AccountSerializer(required=False)
 	categories = serializers.SlugRelatedField(
 		many=True, slug_field='name', required=False, read_only=True)
+	file_type = serializers.SerializerMethodField('get_file_type')
+
+	def get_file_type(self, obj):
+		filename, extension = os.path.splitext(obj.file.name)
+		return extension
+
 
 	class Meta:
 		model = Presentation
@@ -74,13 +81,15 @@ class PresentationSerializer(serializers.ModelSerializer):
 			'description', 
 			'thumbnail', 
 			'file', 
+			'file_type',
+			'file_size',
 			'created', 
 			'pub_date', 
 			'expiry_date',
 			'categories',
 			'user',
 		)
-		read_only_fields = ('id', 'created',)
+		read_only_fields = ('id', 'created', 'file_size',)
 
 	def get_validation_exclusions(self, *args, **kwargs):
 		exclusions = super(PresentationSerializer, self).get_validation_exclusions(
@@ -91,6 +100,12 @@ class PresentationSerializer(serializers.ModelSerializer):
 class FileSerializer(serializers.ModelSerializer):
 	user = AccountSerializer(required=False)
 	categories = serializers.SlugRelatedField(many=True, slug_field='name', read_only=True)
+	file_type = serializers.SerializerMethodField('get_file_type')
+
+	def get_file_type(self, obj):
+		filename, extension = os.path.splitext(obj.file.name)
+		return extension
+
 
 	class Meta:
 		model = File
@@ -100,13 +115,15 @@ class FileSerializer(serializers.ModelSerializer):
 			'description', 
 			'thumbnail', 
 			'file', 
+			'file_type',
+			'file_size',
 			'created', 
 			'pub_date', 
 			'expiry_date',
 			'categories',
 			'user',
 		)
-		read_only_fields = ('id', 'created',)
+		read_only_fields = ('id', 'created', 'file_size',)
 
 	def get_validation_exclusions(self, *args, **kwargs):
 		exclusions = super(FileSerializer, self).get_validation_exclusions(
