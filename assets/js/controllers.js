@@ -622,6 +622,7 @@ ControlPanelApp.controllers
  			name: '',
  			description: '',
  			picture: '',
+ 			priority: 0
  		};
 
  		self.create = function() {
@@ -632,6 +633,7 @@ ControlPanelApp.controllers
 
  				fd.append('name', self.newCategory.name);
  				fd.append('description', self.newCategory.description);
+ 				fd.append('priority', self.newCategory.priority);
  				fd.append('picture', self.newCategory.picture);
 
  				CorePublisherService.newCategory(fd).then(function(resp) {
@@ -675,6 +677,7 @@ ControlPanelApp.controllers
 
 				fd.append('name', self.object.name);
 				fd.append('description', self.object.description);
+				fd.append('priority', self.object.priority);
 
 				//Hack---> Append the file attribute only if updated
 				if (typeof(self.object.picture) === 'object') {

@@ -28,7 +28,15 @@
                         <img src="https://controlpanel-dev.s3.amazonaws.com/[[ c.picture ]]" class="item-thumbnail" width="140" height="100">
 
                         <div class="item-infos">
-                            <p class="item-title"><a href="#/categories/[[ c.id ]]">[[ c.name | limitTo:60 ]]</a></p>
+                            <p class="item-title">
+                                <a href="#/categories/[[ c.id ]]">
+                                    [[ c.name | limitTo:60 ]]
+                                </a>
+                            </p>
+                            <p class="info-item">
+                                <span class="info-title">Priority: </span><span class="info">[[ c.priority]]</span>
+                            </p>
+
                         </div>
                         <div class="pull-right action-buttons">
                             <a href="#/categories/[[ c.id ]]"><span class="glyphicon glyphicon-pencil"></span></a>

@@ -46,7 +46,7 @@ class CategorySerializer(serializers.ModelSerializer):
 	#picture = serializers.Field('picture.url')
 	class Meta:
 		model = Category
-		fields = ('id', 'name', 'description', 'picture', 'country',)
+		fields = ('id', 'name', 'description', 'picture', 'country', 'priority',)
 		read_only_fields = ('id',)
 
 	def get_validation_exclusions(self, *args, **kwargs):

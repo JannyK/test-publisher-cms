@@ -14,12 +14,18 @@ class Category(models.Model):
 	description = models.TextField(blank=True)
 	picture = models.ImageField(upload_to="categories_thumbnails", blank=True)
 	country = models.CharField(max_length=10, choices=COUNTRY_CHOICES, default='NO')
+	priority = models.PositiveIntegerField(default=100)
 
 	def __unicode__(self):
 		return self.name
 
 	def save(self, *args, **kwargs):
 		super(Category, self).save(*args, **kwargs)
+
+
+class BaseEntryManager(models.Manager):
+	def get_queryset(self):
+		return super(BaseEntryManager, self).get_queryset().order_by('-pub_date')
 
 
 class BaseEntry(models.Model):
@@ -32,6 +38,8 @@ class BaseEntry(models.Model):
 	created = models.DateField(auto_now_add=True)
 	pub_date = models.DateField()
 	expiry_date = models.DateField(blank=True)
+
+	objects = BaseEntryManager()
 
 	class Meta:
 		abstract = True
@@ -61,7 +69,7 @@ class Presentation(BaseEntry):
 
 
 	class Meta:
-		ordering = ('-created',)
+		ordering = ('created',)
 
 
 class File(BaseEntry):
@@ -75,11 +83,11 @@ class File(BaseEntry):
 
 
 	class Meta:
-		ordering = ('-created',)
+		ordering = ('created',)
 
 
 class WebLink(BaseEntry):
 	link = models.URLField(max_length=255)
 
 	class Meta:
-		ordering = ('-created',)
+		ordering = ('created',)

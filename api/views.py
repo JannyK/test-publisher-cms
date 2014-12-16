@@ -106,7 +106,7 @@ class LogoutView(views.APIView):
 #	Presentation, File, WebLink, Category
 #
 class CategoryViewSet(viewsets.ModelViewSet):
-	queryset = Category.objects.all()
+	queryset = Category.objects.all().order_by('priority')
 	serializer_class = CategorySerializer
 
 	def get_permissions(self):
@@ -136,7 +136,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
 
 class PresentationViewSet(viewsets.ModelViewSet):
-	queryset = Presentation.objects.all()
+	queryset = Presentation.objects.all().order_by('-pub_date')
 	serializer_class = PresentationSerializer
 	parser_classes = (FormParser, MultiPartParser,)
 
@@ -191,7 +191,7 @@ class UserPresentationsViewSet(viewsets.ViewSet):
 
 
 class FileViewSet(viewsets.ModelViewSet):
-	queryset = File.objects.all()
+	queryset = File.objects.all().order_by('-pub_date')
 	serializer_class = FileSerializer
 	parser_classes = (FormParser, MultiPartParser,)
 
@@ -245,7 +245,7 @@ class UserFilesViewSet(viewsets.ViewSet):
 
 
 class WebLinkViewSet(viewsets.ModelViewSet):
-	queryset = WebLink.objects.all()
+	queryset = WebLink.objects.all().order_by('-pub_date')
 	serializer_class = WebLinkSerializer
 	parser_classes = (FormParser, MultiPartParser,)
 
