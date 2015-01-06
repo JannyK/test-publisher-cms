@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.db import models
 from django.utils import timezone
 
@@ -43,6 +45,14 @@ class BaseEntry(models.Model):
 
 	class Meta:
 		abstract = True
+
+	@property 
+	def is_active(self):
+		if self.expiry_date:
+			return self.pub_date <= date.today() and self.expiry_date > date.today()
+		else:
+			return self.pub_date <= date.today()
+
 
 
 	def __unicode__(self):

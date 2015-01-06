@@ -156,7 +156,9 @@ class PresentationViewSet(viewsets.ModelViewSet):
 				}, status=status.HTTP_400_BAD_REQUEST)
 
 		queryset = self.queryset.filter(user__country=c)
-		serializer = self.serializer_class(queryset, many=True)
+		filtered_queryset = [x for x in queryset if x.is_active]
+
+		serializer = self.serializer_class(filtered_queryset, many=True)
 
 		return Response(serializer.data)
 
@@ -210,7 +212,9 @@ class FileViewSet(viewsets.ModelViewSet):
 				}, status=status.HTTP_400_BAD_REQUEST)
 
 		queryset = self.queryset.filter(user__country=c)
-		serializer = self.serializer_class(queryset, many=True)
+		filtered_queryset = [x for x in queryset if x.is_active]
+
+		serializer = self.serializer_class(filtered_queryset, many=True)
 
 		return Response(serializer.data)
 
@@ -265,7 +269,9 @@ class WebLinkViewSet(viewsets.ModelViewSet):
 				}, status=status.HTTP_400_BAD_REQUEST)
 
 		queryset = self.queryset.filter(user__country=c)
-		serializer = self.serializer_class(queryset, many=True)
+		filtered_queryset = [x for x in queryset if x.is_active]
+
+		serializer = self.serializer_class(filtered_queryset, many=True)
 
 		return Response(serializer.data)
 
@@ -313,13 +319,16 @@ class ResourceByCategoryView(views.APIView):
 		c = Category.objects.get(pk=categoryID)
 
 		pres = [p for p in c.presentation_set.all() if (p.user.country == country)]
-		pSerializer = PresentationSerializer(pres, many=True)
+		filtered_pres = [x for x in pres if x.is_active]
+		pSerializer = PresentationSerializer(filtered_pres, many=True)
 
 		files = [f for f in c.file_set.all() if (f.user.country == country)]
-		fSerializer = FileSerializer(files, many=True)
+		filtered_files = [x for x in files if x.is_active]
+		fSerializer = FileSerializer(filtered_files, many=True)
 
 		links = [l for l in c.weblink_set.all() if (l.user.country == country)]
-		lSerializer = WebLinkSerializer(links, many=True)
+		filtered_links = [x for x in links if x.is_active]
+		lSerializer = WebLinkSerializer(filtered_links, many=True)
 
 		return Response({
 			'presentations': pSerializer.data,
