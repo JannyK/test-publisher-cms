@@ -46,7 +46,7 @@ class CategorySerializer(serializers.ModelSerializer):
 	#picture = serializers.Field('picture.url')
 	class Meta:
 		model = Category
-		fields = ('id', 'name', 'description', 'picture', 'country', 'priority',)
+		fields = ('id', 'name', 'description', 'picture', 'icon', 'country', 'priority',)
 		read_only_fields = ('id',)
 
 	def get_validation_exclusions(self, *args, **kwargs):
@@ -86,6 +86,7 @@ class PresentationSerializer(serializers.ModelSerializer):
 			'created', 
 			'pub_date', 
 			'expiry_date',
+			'zink_number',
 			'categories',
 			'user',
 		)
@@ -120,6 +121,7 @@ class FileSerializer(serializers.ModelSerializer):
 			'created', 
 			'pub_date', 
 			'expiry_date',
+			'zink_number',
 			'categories',
 			'user',
 		)
@@ -146,6 +148,7 @@ class WebLinkSerializer(serializers.ModelSerializer):
 			'created', 
 			'pub_date', 
 			'expiry_date',
+			'zink_number',
 			'categories',
 			'user',
 		)

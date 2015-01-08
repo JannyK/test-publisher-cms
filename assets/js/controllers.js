@@ -129,6 +129,7 @@ ControlPanelApp.controllers
 	 			file: '',
 	 			pub_date: '',
 	 			expiry_date: '',
+	 			zink_number: 0,
 	 			categories: []
 	 		};
 
@@ -152,6 +153,7 @@ ControlPanelApp.controllers
 	 				fd.append('file', self.presentationItem.file);
 	 				fd.append('pub_date', self.presentationItem.pub_date);
 	 				fd.append('expiry_date', self.presentationItem.expiry_date);
+	 				fd.append('zink_number', self.presentationItem.zink_number);
 	 				fd.append('categories', self.presentationItem.categories);
 
 	 				CorePublisherService.newPresentation(fd).then(function(resp) {
@@ -184,6 +186,7 @@ ControlPanelApp.controllers
 	 			file: '',
 	 			pub_date: '',
 	 			expiry_date: '',
+	 			zink_number: 0;
 	 			categories: []
 	 		};
 
@@ -207,6 +210,7 @@ ControlPanelApp.controllers
 	 				fd.append('file', self.newFile.file);
 	 				fd.append('pub_date', self.newFile.pub_date);
 	 				fd.append('expiry_date', self.newFile.expiry_date);
+	 				fd.append('zink_number', self.newFile.zink_number);
 	 				fd.append('categories', self.newFile.categories);
 
 	 				CorePublisherService.newFile(fd).then(function(resp) {
@@ -238,6 +242,7 @@ ControlPanelApp.controllers
 	 			link: '',
 	 			pub_date: '',
 	 			expiry_date: '',
+	 			zink_number: 0,
 	 			categories: []
 	 		};
 
@@ -260,6 +265,7 @@ ControlPanelApp.controllers
 	 				fd.append('link', self.newLink.link);
 	 				fd.append('pub_date', self.newLink.pub_date);
 	 				fd.append('expiry_date', self.newLink.expiry_date);
+	 				fd.append('zink_number', self.newLink.zink_number);
 	 				fd.append('categories', self.newLink.categories);
 
 	 				CorePublisherService.newWebLink(fd).then(function(resp) {
@@ -384,6 +390,7 @@ ControlPanelApp.controllers
 
 	 				fd.append('pub_date', self.object.pub_date);
 	 				fd.append('expiry_date', self.object.expiry_date);
+	 				fd.append('zink_number', self.object.zink_number);
 	 				fd.append('categories', self.object.categories);
 
 	 				CorePublisherService.updatePresentation(self.objectID, fd).then(function(resp) {
@@ -469,6 +476,7 @@ ControlPanelApp.controllers
 
 	 				fd.append('pub_date', self.object.pub_date);
 	 				fd.append('expiry_date', self.object.expiry_date);
+	 				fd.append('zink_number', self.object.zink_number);
 	 				fd.append('categories', self.object.categories);
 
 	 				CorePublisherService.updateFile(self.objectID, fd).then(function(resp) {
@@ -553,6 +561,7 @@ ControlPanelApp.controllers
 
 	 				fd.append('pub_date', self.object.pub_date);
 	 				fd.append('expiry_date', self.object.expiry_date);
+	 				fd.append('zink_number', self.object.zink_number);
 	 				fd.append('categories', self.object.categories);
 
 	 				CorePublisherService.updateWeblink(self.objectID, fd).then(function(resp) {
@@ -635,6 +644,7 @@ ControlPanelApp.controllers
  				fd.append('description', self.newCategory.description);
  				fd.append('priority', self.newCategory.priority);
  				fd.append('picture', self.newCategory.picture);
+ 				fd.append('icon', self.newcategory.icon);
 
  				CorePublisherService.newCategory(fd).then(function(resp) {
  					console.log('Product Category created successfully');
@@ -684,6 +694,14 @@ ControlPanelApp.controllers
 					console.log('SENDING MULTIPART');
 
 					fd.append('picture', self.object.picture);
+
+					//isMultipart = true;
+				}
+
+				if (typeof(self.object.icon) === 'object') {
+				
+					fd.append('icon', self.object.icon);
+
 					//isMultipart = true;
 				}
 

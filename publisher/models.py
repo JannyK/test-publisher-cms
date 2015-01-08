@@ -15,6 +15,7 @@ class Category(models.Model):
 	name = models.CharField(max_length=40, unique=True)
 	description = models.TextField(blank=True)
 	picture = models.ImageField(upload_to="categories_thumbnails", blank=True)
+	icon = models.ImageField(upload_to="categories_icons", blank=True, null=True)
 	country = models.CharField(max_length=10, choices=COUNTRY_CHOICES, default='NO')
 	priority = models.PositiveIntegerField(default=100)
 
@@ -40,6 +41,7 @@ class BaseEntry(models.Model):
 	created = models.DateField(auto_now_add=True)
 	pub_date = models.DateField()
 	expiry_date = models.DateField(blank=True)
+	zink_number = models.CharField(max_length=50, default="NOXXXX")
 
 	objects = BaseEntryManager()
 
