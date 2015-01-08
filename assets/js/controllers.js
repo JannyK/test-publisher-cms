@@ -186,7 +186,7 @@ ControlPanelApp.controllers
 	 			file: '',
 	 			pub_date: '',
 	 			expiry_date: '',
-	 			zink_number: 0;
+	 			zink_number: 0,
 	 			categories: []
 	 		};
 
