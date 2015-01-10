@@ -96,10 +96,10 @@ class LoginView(views.APIView):
 
 class MobileClientLoginView(views.APIView):
 	def get(self, request, format=None):
-		data = json.loads(request.body)
+		#data = json.loads(request.body)
 
-		email = data.get('email', None)
-		password = data.get('password', None)
+		email = request.GET.get('email', None)
+		password = request.GET.get('password', None)
 
 		user = authenticate(email=email, password=password)
 
