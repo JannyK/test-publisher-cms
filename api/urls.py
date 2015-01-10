@@ -5,6 +5,7 @@ from rest_framework_nested import routers
 from .views import (
 	AccountViewSet, 
 	LoginView, 
+	MobileClientLoginView,
 	LogoutView,
 	CategoryViewSet,
 	PresentationViewSet,
@@ -35,6 +36,7 @@ account_router.register(r'links', UserWebLinksViewSet)
 urlpatterns = patterns('',
 	url(r'v1/', include(router.urls)),
 	url(r'v1/login/$', LoginView.as_view(), name='login'),
+	url(r'v1/ios-login/$', MobileClientLoginView.as_view(), name='ios_login'),
 	url(r'v1/logout/$', LogoutView.as_view(), name='logout'),
 	url(r'v1/categorized_resources/$', ResourceByCategoryView.as_view(), name='categorized_resources'),
 	url(r'v1/', include(account_router.urls)),
