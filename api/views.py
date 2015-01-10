@@ -95,9 +95,7 @@ class LoginView(views.APIView):
 
 
 class MobileClientLoginView(views.APIView):
-
-	@method_decorator(csrf_exempt)
-	def post(self, request, format=None):
+	def get(self, request, format=None):
 		data = json.loads(request.body)
 
 		email = data.get('email', None)
