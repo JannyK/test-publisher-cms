@@ -11,6 +11,7 @@ COUNTRY_CHOICES = (
 	('DK', 'DANMARK'),
 )
 
+
 class Category(models.Model):
 	name = models.CharField(max_length=40, unique=True)
 	description = models.TextField(blank=True)
@@ -31,6 +32,7 @@ class BaseEntryManager(models.Manager):
 		return super(BaseEntryManager, self).get_queryset().order_by('-pub_date')
 
 
+
 class BaseEntry(models.Model):
 	categories = models.ManyToManyField(Category, blank=True)
 	user = models.ForeignKey(Account)
@@ -47,6 +49,10 @@ class BaseEntry(models.Model):
 
 	class Meta:
 		abstract = True
+		permissions = (
+			('view_entry', 'Can see available entries'),
+			('edit_entry_status', 'Can edit status of available entries'),
+		)
 
 	@property 
 	def is_active(self):

@@ -16,18 +16,22 @@ class AccountSerializer(serializers.ModelSerializer):
 			'id',
 			'email',
 			'country',
+			'user_type',
 			'created_at',
 			'updated_at',
 			'first_name',
 			'last_name',
 			'password',
-			#'confirm_password',
 		)
-		read_only_fields = ('created_at', 'updated_at',)
+		read_only_fields = ('id', 'created_at', 'updated_at',)
 
 	def restore_object(self, attrs, instance=None):
 		if instance is not None:
 			instance.country = attrs.get('country', instance.country)
+			instance.first_name = attrs.get('first_name', instance.first_name)
+			instance.last_name = attrs.get('last_name', instance.last_name)
+			instance.user_type = attrs.get('user_type', instance.user_type)
+			
 			password = attrs.get('password', None)
 			confirm_password = attrs.get('confirm_password', None)
 

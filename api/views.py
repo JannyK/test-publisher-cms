@@ -28,7 +28,7 @@ from .permissions import (
 
 
 class AccountViewSet(viewsets.ModelViewSet):
-	lookup_field = 'country'
+	#lookup_field = 'country'
 	queryset = Account.objects.all()
 	serializer_class = AccountSerializer
 
@@ -38,7 +38,8 @@ class AccountViewSet(viewsets.ModelViewSet):
 		if self.request.method == 'POST':
 			return (permissions.AllowAny(),)
 
-		return (permissions.IsAuthenticated(), IsAccountOwner(),)
+		#return (permissions.IsAuthenticated(), IsAccountOwner(),)
+		return (permissions.IsAuthenticated(),)
 
 	def create(self, request):
 		serializer = self.serializer_class(data=request.DATA)
@@ -65,6 +66,12 @@ class AccountViewSet(viewsets.ModelViewSet):
 			'status': 'BAD REQUEST',
 			'message': 'Account could not be created with received data'
 		}, status=status.HTTP_400_BAD_REQUEST)
+
+	def update(self, request, *args, **kwargs):
+		print 'UPDATING...'
+		print 'DATA: ', request.DATA
+		return super(AccountViewSet, self).update(request, *args, **kwargs)
+
 
 
 class LoginView(views.APIView):
@@ -141,6 +148,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
 	def get_permissions(self):
 		if self.request.method in permissions.SAFE_METHODS:
 			return (permissions.AllowAny(),)
+
 		return (permissions.IsAuthenticated(), IsProductCategoryOwner(),)
 
 
@@ -172,12 +180,15 @@ class PresentationViewSet(viewsets.ModelViewSet):
 	def get_permissions(self):
 		if self.request.method in permissions.SAFE_METHODS:
 			return (permissions.AllowAny(),)
+
 		return (permissions.IsAuthenticated(), IsPresentationOwner(),)
 
 
 	def list(self, request, *args, **kwargs):
 		try:
 			c = request.GET['country']
+			print 'Current Country: '+ c
+			print 'User Country: '+ self.request.user.country
 		except KeyError:
 			return Response({
 				'status': 'Bad Request',
@@ -229,6 +240,7 @@ class FileViewSet(viewsets.ModelViewSet):
 	def get_permissions(self):
 		if self.request.method in permissions.SAFE_METHODS:
 			return (permissions.AllowAny(),)
+
 		return (permissions.IsAuthenticated(), IsFileOwner(),)
 
 	def list(self, request, *args, **kwargs):
@@ -285,6 +297,7 @@ class WebLinkViewSet(viewsets.ModelViewSet):
 	def get_permissions(self):
 		if self.request.method in permissions.SAFE_METHODS:
 			return (permissions.AllowAny(),)
+
 		return (permissions.IsAuthenticated(), IsWebLinkOwner(),)
 
 

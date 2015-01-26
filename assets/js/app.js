@@ -95,6 +95,21 @@ var app = angular.module('ControlPanelApp',
 				controllerAs: 'ctrl',
 				templateUrl: '/static/partials/detail-category.html'
 			})
+			.when('/users', {
+				controller: 'UserListController',
+				controllerAs: 'ctrl',
+				templateUrl: '/static/partials/users.html'
+			})
+			.when('/users/new', {
+				controller: 'UserCreateController',
+				controllerAs: 'ctrl',
+				templateUrl: '/static/partials/new-user.html'
+			})
+			.when('/users/:uId', {
+				controller: 'UserDetailController',
+				controllerAs: 'ctrl',
+				templateUrl: '/static/partials/user-details.html'
+			})
 			.otherwise({
 				redirectTo: '/'
 			});
@@ -194,6 +209,10 @@ app.factory('CorePublisherService', ['$http', function($http) {
 			return $http.get('/api/v1/categories/?country=' +countryCode+ '&format=json');
 		},
 
+		allUsers: function() {
+			return $http.get('/api/v1/accounts/?format=json');
+		},
+
 		allPresentations: function(countryCode) {
 			return $http.get('/api/v1/presentations/?country=' +countryCode+ '&format=json');
 		},
@@ -225,7 +244,20 @@ app.factory('CorePublisherService', ['$http', function($http) {
 		},
 
 		deleteCategory: function(cId) {
-			return $http.delete('/api/v1/categories/'+ cId + '/?format=jaon');
+			return $http.delete('/api/v1/categories/'+ cId + '/?format=json');
+		},
+
+		newUser: function(data) {
+			return $http.post('/api/v1/accounts/', data);
+		},
+		fetchUser: function(uId) {
+			return $http.get('/api/v1/accounts/'+ uId + '/?format=json');
+		},
+		updateUser: function(uId, data) {
+			return $http.patch('/api/v1/accounts/'+ uId +'/', data);
+		},
+		deleteUser: function(uId) {
+			return $http.delete('/api/v1/accounts/'+ uId + '/?format=json');
 		},
 
 		newPresentation: function(data) {
@@ -293,14 +325,14 @@ app.factory('CorePublisherService', ['$http', function($http) {
 
 		deleteWeblink: function(itemID) {
 			return $http.delete('/api/v1/links/' + itemID + '/?format=json');
-		},
+		}
 
 		//Fetch Items by country (from current logged user)
+		/*
 		getPresentations: function(user_country) {
 			return $http.get('/api/v1/accounts/' + user_country + 'presentations');
 		},
 
-		//TODO - Change the param to be: name of the current country
 		getFiles: function(user_country) {
 			return $http.get('/api/v1/accounts/' + user_country + 'files');
 		},
@@ -308,6 +340,7 @@ app.factory('CorePublisherService', ['$http', function($http) {
 		getWebLinks: function(user_country) {
 			return $http.get('/api/v1/accounts/' + user_country + 'links');
 		}
+		*/
 	}
 }]);
 
@@ -356,12 +389,3 @@ app.directive('fileField', ['$parse', function($parse) {
 		}
 	};
 }]);
-
-
-
-
-
-
-
-
-

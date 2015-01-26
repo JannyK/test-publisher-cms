@@ -1,11 +1,23 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser
-from django.contrib.auth.models import BaseUserManager
+from django.contrib.auth.models import (
+	BaseUserManager,
+	AbstractBaseUser,
+	PermissionsMixin,
+	Group,
+	Permission,
+)
 
 COUNTRY_CHOICES = (
 	('NO', 'NORGE'),
 	('SE', 'SVERIGE'),
 	('DK', 'DANMARK'),
+	('ALL', 'ALL COUNTRIES'),
+)
+
+USER_GROUPS = (
+	('DEVELOPER', 'Developer'),
+	('LILLY_USER', 'Lilly user'),
+	('TEST_USER', 'Test user'),
 )
 
 class AccountManager(BaseUserManager):
@@ -35,10 +47,10 @@ class AccountManager(BaseUserManager):
 		return user
 
 
-class Account(AbstractBaseUser):
+class Account(AbstractBaseUser, PermissionsMixin):
 	email = models.EmailField(unique=True)
-	#username = models.CharField(max_length=40, unique=True)
 	country = models.CharField(max_length=40, choices=COUNTRY_CHOICES, default='NO')
+	user_type = models.CharField(max_length=40, choices=USER_GROUPS, default='DEVELOPER')
 	first_name = models.CharField(max_length=40, blank=True)
 	last_name = models.CharField(max_length=40, blank=True)
 
@@ -55,6 +67,8 @@ class Account(AbstractBaseUser):
 		return '%s (%s)' % (self.email, self.country)
 
 	def save(self, *args, **kwargs):
+		print 'SAVING...'
+		
 		super(Account, self).save(*args, **kwargs)
 
 

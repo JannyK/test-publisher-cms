@@ -1,0 +1,59 @@
+<div class="row">
+	<div class="col-xs-12">
+		<ul class="breadcrumb">
+	  		<li><a href="#">Home</a></li>
+	  		<li class="active">Registered users</li>
+		</ul>
+	</div>
+</div>
+
+<div class="row"></div>
+
+<div class="row">
+	<div class="col-xs-12">
+		
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-list"></span>Registered Users
+                <div class="pull-right action-buttons">
+                    <div class="btn-group pull-right">
+                        <a class="btn btn-primary btn-xs pull-right" href="#/users/new">Register new</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-body">
+                <ul class="list-group custom-list">
+                    <li class="list-group-item custom-item" ng-repeat="u in ctrl.registered_users">
+                        <img src="http://placehold.it/140x100" class="item-thumbnail" width="140" height="100">
+
+                        <div class="item-infos">
+                            <p class="item-title">
+                                <a href="#/users/[[ u.id ]]">
+                                    [[ u.email | limitTo:60 ]]
+                                </a>
+                            </p>
+
+                            <p class="info-item">
+                                <span class="info-title">Group: </span><span class="info">[[ u.user_type ]]</span>
+                            </p>
+
+                        </div>
+                        <div class="pull-right action-buttons">
+                            <a href="#/users/[[ u.id ]]"><span class="glyphicon glyphicon-pencil"></span></a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="panel-footer">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h6>
+                            Total <span class="label label-info" ng-bind="ctrl.registered_users.length"></span></h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
+</div>

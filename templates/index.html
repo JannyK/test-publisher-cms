@@ -22,11 +22,12 @@
     						<ul class="dropdown-menu">
   								<li><a href="#/categories">Products/Categories</a></li>
   								<li><a href="">Application variables</a></li>
-  								<li><a href="">My profile</a></li>
+                  <li><a href="#/users">Users</a></li>
     						</ul>
   						</li>
 					</ul>
     			</div>
+            <div class="alert alert-info" ng-show="mainCtrl.loading">Loading...</div>
       			<div class="col-xs-9" ng-view></div>
     		</div>
   		</div>

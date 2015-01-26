@@ -35,6 +35,7 @@ ControlPanelApp.controllers
 		self.isCountrySet = !!AuthenticationService.getSelectedCountry();
 		self.isAuthenticated = AuthenticationService.isAuthenticated();
 		self.canDisplayMeny = false;
+		self.loading = false;
 
 		self.countries = [
 			{name: 'norway', code: 'NO'},
@@ -54,13 +55,30 @@ ControlPanelApp.controllers
 			self.isCountrySet = true;
 
 			if (AuthenticationService.setSelectedCountry(country)) {
-				$location.url('/login');	
+				//$location.url('/login');	
+				if (self.isAuthenticated) {
+					$location.url('/dashboard');
+				}else {
+					$location.url('/login');
+				}
 			}
 		};
 
 		self.logout = function() {
 			AuthenticationService.logout();
 		};
+
+		//PUB-SUB
+		/*
+		$scope.$on('LOADIND', function() {
+			self.loading = true;
+		});
+
+		$scope.$on('NOT_LOADING', function() {
+			self.loading = false;
+		});
+		*/
+
 	}])
  	.controller('RegistrationController', 
  		['AuthenticationService', '$location', function(AuthenticationService, $location) {
@@ -134,11 +152,15 @@ ControlPanelApp.controllers
 	 		};
 
 	 		//fetch all categories and make them availbale for use
+	 		//$scope.$emit('LOADIND');
+
 	 		CorePublisherService.allCategories(selectedCountry.code).then(function(resp) {
 	 			self.categories = resp.data;
 	 		}, function(errorResp) {
 	 			console.error('Failed to fetch categories:');
 	 		});
+
+	 		//$scope.$emit('NOT_LOADING');
 
 	 		self.create = function() {
 	 			console.log('DATA TO BE POSTED: '+ JSON.stringify(self.presentationItem));
@@ -286,14 +308,12 @@ ControlPanelApp.controllers
  	.controller('PresentationListController', 
  		['AuthenticationService', 'CorePublisherService', '$location', 'ngDialog',function(AuthenticationService, CorePublisherService, $location, ngDialog) {
 
- 		//ToDO -Implement
  		var self = this;
  		var selectedCountry = AuthenticationService.getSelectedCountry();
 
  		self.presentations = [];
 
  		if (AuthenticationService.isAuthenticated()) {
-
 
 	 		//fetch all presentations
 	 		CorePublisherService.allPresentations(selectedCountry.code).then(function(resp) {
@@ -644,7 +664,7 @@ ControlPanelApp.controllers
  				fd.append('description', self.newCategory.description);
  				fd.append('priority', self.newCategory.priority);
  				fd.append('picture', self.newCategory.picture);
- 				fd.append('icon', self.newcategory.icon);
+ 				fd.append('icon', self.newCategory.icon);
 
  				CorePublisherService.newCategory(fd).then(function(resp) {
  					console.log('Product Category created successfully');
@@ -726,6 +746,149 @@ ControlPanelApp.controllers
 
 				}, function(errorResp) {
 					console.error('Failed to delete category');
+				});
+			} else {
+				console.error('Does not have permission');
+			}
+		};
+
+		//fetch the object after instanciation
+		self.retrieve(self.objectID);
+	}])
+	
+	.controller('UserListController', 
+		['AuthenticationService', 'CorePublisherService', '$location', function(AuthenticationService, CorePublisherService, $location) {
+		var self = this;
+
+		self.registered_users = [];
+
+		if (AuthenticationService.isAuthenticated()) {
+			//var user = AuthenticationService.getAuthenticatedUser();
+
+			CorePublisherService.allUsers().then(function(resp) {
+				console.log('users load successfully: '+ JSON.stringify(resp.data));
+
+				self.registered_users = resp.data;
+			}, function(errorResp) {
+				console.error('Failed loading users...');
+			});
+		}
+	}])
+
+	.controller('UserCreateController', 
+		['AuthenticationService', 'CorePublisherService', '$location', function(AuthenticationService, CorePublisherService, $location) {
+
+		var self = this;
+		self.isAuthenticated = AuthenticationService.isAuthenticated();
+
+		self.countries = [
+			{name: 'norway', code: 'NO'},
+			{name: 'sweden', code: 'SE'},
+			{name: 'danmark', code: 'DK'}
+		];
+
+		self.user_groups = [
+			{name: 'Developer', code: 'DEVELOPER'},
+			{name: 'Lilly User', code: 'LILLY_USER'},
+			{name: 'Test user', code: 'TEST_USER'}
+		];
+
+		self.newUser = {
+ 			email: '',
+ 			first_name: '',
+ 			last_name: '',
+ 			user_type: '',
+ 			country: ''
+ 		};
+
+ 		self.create = function() {
+ 			
+ 			if (self.isAuthenticated) {
+
+ 				var fd = {
+ 					email: self.newUser.email,
+ 					first_name: self.newUser.first_name,
+ 					last_name: self.newUser.last_name,
+ 					user_type: self.newUser.user_type,
+ 					country: self.newUser.country
+ 				};
+
+ 				CorePublisherService.newUser(fd).then(function(resp) {
+ 					console.log('User created successfully');
+ 					$location.url('/users');
+
+ 				}, function(errorResp) {
+ 					console.error('Failed to create User:');
+ 				});
+
+	 		} else {
+	 			//redirect to the login page
+	 			$location.url('/login');
+	 		}
+ 		};
+	}])
+
+	.controller('UserDetailController', 
+		['AuthenticationService', 'CorePublisherService', '$location', '$routeParams', 'ngDialog', function(AuthenticationService, CorePublisherService, $location, $routeParams, ngDialog) {
+
+		var self = this;
+		self.countries = [
+			{name: 'norway', code: 'NO'},
+			{name: 'sweden', code: 'SE'},
+			{name: 'danmark', code: 'DK'}
+		];
+
+		self.user_groups = [
+			{name: 'Developer', code: 'DEVELOPER'},
+			{name: 'Lilly User', code: 'LILLY_USER'},
+			{name: 'Test user', code: 'TEST_USER'}
+		];
+
+		self.isAuthenticated = AuthenticationService.isAuthenticated();
+		self.objectID = $routeParams.uId;
+		self.object = {};
+
+		self.retrieve = function(objID) {
+			CorePublisherService.fetchUser(objID).then(function(resp) {
+				self.object = resp.data;
+				console.log('Object fecthed and set correctly: '+ JSON.stringify(self.object));
+			}, function(errorResp) {
+				console.error('Failed to load resource from the remote server');
+			});
+		};
+
+		self.update = function() {
+			if (self.isAuthenticated) {
+
+ 				var fd = {
+ 					email: self.object.email,
+ 					first_name: self.object.first_name,
+ 					last_name: self.object.last_name,
+ 					user_type: self.object.user_type,
+ 					country: self.object.country
+ 				};
+
+				CorePublisherService.updateUser(self.objectID, fd).then(function(resp) {
+					console.log('User updated successfully');
+
+				}, function(errorResp) {
+					console.error('Failed to update User');
+				});
+
+	 		} else {
+	 			//redirect to the login page
+	 			$location.url('/login');
+	 		}
+		};
+
+		self.delete = function() {
+			if (self.isAuthenticated) {
+				CorePublisherService.deleteUser(self.objectID).then(function(resp) {
+					$location.url('/users');
+
+				}, function(errorResp) {
+
+					console.error('Failed to delete user:'+ errorResp.data.detail);
 				});
 			} else {
 				console.error('Does not have permission');
