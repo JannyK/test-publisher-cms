@@ -2,7 +2,7 @@
 'use strict';
 
 var app = angular.module('ControlPanelApp', 
-	['publisherControllers','ngRoute', 'ngCookies', 'ngDialog'])
+	['ngAnimate', 'ngRoute', 'ngCookies', 'ngDialog', 'cgBusy', 'toastr', 'ui.bootstrap', 'publisherControllers'])
 	.config(['$routeProvider', '$locationProvider', '$httpProvider', '$interpolateProvider', function($routeProvider, $locationProvider, $httpProvider, $interpolateProvider) {
 
 		$httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -109,8 +109,8 @@ var app = angular.module('ControlPanelApp',
 				controller: 'UserDetailController',
 				controllerAs: 'ctrl',
 				templateUrl: '/static/partials/user-details.html'
-			})
-			.otherwise({
+			}).
+			otherwise({
 				redirectTo: '/'
 			});
 	}]);

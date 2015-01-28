@@ -103,7 +103,6 @@ DATABASES['default'] = dj_database_url.config()
 DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
 
 
-
 # Add to your settings file
 #CONTENT_TYPES = ['image', 'video']
 # 2.5MB - 2621440

@@ -144,6 +144,7 @@ class LogoutView(views.APIView):
 class CategoryViewSet(viewsets.ModelViewSet):
 	queryset = Category.objects.all().order_by('priority')
 	serializer_class = CategorySerializer
+	parser_classes = (FormParser, MultiPartParser,)
 
 	def get_permissions(self):
 		if self.request.method in permissions.SAFE_METHODS:
@@ -187,8 +188,6 @@ class PresentationViewSet(viewsets.ModelViewSet):
 	def list(self, request, *args, **kwargs):
 		try:
 			c = request.GET['country']
-			print 'Current Country: '+ c
-			print 'User Country: '+ self.request.user.country
 		except KeyError:
 			return Response({
 				'status': 'Bad Request',

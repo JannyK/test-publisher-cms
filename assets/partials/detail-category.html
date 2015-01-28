@@ -8,62 +8,80 @@
     </div>
 </div>
 
-<div class="row">
+<div cg-busy="{promise:ctrl.promise,templateUrl:ctrl.templateUrl,message:ctrl.message,backdrop:ctrl.backdrop,delay:ctrl.delay,minDuration:ctrl.minDuration}" class="row">
     <div class="col-xs-12">
 
-        <form class="form-horizontal" ng-submit="ctrl.update()">
-            <fieldset>
-                <legend>[[ ctrl.object.name ]]</legend>
-                <div class="form-group">
-                    <label for="title" class="col-md-2 control-label">Name</label>
-                    <div class="col-md-10">
-                        <input type="text" class="form-control" id="title" placeholder="Product title" ng-model="ctrl.object.name">
-                    </div>
-                </div>
 
-                <div class="form-group">
-                    <label for="description" class="col-md-2 control-label">Description</label>
-                    <div class="col-md-10">
-                        <textarea class="form-control" rows="3" id="description" ng-model="ctrl.object.description"></textarea>
-                        <span class="help-block">A brief description of the product</span>
-                    </div>
-                </div>
+        <accordion close-others="false">
+            <accordion-group heading="[[ ctrl.object.name ]]" is-open="true" is-disabled="false">
+                <form class="form-horizontal" ng-submit="ctrl.update()">
+                    <fieldset>
 
-                <div class="form-group">
-                    <label for="priority" class="col-md-2 control-label">Priority</label>
-                    <div class="col-md-10">
-                        <input type="text" class="form-control" rows="3" id="priority" ng-model="ctrl.object.priority">
-                        <span class="help-block">The position on the app Menu</span>
-                    </div>
-                </div>
+                        <div class="form-group" style="margin-top: 30px;">
+                            <label for="title" class="col-md-2 control-label">Name</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" id="title" placeholder="Product title" ng-model="ctrl.object.name">
+                            </div>
+                        </div>
 
-                <div class="form-group">
-                    <label for="thumbnail" class="col-md-2 control-label">Picture</label>
-                    <img src="" class="col-md-5">
-                    <div class="col-md-5">
-                        <input type="file" class="form-control" id="thumbnail" file-field="ctrl.object.picture">
-                    </div>
-                    <span class="help-block">Select an image to use as thumbnail</span>
-                </div>
+                        <div class="form-group">
+                            <label for="description" class="col-md-2 control-label">Description</label>
+                            <div class="col-md-8">
+                                <textarea class="form-control" rows="3" id="description" ng-model="ctrl.object.description"></textarea>
+                                <span class="help-block" style="font-size: 8px;">A brief description of the product category</span>
+                            </div>
+                        </div>
 
-                <div class="form-group">
-                    <label for="icon" class="col-md-2 control-label">Product icon</label>
-                    <img src="" class="col-md-5">
-                    <div class="col-md-5">
-                        <input type="file" class="form-control" id="icon" file-field="ctrl.object.icon">
-                    </div>
-                    <span class="help-block">Select an image to use as menu icon</span>
-                </div>
+                        <div class="form-group">
+                            <label for="priority" class="col-md-2 control-label">Priority</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" rows="3" id="priority" ng-model="ctrl.object.priority">
+                                <span class="help-block" style="font-size: 8px;">The position on the app Menu</span>
+                            </div>
+                        </div>
 
+                        <div class="form-group">
+                            <label for="thumbnail" class="col-md-2 control-label">Picture</label>
+                            <img src="" class="col-md-2">
+                            <div class="col-md-6">
+                                <input type="file" class="form-control" id="thumbnail" file-field="ctrl.object.picture">
+                            </div>
+                            <!--<span class="help-block" style="font-size: 8px;">Select an image to use as thumbnail</span>-->
+                        </div>
 
-                <div class="form-group">
-                    <div class="col-md-10 col-md-offset-2">
-                        <a class="btn btn-default" href="#/categories">Cancel</a>
-                        <input type="submit" value="Submit" class="btn btn-primary">
-                        <a class="btn btn-danger pull-right" ng-click="ctrl.delete()">Delete</a>
-                    </div>
-                </div>
-            </fieldset>
-        </form>
+                        <div class="form-group">
+                            <label for="icon" class="col-md-2 control-label">Product icon</label>
+                            <img src="" class="col-md-2">
+                            <div class="col-md-6">
+                                <input type="file" class="form-control" id="icon" file-field="ctrl.object.icon">
+                            </div>
+                            <!--<span class="help-block" style="font-size: 8px;">Select an image to use as menu icon</span>-->
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-8 col-md-offset-2">
+                                <a class="btn btn-default" href="#/categories">Return</a>
+                                <input type="submit" value="Submit" class="btn btn-primary">
+                                <a class="btn btn-danger pull-right" ng-click="ctrl.delete()">Delete</a>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </accordion-group>
+
+            <accordion-group heading="Resource in this category">
+                <a href="">TEST</a>
+                <a href="">TEST</a>
+                <a href="">TEST</a>
+                <a href="">TEST</a>
+                <a href="">TEST</a>
+                <a href="">TEST</a>
+                <a href="">TEST</a>
+                <a href="">TEST</a>
+                
+            </accordion-group>
+            
+        </accordion>
+
     </div>
 </div>
