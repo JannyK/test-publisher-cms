@@ -69,16 +69,87 @@
                 </form>
             </accordion-group>
 
-            <accordion-group heading="Resource in this category">
-                <a href="">TEST</a>
-                <a href="">TEST</a>
-                <a href="">TEST</a>
-                <a href="">TEST</a>
-                <a href="">TEST</a>
-                <a href="">TEST</a>
-                <a href="">TEST</a>
-                <a href="">TEST</a>
-                
+            <accordion-group heading="Resources in this category">
+
+                <tabset justified="true">
+                    <tab heading="Files" ng-click="ctrl.getCategorizedFiles()">
+                        <ul class="list-group custom-list">
+                            <li class="list-group-item custom-item" ng-repeat="f in ctrl.categorizedFiles">
+                                <img src="https://controlpanel-dev.s3.amazonaws.com/[[ f.file_resource.thumbnail ]]" class="item-thumbnail" width="140" height="100">
+
+                                <div class="item-infos">
+                                    <p class="item-title"><a href="#/files/[[ f.file_resource.id ]]">[[ f.file_resource.title | limitTo : 60 ]]</a></p>
+
+                                    <p class="info-item">
+                                        <span class="info-title">Pub Date: </span><span class="info">[[ f.file_resource.pub_date | date:medium ]]</span>
+                                    </p>
+                                    <p>
+                                        <span class="info-title">Expiry Date: </span><span class="info">[[ f.file_resource.expiry_date | date:medium ]]</span>
+                                    </p>
+                                    <p>
+                                        <span class="info-title">Categories/Products: </span><span class="info">[[ f.file_resource.categories.join(" | ")]]</span>
+                                    </p>
+
+                                </div>
+                                <span>Position: </span>
+                                <div class="stepper" rn-stepper ng-model="f.position" min="1" max="100"></div>
+                        
+                            </li>
+                        </ul>
+                    </tab>
+
+                    <tab heading="Presentations" ng-click="ctrl.getCategorizedPresentations()">
+                        <ul class="list-group custom-list">
+                            <li class="list-group-item custom-item" ng-repeat="p in ctrl.categorizedPresentations">
+                                <img src="https://controlpanel-dev.s3.amazonaws.com/[[ p.presentation.thumbnail ]]" class="item-thumbnail" width="140" height="100">
+
+                                <div class="item-infos">
+                                    <p class="item-title"><a href="#/presentations/[[ p.presentation.id ]]">[[ p.presentation.title | limitTo : 60 ]]</a></p>
+
+                                    <p class="info-item">
+                                        <span class="info-title">Pub Date: </span><span class="info">[[ p.presentation.pub_date | date:medium ]]</span>
+                                    </p>
+                                    <p>
+                                        <span class="info-title">Expiry Date: </span><span class="info">[[ p.presentation.expiry_date | date:medium ]]</span>
+                                    </p>
+                                    <p>
+                                        <span class="info-title">Categories/Products: </span><span class="info">[[ p.presentation.categories.join(" | ")]]</span>
+                                    </p>
+
+                                </div>
+                                <span>Position: </span>
+                                <div class="stepper" rn-stepper ng-model="p.position" min="1" max="100"></div>
+                        
+                            </li>
+                        </ul>
+                    </tab>
+
+                    <tab heading="Web Links" ng-click="ctrl.getCategorizedWeblinks()">
+                        <ul class="list-group custom-list">
+                            <li class="list-group-item custom-item" ng-repeat="l in ctrl.categorizedWeblinks">
+                                <img src="https://controlpanel-dev.s3.amazonaws.com/[[ l.weblink.thumbnail ]]" class="item-thumbnail" width="140" height="100">
+
+                                <div class="item-infos">
+                                    <p class="item-title"><a href="#/links/[[ l.weblink.id ]]">[[ l.weblink.title | limitTo : 60 ]]</a></p>
+
+                                    <p class="info-item">
+                                        <span class="info-title">Pub Date: </span><span class="info">[[ l.weblink.pub_date | date:medium ]]</span>
+                                    </p>
+                                    <p>
+                                        <span class="info-title">Expiry Date: </span><span class="info">[[ l.weblink.expiry_date | date:medium ]]</span>
+                                    </p>
+                                    <p>
+                                        <span class="info-title">Categories/Products: </span><span class="info">[[ l.weblink.categories.join(" | ")]]</span>
+                                    </p>
+
+                                </div>
+                                <span>Position: </span>
+                                <div class="stepper" rn-stepper ng-model="l.position" min="1" max="100"></div>
+                        
+                            </li>
+                        </ul>
+                    </tab>
+                </tabset>
             </accordion-group>
             
         </accordion>

@@ -20,7 +20,7 @@ class Category(models.Model):
 	country = models.CharField(max_length=10, choices=COUNTRY_CHOICES, default='NO')
 	priority = models.PositiveIntegerField(default=100)
 
-	def __unicode__(self):
+	def __str__(self):
 		return self.name
 
 	def save(self, *args, **kwargs):
@@ -34,7 +34,7 @@ class BaseEntryManager(models.Manager):
 
 
 class BaseEntry(models.Model):
-	categories = models.ManyToManyField(Category, blank=True)
+	
 	user = models.ForeignKey(Account)
 
 	title = models.CharField(max_length=255)
@@ -49,10 +49,10 @@ class BaseEntry(models.Model):
 
 	class Meta:
 		abstract = True
-		permissions = (
-			('view_entry', 'Can see available entries'),
-			('edit_entry_status', 'Can edit status of available entries'),
-		)
+		#permissions = (
+		#	('view_entry', 'Can see available entries'),
+		#	('edit_entry_status', 'Can edit status of available entries'),
+		#)
 
 	@property 
 	def is_active(self):
@@ -63,7 +63,7 @@ class BaseEntry(models.Model):
 
 
 
-	def __unicode__(self):
+	def __str__(self):
 		return 'Entry: %s' % (self.title,)
 
 	def save(self, *args, **kwargs):
@@ -75,7 +75,9 @@ class BaseEntry(models.Model):
 		super(BaseEntry, self).save(*args, **kwargs)
 
 
+
 class Presentation(BaseEntry):
+	categories = models.ManyToManyField(Category, through="CategorizedPresentation", blank=True)
 	file = models.FileField(upload_to='presentation_files')
 	file_size = models.PositiveIntegerField(default=0)
 
@@ -91,6 +93,7 @@ class Presentation(BaseEntry):
 
 
 class File(BaseEntry):
+	categories = models.ManyToManyField(Category, through="CategorizedFile", blank=True)
 	file = models.FileField(upload_to='files')
 	file_size = models.PositiveIntegerField(default=0)
 
@@ -99,13 +102,35 @@ class File(BaseEntry):
 			self.file_size = self.file.size
 		super(File, self).save(*args, **kwargs)
 
-
 	class Meta:
 		ordering = ('created',)
 
 
+
 class WebLink(BaseEntry):
+	categories = models.ManyToManyField(Category, through="CategorizedWebLink", blank=True)
 	link = models.URLField(max_length=255)
 
 	class Meta:
 		ordering = ('created',)
+
+
+
+class CategorizedFile(models.Model):
+	category = models.ForeignKey(Category, related_name="categorized_files")
+	file_resource = models.ForeignKey(File)
+	position = models.PositiveIntegerField(default=1)
+
+
+
+class CategorizedPresentation(models.Model):
+	category = models.ForeignKey(Category, related_name="categorized_presentations")
+	presentation = models.ForeignKey(Presentation)
+	position = models.PositiveIntegerField(default=1)
+
+
+
+class CategorizedWebLink(models.Model):
+	category = models.ForeignKey(Category, related_name="categorized_weblinks")
+	weblink = models.ForeignKey(WebLink)
+	position = models.PositiveIntegerField(default=1)

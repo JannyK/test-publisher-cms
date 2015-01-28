@@ -15,6 +15,12 @@ from .views import (
 	WebLinkViewSet,
 	UserWebLinksViewSet,
 	ResourceByCategoryView,
+	
+	#categorized resource with sorting
+	AllCategorizedResourceByCategoryView,
+	CategorizedPresentationViewSet,
+	CategorizedFileViewSet,
+	CategorizedWebLinkViewSet,
 )
 
 router = routers.SimpleRouter()
@@ -23,6 +29,11 @@ router.register(r'categories', CategoryViewSet)
 router.register(r'presentations', PresentationViewSet)
 router.register(r'files', FileViewSet)
 router.register(r'links', WebLinkViewSet)
+
+#Categorized content
+router.register(r'categorized_presentations', CategorizedPresentationViewSet)
+router.register(r'categorized_files', CategorizedFileViewSet)
+router.register(r'categorized_links', CategorizedWebLinkViewSet)
 
 #AccountRouter provide the nested routing needed to access entries for
 #a specific user
@@ -39,5 +50,6 @@ urlpatterns = patterns('',
 	url(r'v1/ios-login/$', MobileClientLoginView.as_view(), name='ios_login'),
 	url(r'v1/logout/$', LogoutView.as_view(), name='logout'),
 	url(r'v1/categorized_resources/$', ResourceByCategoryView.as_view(), name='categorized_resources'),
+	url(r'v1/all_categorized_resources/$', AllCategorizedResourceByCategoryView.as_view(), name='all_categorized_resources'),
 	url(r'v1/', include(account_router.urls)),
 )

@@ -1,0 +1,36 @@
+{
+  "name": "angular-stepper",
+  "version": "0.0.2",
+  "homepage": "https://github.com/revolunet/angular-stepper",
+  "authors": [
+    "Julien Bouquillon <julien@revolunet.com>"
+  ],
+  "description": "Numeric stepper for AngularJS",
+  "main": "src/angular-stepper.js",
+  "keywords": [
+    "angular",
+    "stepper",
+    "form"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.2.5"
+  },
+  "_release": "0.0.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.0.2",
+    "commit": "1df3859091281dbc57dd8cb5eabf22586d3d5565"
+  },
+  "_source": "git://github.com/revolunet/angular-stepper.git",
+  "_target": "~0.0.2",
+  "_originalSource": "angular-stepper",
+  "_direct": true
+}

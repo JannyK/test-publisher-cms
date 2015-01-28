@@ -2,7 +2,7 @@
 'use strict';
 
 var app = angular.module('ControlPanelApp', 
-	['ngAnimate', 'ngRoute', 'ngCookies', 'ngDialog', 'cgBusy', 'toastr', 'ui.bootstrap', 'publisherControllers'])
+	['ngAnimate', 'ngRoute', 'ngCookies', 'ngDialog', 'cgBusy', 'toastr', 'ui.bootstrap', 'revolunet.stepper', 'publisherControllers'])
 	.config(['$routeProvider', '$locationProvider', '$httpProvider', '$interpolateProvider', function($routeProvider, $locationProvider, $httpProvider, $interpolateProvider) {
 
 		$httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -325,7 +325,7 @@ app.factory('CorePublisherService', ['$http', function($http) {
 
 		deleteWeblink: function(itemID) {
 			return $http.delete('/api/v1/links/' + itemID + '/?format=json');
-		}
+		},
 
 		//Fetch Items by country (from current logged user)
 		/*
@@ -341,6 +341,27 @@ app.factory('CorePublisherService', ['$http', function($http) {
 			return $http.get('/api/v1/accounts/' + user_country + 'links');
 		}
 		*/
+
+		fetchCategorizedPresentations: function(categoryId, country) {
+			return $http.get('/api/v1/categorized_presentations/?categoryId='+ categoryId +'&country='+ country +'&format=json');
+		},
+
+		fetchCategorizedFiles: function(categoryId, country) {
+			return $http.get('/api/v1/categorized_files/?categoryId='+ categoryId +'&country='+ country +'&format=json');
+		},
+
+		fetchCategorizedWeblinks: function(categoryId, country) {
+			return $http.get('/api/v1/categorized_links/?categoryId='+ categoryId +'&country='+ country +'&format=json');
+		},
+		updateWeblinkPosition: function(id, data) {
+			return $http.patch('/api/v1/categorized_links/' + id + '/', data);
+		},
+		updatePresentationPosition: function(id, data) {
+			return $http.patch('/api/v1/categorized_presentations/' + id + '/', data);
+		},
+		updateFilePosition: function(id, data) {
+			return $http.patch('/api/v1/categorized_files/' + id + '/', data);
+		}
 	}
 }]);
 

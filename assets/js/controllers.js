@@ -762,10 +762,14 @@ ControlPanelApp.controllers
 		self.backdrop = true;
 		self.promise = null;
 
-
 		self.isAuthenticated = AuthenticationService.isAuthenticated();
+		self.selectedCountry = AuthenticationService.getSelectedCountry();
 		self.objectID = $routeParams.categoryId;
 		self.object = {};
+
+		self.categorizedPresentations = null;
+		self.categorizedFiles = null;
+		self.categorizedWeblinks = null;
 
 		self.retrieve = function(objID) {
 			self.promise = CorePublisherService.fetchCategory(objID).then(function(resp) {
@@ -821,6 +825,84 @@ ControlPanelApp.controllers
 			} else {
 				toastr.warning('You are not allowed to perform this action', 'Error!');
 			}
+		};
+
+		self.getCategorizedPresentations = function() {
+			console.log('Fetching...');
+			if (self.categorizedPresentations === null) {
+				if (self.object !== null) {
+
+					self.msg = 'Fetching presentations in thie category';
+					self.promise = CorePublisherService.fetchCategorizedPresentations(self.objectID, self.selectedCountry.code).then(function(resp) {
+						console.log('RESPONSE: '+ JSON.stringify(resp.data));
+						self.categorizedPresentations = resp.data;
+					}, function(errorResp) {
+						toastr.error('An error occured while fetching data: '+ errorResp.data.detail, 'Error');
+					});
+				}
+			}
+		};
+
+		self.getCategorizedFiles = function() {
+
+			console.log('Fetching...');
+			if (self.categorizedFiles === null) {
+				if (self.object !== null) {
+
+					self.msg = 'Fetching files in thie category';
+					self.promise = CorePublisherService.fetchCategorizedFiles(self.objectID, self.selectedCountry.code).then(function(resp) {
+						self.categorizedFiles = resp.data;
+						console.log('RESPONSE: '+ JSON.stringify(resp.data));
+					}, function(errorResp) {
+						toastr.error('An error occured while fetching data: '+ errorResp.data.detail, 'Error');
+					});
+				}
+			}
+		};
+
+		self.getCategorizedWeblinks = function() {
+			console.log('Fetching...');
+
+			if (self.categorizedWeblinks === null) {
+				if (self.object !== null) {
+
+					self.msg = 'Fetching links in thie category';
+					self.promise = CorePublisherService.fetchCategorizedWeblinks(self.objectID, self.selectedCountry.code).then(function(resp) {
+						console.log('RESPONSE: '+ JSON.stringify(resp.data));
+						self.categorizedWeblinks = resp.data;
+					}, function(errorResp) {
+						toastr.error('An error occured while fetching data: '+ errorResp.data.detail, 'Error');
+					});
+				}
+			}
+		};
+
+		self.updateFilePosition = function(fileID, newPosition) {
+
+			self.msg = '';
+			self.promise = CorePublisherService.updateFilePosition(fileID, {position:newPosition}).then(function(resp) {
+				console.log('Update complete...');
+			}, function(errorResp) {
+				toastr.error('An error occured while updating position '+ errorResp.data.detail, 'Error');
+			});
+		};
+
+		self.updatePresentationPosition = function(pID, newPosition) {
+			self.msg = '';
+			self.promise = CorePublisherService.updatePresentationPosition(pID, {position:newPosition}).then(function(resp) {
+				console.log('Update complete...');
+			}, function(errorResp) {
+				toastr.error('An error occured while updating position '+ errorResp.data.detail, 'Error');
+			});
+		};
+
+		self.updateWeblinkPosition = function(linkID, newPosition) {
+			self.msg = '';
+			self.promise = CorePublisherService.updateWeblinkPosition(linkID, {position:newPosition}).then(function(resp) {
+				console.log('Update complete...');
+			}, function(errorResp) {
+				toastr.error('An error occured while updating position '+ errorResp.data.detail, 'Error');
+			});
 		};
 
 		//fetch the object after instanciation

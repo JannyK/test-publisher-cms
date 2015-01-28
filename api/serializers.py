@@ -3,8 +3,15 @@ from django.contrib.auth import update_session_auth_hash
 from rest_framework import serializers
 
 from accounts.models import Account 
-from publisher.models import Category, Presentation, File, WebLink
-
+from publisher.models import (
+	Category, 
+	Presentation, 
+	File, 
+	WebLink,
+	CategorizedFile,
+	CategorizedPresentation,
+	CategorizedWebLink,
+)
 
 class AccountSerializer(serializers.ModelSerializer):
 	password = serializers.CharField(source='password', write_only=True, required=False)
@@ -31,7 +38,7 @@ class AccountSerializer(serializers.ModelSerializer):
 			instance.first_name = attrs.get('first_name', instance.first_name)
 			instance.last_name = attrs.get('last_name', instance.last_name)
 			instance.user_type = attrs.get('user_type', instance.user_type)
-			
+
 			password = attrs.get('password', None)
 			confirm_password = attrs.get('confirm_password', None)
 
@@ -162,3 +169,61 @@ class WebLinkSerializer(serializers.ModelSerializer):
 		exclusions = super(WebLinkSerializer, self).get_validation_exclusions(
 			*args, **kwargs)
 		return exclusions + ['user', 'categories']
+
+
+
+#class CategorizedFile(serializers.ModelSerializer):
+#	file_resource = FileSerializer(many=False)
+#	category = CategorySerializer(many=False)
+#
+#	class Meta:
+#		model = CategorizedFile
+#		fields = (
+#			'file_resource',
+#			'category',
+#			'position',
+#		)
+#		read_only_fields = ('id',)
+
+class CategorizedFileSerializer(serializers.ModelSerializer):
+	file_resource = FileSerializer(many=False)
+	category = CategorySerializer(many=False)
+
+	class Meta:
+		model = CategorizedFile
+		fields = (
+			'file_resource',
+			'category',
+			'position',
+		)
+		read_only_fields = ('id',)
+
+
+
+class CategorizedPresentationSerializer(serializers.ModelSerializer):
+	presentation = PresentationSerializer(many=False)
+	category = CategorySerializer(many=False)
+
+	class Meta:
+		model = CategorizedPresentation
+		fields = (
+			'presentation',
+			'category',
+			'position',
+		)
+		read_only_fields = ('id',)
+
+
+
+class CategorizedWebLinkSerializer(serializers.ModelSerializer):
+	weblink = WebLinkSerializer(many=False)
+	category = CategorySerializer(many=False)
+
+	class Meta:
+		model = CategorizedWebLink
+		fields = (
+			'weblink',
+			'category',
+			'position',
+		)
+		read_only_fields = ('id',)

@@ -50,8 +50,9 @@
 }
 
 .item-infos {
-	/*display: inline-block;*/
+	display: inline-block;
 	margin: 5px;
+	width: 480px;
 }
 
 .item-title {
@@ -83,4 +84,16 @@
 	height: 120px;
 	padding: 5px;
 	margin-bottom: 0px;
+}
+
+.stepper {
+	display: inline-block;
+}
+
+.stepper button {
+	background: #9C9AA0;
+}
+
+.stepper button:active {
+	background: #D1CFD5;
 }
