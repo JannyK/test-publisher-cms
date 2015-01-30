@@ -67,8 +67,6 @@ class Account(AbstractBaseUser, PermissionsMixin):
 		return '%s (%s)' % (self.email, self.country)
 
 	def save(self, *args, **kwargs):
-		print 'SAVING...'
-		
 		super(Account, self).save(*args, **kwargs)
 
 

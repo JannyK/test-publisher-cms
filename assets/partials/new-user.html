@@ -47,6 +47,20 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="password" class="col-md-2 control-label">Password</label>
+                    <div class="col-md-10">
+                        <input type="password" class="form-control" id="password" placeholder="Password" ng-model="ctrl.newUser.password">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password" class="col-md-2 control-label">Confirm password</label>
+                    <div class="col-md-10">
+                        <input type="password" class="form-control" id="confirm_password" placeholder="Confirm password" ng-model="ctrl.newUser.confirm_password">
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <div class="col-md-10 col-md-offset-2">
                         <a class="btn btn-default" href="#/users">Cancel</a>
                         <input type="submit" value="Create" class="btn btn-primary">

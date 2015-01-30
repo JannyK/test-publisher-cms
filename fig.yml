@@ -1,0 +1,27 @@
+dbdata:
+  image: postgres:latest
+  volumes:
+    - /var/lib/postgresql
+  command: true
+
+database:
+  image: aidanlister/postgres-hstore
+  volumes_from:
+    - dbdata
+  ports:
+    - "5432"
+
+web:
+  build: .
+  command: python manage.py runserver 0.0.0.0:8000
+  volumes:
+    - .:/usr/src/app/
+  ports:
+    - "8000:8000"
+  links:
+    - database
+  environment:
+    - INSTANCE_TYPE=web
+    - DEBUG=1
+    - DJANGO_SETTINGS_MODULE=controlpanel.settings
+    - DATABASE_URL=postgres://postgres@db/postgres

@@ -53,6 +53,7 @@ class AccountViewSet(viewsets.ModelViewSet):
 		return (permissions.IsAuthenticated(),)
 
 	def create(self, request):
+		print 'REQUEST USER DATA: ', request.DATA
 		serializer = self.serializer_class(data=request.DATA)
 
 		if serializer.is_valid():
@@ -66,9 +67,14 @@ class AccountViewSet(viewsets.ModelViewSet):
 					'message': 'Account could not be created with received data. Missing field(s)'
 				}, status=status.HTTP_400_BAD_REQUEST)
 
+			first_name = request.DATA.get('first_name', '')
+			last_name = request.DATA.get('last_name', '')
+
 			user = Account.objects.create_user(email, password, country=country)
 			user.set_password(request.DATA.get('password'))
-
+			user.first_name = first_name
+			user.last_name = last_name
+			
 			user.save()
 
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -267,6 +273,13 @@ class FileViewSet(viewsets.ModelViewSet):
 		serializer = self.serializer_class(filtered_queryset, many=True)
 
 		return Response(serializer.data)
+
+
+	def create(self, request, *args, **kwargs):
+		print self.request.DATA 
+		print 'REQUEST POST: ', request.POST
+		return super(FileViewSet, self).create(request, *args, **kwargs)
+
 
 
 	def pre_save(self, obj):

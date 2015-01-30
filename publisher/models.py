@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime
 
 from django.db import models
 from django.utils import timezone
@@ -11,6 +11,12 @@ COUNTRY_CHOICES = (
 	('DK', 'DANMARK'),
 )
 
+AUDIENCE_CHOICES = (
+	('DEVELOPER', 'Developer'),
+	('LILLY_USER', 'Lilly user'),
+	('DEVELOPER_AND_LILLY', 'Developers & Lilly users'),
+	('PUBLIC', 'Public audience'),
+)
 
 class Category(models.Model):
 	name = models.CharField(max_length=40, unique=True)
@@ -40,10 +46,12 @@ class BaseEntry(models.Model):
 	title = models.CharField(max_length=255)
 	description = models.TextField()
 	thumbnail = models.ImageField(upload_to='_thumbnails_', blank=True)
-	created = models.DateField(auto_now_add=True)
-	pub_date = models.DateField()
-	expiry_date = models.DateField(blank=True)
+	created = models.DateTimeField(auto_now_add=True)
+	pub_date = models.DateTimeField()
+	expiry_date = models.DateTimeField(blank=True)
 	zink_number = models.CharField(max_length=50, default="NOXXXX")
+
+	audience = models.CharField(max_length=50, choices=AUDIENCE_CHOICES, default='DEVELOPER')
 
 	objects = BaseEntryManager()
 
@@ -57,9 +65,9 @@ class BaseEntry(models.Model):
 	@property 
 	def is_active(self):
 		if self.expiry_date:
-			return self.pub_date <= date.today() and self.expiry_date > date.today()
+			return self.pub_date <= timezone.now() and self.expiry_date > timezone.now()
 		else:
-			return self.pub_date <= date.today()
+			return self.pub_date <= timezone.now()
 
 
 

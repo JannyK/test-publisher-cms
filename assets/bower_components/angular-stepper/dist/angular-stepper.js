@@ -16,7 +16,6 @@ angular.module('revolunet.stepper', [])
         link: function(scope, iElement, iAttrs, ngModelController) {
 
             scope.label = '';
-            scope.changed = function(){};
 
             if (angular.isDefined(iAttrs.label)) {
                 iAttrs.$observe('label', function(value) {

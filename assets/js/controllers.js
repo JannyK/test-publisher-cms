@@ -42,6 +42,7 @@ ControlPanelApp.controllers
 			{name: 'danmark', code: 'DK'}
 		];
 
+
 		if (self.isCountrySet) {
 			if (self.isAuthenticated) {
 				$location.url('/dashboard');
@@ -66,17 +67,6 @@ ControlPanelApp.controllers
 		self.logout = function() {
 			AuthenticationService.logout();
 		};
-
-		//PUB-SUB
-		/*
-		$scope.$on('LOADIND', function() {
-			self.loading = true;
-		});
-
-		$scope.$on('NOT_LOADING', function() {
-			self.loading = false;
-		});
-		*/
 
 	}])
  	.controller('RegistrationController', 
@@ -146,6 +136,14 @@ ControlPanelApp.controllers
  			self.isAuthenticated = AuthenticationService.isAuthenticated();
 	 		self.categories = [];
 
+	 		self.audiences = [
+				{name: 'Developers', code: 'DEVELOPER'},
+				{name: 'Lilly Users', code: 'LILLY_USER'},
+				{code: 'DEVELOPER_AND_LILLY', name: 'Developers & Lilly users'},
+				{code: 'PUBLIC', name: 'Public audience'}
+			];
+
+
 	 		self.presentationItem = {
 	 			title: '',
 	 			description: '',
@@ -154,8 +152,29 @@ ControlPanelApp.controllers
 	 			pub_date: '',
 	 			expiry_date: '',
 	 			zink_number: 0,
-	 			categories: []
+	 			categories: [],
+	 			audience: ''
 	 		};
+
+	 		self.today = new Date();
+	 		self.dateFormat = 'yyyy-MM-dd';
+	 		self.pubDatePickerOpened = false;
+	 		self.expiryDatePickerOpened = false;
+
+	 		self.openPubDatePicker = function($event) {
+			    $event.preventDefault();
+			    $event.stopPropagation();
+
+			    self.pubDatePickerOpened = true;
+			 };
+
+			 self.openExpiryDatePicker = function($event) {
+			    $event.preventDefault();
+			    $event.stopPropagation();
+
+			    self.expiryDatePickerOpened = true;
+			 };
+
 
 	 		//fetch all categories and make them availbale for use
 	 		self.message = "Loading Product Categories";
@@ -175,10 +194,11 @@ ControlPanelApp.controllers
 	 				fd.append('description', self.presentationItem.description);
 	 				fd.append('thumbnail', self.presentationItem.thumbnail);
 	 				fd.append('file', self.presentationItem.file);
-	 				fd.append('pub_date', self.presentationItem.pub_date);
-	 				fd.append('expiry_date', self.presentationItem.expiry_date);
+	 				fd.append('pub_date', JSON.stringify(self.presentationItem.pub_date).replace('"', '').replace('"', '').trim());
+	 				fd.append('expiry_date', JSON.stringify(self.presentationItem.expiry_date).replace('"', '').replace('"', '').trim());
 	 				fd.append('zink_number', self.presentationItem.zink_number);
 	 				fd.append('categories', self.presentationItem.categories);
+	 				fd.append('audience', self.presentationItem.audience);
 
 	 				self.message = "Please while we're uploading your file...";
 	 				self.promise = CorePublisherService.newPresentation(fd).then(function(resp) {
@@ -210,6 +230,13 @@ ControlPanelApp.controllers
 			self.isAuthenticated = AuthenticationService.isAuthenticated();
 			self.categories = [];
 
+			self.audiences = [
+				{name: 'Developers', code: 'DEVELOPER'},
+				{name: 'Lilly Users', code: 'LILLY_USER'},
+				{code: 'DEVELOPER_AND_LILLY', name: 'Developers & Lilly users'},
+				{code: 'PUBLIC', name: 'Public audience'}
+			];
+
 			self.newFile = {
 	 			title: '',
 	 			description: '',
@@ -218,8 +245,28 @@ ControlPanelApp.controllers
 	 			pub_date: '',
 	 			expiry_date: '',
 	 			zink_number: 0,
-	 			categories: []
+	 			categories: [],
+	 			audience: ''
 	 		};
+
+	 		self.today = new Date();
+	 		self.dateFormat = 'yyyy-MM-dd';
+	 		self.pubDatePickerOpened = false;
+	 		self.expiryDatePickerOpened = false;
+
+	 		self.openPubDatePicker = function($event) {
+			    $event.preventDefault();
+			    $event.stopPropagation();
+
+			    self.pubDatePickerOpened = true;
+			 };
+
+			 self.openExpiryDatePicker = function($event) {
+			    $event.preventDefault();
+			    $event.stopPropagation();
+
+			    self.expiryDatePickerOpened = true;
+			 };
 
 	 		//fetch all categories and make them availbale for use
 	 		self.message = "Fetching product categories...";
@@ -230,8 +277,8 @@ ControlPanelApp.controllers
 	 		});
 
 	 		self.create = function() {
-	 			console.log('DATA TO BE POSTED: '+ JSON.stringify(self.newFile));
-	 			
+
+	 			console.log('File to send(PUB DATE JSON): '+ JSON.stringify(self.newFile.pub_date));
 	 			if (self.isAuthenticated) {
 
 	 				var fd = new FormData();
@@ -240,10 +287,11 @@ ControlPanelApp.controllers
 	 				fd.append('description', self.newFile.description);
 	 				fd.append('thumbnail', self.newFile.thumbnail);
 	 				fd.append('file', self.newFile.file);
-	 				fd.append('pub_date', self.newFile.pub_date);
-	 				fd.append('expiry_date', self.newFile.expiry_date);
+	 				fd.append('pub_date', JSON.stringify(self.newFile.pub_date).replace('"', '').replace('"', '').trim());
+	 				fd.append('expiry_date', JSON.stringify(self.newFile.expiry_date).replace('"', '').replace('"', '').trim());
 	 				fd.append('zink_number', self.newFile.zink_number);
 	 				fd.append('categories', self.newFile.categories);
+	 				fd.append('audience', self.newFile.audience);
 
 	 				self.message = "Please wait while we're uploading your file...";
 	 				self.promise = CorePublisherService.newFile(fd).then(function(resp) {
@@ -275,6 +323,13 @@ ControlPanelApp.controllers
 			self.isAuthenticated = AuthenticationService.isAuthenticated();
 			self.categories = [];
 
+			self.audiences = [
+				{name: 'Developers', code: 'DEVELOPER'},
+				{name: 'Lilly Users', code: 'LILLY_USER'},
+				{code: 'DEVELOPER_AND_LILLY', name: 'Developers & Lilly users'},
+				{code: 'PUBLIC', name: 'Public audience'}
+			];
+
 			self.newLink = {
 	 			title: '',
 	 			description: '',
@@ -283,8 +338,28 @@ ControlPanelApp.controllers
 	 			pub_date: '',
 	 			expiry_date: '',
 	 			zink_number: 0,
-	 			categories: []
+	 			categories: [],
+	 			audience: ''
 	 		};
+
+	 		self.today = new Date();
+	 		self.dateFormat = 'yyyy-MM-dd';
+	 		self.pubDatePickerOpened = false;
+	 		self.expiryDatePickerOpened = false;
+
+	 		self.openPubDatePicker = function($event) {
+			    $event.preventDefault();
+			    $event.stopPropagation();
+
+			    self.pubDatePickerOpened = true;
+			};
+
+			 self.openExpiryDatePicker = function($event) {
+			    $event.preventDefault();
+			    $event.stopPropagation();
+
+			    self.expiryDatePickerOpened = true;
+			};
 
 	 		//fetch all categories and make them availbale for use
 	 		self.message = "Fatching product categories...";
@@ -304,10 +379,11 @@ ControlPanelApp.controllers
 	 				fd.append('description', self.newLink.description);
 	 				fd.append('thumbnail', self.newLink.thumbnail);
 	 				fd.append('link', self.newLink.link);
-	 				fd.append('pub_date', self.newLink.pub_date);
-	 				fd.append('expiry_date', self.newLink.expiry_date);
+	 				fd.append('pub_date', JSON.stringify(self.newLink.pub_date).replace('"', '').replace('"', '').trim());
+	 				fd.append('expiry_date', JSON.stringify(self.newLink.expiry_date).replace('"', '').replace('"', '').trim());
 	 				fd.append('zink_number', self.newLink.zink_number);
 	 				fd.append('categories', self.newLink.categories);
+	 				fd.append('audience', self.newLink.audience);
 
 	 				self.message = "Please wait a moment...";
 	 				self.promise = CorePublisherService.newWebLink(fd).then(function(resp) {
@@ -414,6 +490,32 @@ ControlPanelApp.controllers
  			self.object = {};
  			self.categories = [];
 
+ 			self.audiences = [
+				{name: 'Developers', code: 'DEVELOPER'},
+				{name: 'Lilly Users', code: 'LILLY_USER'},
+				{code: 'DEVELOPER_AND_LILLY', name: 'Developers & Lilly users'},
+				{code: 'PUBLIC', name: 'Public audience'}
+			];
+
+			self.today = new Date();
+	 		self.dateFormat = 'yyyy-MM-dd';
+	 		self.pubDatePickerOpened = false;
+	 		self.expiryDatePickerOpened = false;
+
+	 		self.openPubDatePicker = function($event) {
+			    $event.preventDefault();
+			    $event.stopPropagation();
+
+			    self.pubDatePickerOpened = true;
+			};
+
+			 self.openExpiryDatePicker = function($event) {
+			    $event.preventDefault();
+			    $event.stopPropagation();
+
+			    self.expiryDatePickerOpened = true;
+			};
+
  			//fetch all categories and make them availbale for use
  			self.message = "Fecthing product categories...";
 	 		self.promise = CorePublisherService.allCategories(selectedCountry.code).then(function(resp) {
@@ -453,10 +555,11 @@ ControlPanelApp.controllers
 	 					fd.append('file', self.object.file);
 	 				}
 
-	 				fd.append('pub_date', self.object.pub_date);
-	 				fd.append('expiry_date', self.object.expiry_date);
+	 				fd.append('pub_date', JSON.stringify(self.object.pub_date).replace('"', '').replace('"', '').trim());
+	 				fd.append('expiry_date', JSON.stringify(self.object.expiry_date).replace('"', '').replace('"', '').trim());
 	 				fd.append('zink_number', self.object.zink_number);
 	 				fd.append('categories', self.object.categories);
+	 				fd.append('audience', self.object.audience);
 
 	 				self.message = "Updating...";
 	 				self.promise = CorePublisherService.updatePresentation(self.objectID, fd).then(function(resp) {
@@ -509,6 +612,32 @@ ControlPanelApp.controllers
  			self.object = {};
  			self.categories = [];
 
+ 			self.audiences = [
+				{name: 'Developers', code: 'DEVELOPER'},
+				{name: 'Lilly Users', code: 'LILLY_USER'},
+				{code: 'DEVELOPER_AND_LILLY', name: 'Developers & Lilly users'},
+				{code: 'PUBLIC', name: 'Public audience'}
+			];
+
+			self.today = new Date();
+	 		self.dateFormat = 'yyyy-MM-dd';
+	 		self.pubDatePickerOpened = false;
+	 		self.expiryDatePickerOpened = false;
+
+	 		self.openPubDatePicker = function($event) {
+			    $event.preventDefault();
+			    $event.stopPropagation();
+
+			    self.pubDatePickerOpened = true;
+			};
+
+			 self.openExpiryDatePicker = function($event) {
+			    $event.preventDefault();
+			    $event.stopPropagation();
+
+			    self.expiryDatePickerOpened = true;
+			};
+
  			//fetch all categories and make them availbale for use
  			self.message = "Fetching product categories...";
 	 		self.promise = CorePublisherService.allCategories(selectedCountry.code).then(function(resp) {
@@ -546,10 +675,11 @@ ControlPanelApp.controllers
 	 					fd.append('file', self.object.file);
 	 				}
 
-	 				fd.append('pub_date', self.object.pub_date);
-	 				fd.append('expiry_date', self.object.expiry_date);
+	 				fd.append('pub_date', JSON.stringify(self.object.pub_date).replace('"', '').replace('"', '').trim());
+	 				fd.append('expiry_date', JSON.stringify(self.object.expiry_date).replace('"', '').replace('"', '').trim());
 	 				fd.append('zink_number', self.object.zink_number);
 	 				fd.append('categories', self.object.categories);
+	 				fd.append('audience', self.object.audience);
 
 	 				self.message = "Updating...";
 	 				self.promise = CorePublisherService.updateFile(self.objectID, fd).then(function(resp) {
@@ -600,6 +730,33 @@ ControlPanelApp.controllers
  			self.isAuthenticated = AuthenticationService.isAuthenticated();
  			self.objectID = $routeParams.linkID;
  			self.categories = [];
+
+ 			self.audiences = [
+				{name: 'Developers', code: 'DEVELOPER'},
+				{name: 'Lilly Users', code: 'LILLY_USER'},
+				{code: 'DEVELOPER_AND_LILLY', name: 'Developers & Lilly users'},
+				{code: 'PUBLIC', name: 'Public audience'}
+			];
+
+			self.today = new Date();
+	 		self.dateFormat = 'yyyy-MM-dd';
+	 		self.pubDatePickerOpened = false;
+	 		self.expiryDatePickerOpened = false;
+
+	 		self.openPubDatePicker = function($event) {
+			    $event.preventDefault();
+			    $event.stopPropagation();
+
+			    self.pubDatePickerOpened = true;
+			};
+
+			 self.openExpiryDatePicker = function($event) {
+			    $event.preventDefault();
+			    $event.stopPropagation();
+
+			    self.expiryDatePickerOpened = true;
+			};
+
  			self.object = {};
 
  			//fetch all categories and make them availbale for use
@@ -636,10 +793,11 @@ ControlPanelApp.controllers
 	 					//isMultipart = true;
 	 				}
 
-	 				fd.append('pub_date', self.object.pub_date);
-	 				fd.append('expiry_date', self.object.expiry_date);
+	 				fd.append('pub_date', JSON.stringify(self.object.pub_date).replace('"', '').replace('"', '').trim());
+	 				fd.append('expiry_date', JSON.stringify(self.object.expiry_date).replace('"', '').replace('"', '').trim());
 	 				fd.append('zink_number', self.object.zink_number);
 	 				fd.append('categories', self.object.categories);
+	 				fd.append('audience', self.object.audience);
 
 	 				self.message = "Updating...";
 	 				self.promise = CorePublisherService.updateWeblink(self.objectID, fd).then(function(resp) {
@@ -834,7 +992,7 @@ ControlPanelApp.controllers
 
 					self.msg = 'Fetching presentations in thie category';
 					self.promise = CorePublisherService.fetchCategorizedPresentations(self.objectID, self.selectedCountry.code).then(function(resp) {
-						console.log('RESPONSE: '+ JSON.stringify(resp.data));
+						
 						self.categorizedPresentations = resp.data;
 					}, function(errorResp) {
 						toastr.error('An error occured while fetching data: '+ errorResp.data.detail, 'Error');
@@ -852,7 +1010,7 @@ ControlPanelApp.controllers
 					self.msg = 'Fetching files in thie category';
 					self.promise = CorePublisherService.fetchCategorizedFiles(self.objectID, self.selectedCountry.code).then(function(resp) {
 						self.categorizedFiles = resp.data;
-						console.log('RESPONSE: '+ JSON.stringify(resp.data));
+						
 					}, function(errorResp) {
 						toastr.error('An error occured while fetching data: '+ errorResp.data.detail, 'Error');
 					});
@@ -868,7 +1026,7 @@ ControlPanelApp.controllers
 
 					self.msg = 'Fetching links in thie category';
 					self.promise = CorePublisherService.fetchCategorizedWeblinks(self.objectID, self.selectedCountry.code).then(function(resp) {
-						console.log('RESPONSE: '+ JSON.stringify(resp.data));
+
 						self.categorizedWeblinks = resp.data;
 					}, function(errorResp) {
 						toastr.error('An error occured while fetching data: '+ errorResp.data.detail, 'Error');
@@ -877,32 +1035,46 @@ ControlPanelApp.controllers
 			}
 		};
 
-		self.updateFilePosition = function(fileID, newPosition) {
+		self.updateFilesPositions = function() {
 
-			self.msg = '';
-			self.promise = CorePublisherService.updateFilePosition(fileID, {position:newPosition}).then(function(resp) {
-				console.log('Update complete...');
-			}, function(errorResp) {
-				toastr.error('An error occured while updating position '+ errorResp.data.detail, 'Error');
-			});
+			for (var i = 0; i < self.categorizedFiles.length; i++) {
+				var f = self.categorizedFiles[i];
+
+				self.msg = 'Updating position of: '+ f.file_resource.title;
+				self.promise = CorePublisherService.updateFilePosition(f.id, {position: f.position}).then(function(resp) {
+					console.log('Update complete...');
+				}, function(errorResp) {
+					toastr.error('An error occured while updating position '+ errorResp.data.detail, 'Error');
+				});
+			}
 		};
 
-		self.updatePresentationPosition = function(pID, newPosition) {
-			self.msg = '';
-			self.promise = CorePublisherService.updatePresentationPosition(pID, {position:newPosition}).then(function(resp) {
-				console.log('Update complete...');
-			}, function(errorResp) {
-				toastr.error('An error occured while updating position '+ errorResp.data.detail, 'Error');
-			});
+		self.updatePresentationsPositions = function() {
+
+			for (var i = 0; i < self.categorizedPresentations.length; i++) {
+				var f = self.categorizedPresentations[i];
+
+				self.msg = 'Updating position of: '+ f.presentation.title;
+				self.promise = CorePublisherService.updatePresentationPosition(f.id, {position: f.position}).then(function(resp) {
+					console.log('Update complete...');
+				}, function(errorResp) {
+					toastr.error('An error occured while updating position '+ errorResp.data.detail, 'Error');
+				});
+			}
 		};
 
-		self.updateWeblinkPosition = function(linkID, newPosition) {
-			self.msg = '';
-			self.promise = CorePublisherService.updateWeblinkPosition(linkID, {position:newPosition}).then(function(resp) {
-				console.log('Update complete...');
-			}, function(errorResp) {
-				toastr.error('An error occured while updating position '+ errorResp.data.detail, 'Error');
-			});
+		self.updateWeblinksPositions = function() {
+			
+			for (var i = 0; i < self.categorizedWeblinks.length; i++) {
+				var f = self.categorizedWeblinks[i];
+
+				self.msg = 'Updating position of: '+ f.weblink.title;
+				self.promise = CorePublisherService.updateWeblinkPosition(f.id, {position: f.position}).then(function(resp) {
+					console.log('Update complete...');
+				}, function(errorResp) {
+					toastr.error('An error occured while updating position '+ errorResp.data.detail, 'Error');
+				});
+			}
 		};
 
 		//fetch the object after instanciation
@@ -962,7 +1134,9 @@ ControlPanelApp.controllers
  			first_name: '',
  			last_name: '',
  			user_type: '',
- 			country: ''
+ 			country: '',
+ 			password: '',
+ 			confirm_password: ''
  		};
 
  		self.create = function() {
@@ -974,7 +1148,9 @@ ControlPanelApp.controllers
  					first_name: self.newUser.first_name,
  					last_name: self.newUser.last_name,
  					user_type: self.newUser.user_type,
- 					country: self.newUser.country
+ 					country: self.newUser.country,
+ 					password: self.newUser.password,
+ 					confirm_password: self.newUser.confirm_password
  				};
 
  				self.message = "Please wait a moment...";

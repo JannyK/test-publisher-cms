@@ -46,13 +46,30 @@
                 <div class="form-group">
                     <label for="pub_data" class="col-md-2 control-label">Publication date</label>
                     <div class="col-md-10">
-                        <input type="text" class="form-control datePicker" id="pub_date" placeholder="Publication date" ng-model="ctrl.newFile.pub_date">
+                        <!--<input type="text" class="form-control" id="expiry_date" placeholder="Expiration date" ng-model="ctrl.newFile.expiry_date">-->
+                        <p class="input-group">
+                            <input type="text" class="form-control" datepicker-popup show-button-bar="false" close-on-date-selection="true" ng-model="ctrl.newFile.pub_date" is-open=ctrl.pubDatePickerOpened min-date="ctrl.today" max-date="'2020-12-31'" datepicker-options="{formatYear: 'yy',startingDay: 1}" ng-required="true" close-text="Close">
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="ctrl.openPubDatePicker($event)">
+                                    <i class="glyphicon glyphicon-calendar"></i>
+                                </button>
+                            </span>
+                        </p>
                     </div>
                 </div>
+                
                 <div class="form-group">
                     <label for="expiry_data" class="col-md-2 control-label">Expiration date</label>
                     <div class="col-md-10">
-                        <input type="text" class="form-control datePicker" id="expiry_date" placeholder="Expiration date" ng-model="ctrl.newFile.expiry_date">
+                        <!--<input type="text" class="form-control" id="expiry_date" placeholder="Expiration date" ng-model="ctrl.newFile.expiry_date">-->
+                        <p class="input-group">
+                            <input type="text" class="form-control" datepicker-popup show-button-bar="false" close-on-date-selection="true" ng-model="ctrl.newFile.expiry_date" is-open=ctrl.expiryDatePickerOpened min-date="ctrl.today" max-date="'2020-12-31'" datepicker-options="{formatYear: 'yy',startingDay: 1}" ng-required="true" close-text="Close">
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="ctrl.openExpiryDatePicker($event)">
+                                    <i class="glyphicon glyphicon-calendar"></i>
+                                </button>
+                            </span>
+                        </p>
                     </div>
                 </div>
 
@@ -70,6 +87,14 @@
                         </select>
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="audience">Audience</label>
+                    <div class="col-md-10">
+                        <select name="audience" class="form-control" ng-model="ctrl.newFile.audience" ng-options="a.code as a.name for a in ctrl.audiences"></select>
+                    </div>
+                </div>
+
 
                 <div class="form-group">
                     <div class="col-md-10 col-md-offset-2">

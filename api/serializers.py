@@ -98,6 +98,7 @@ class PresentationSerializer(serializers.ModelSerializer):
 			'pub_date', 
 			'expiry_date',
 			'zink_number',
+			'audience',
 			'categories',
 			'user',
 		)
@@ -110,6 +111,11 @@ class PresentationSerializer(serializers.ModelSerializer):
 
 
 class FileSerializer(serializers.ModelSerializer):
+	#pub_date = serializers.DateTimeField(
+	#	format=None, input_formats=['YYYY-MM-DDTHH:mm:ss.sssZ'])
+	#expiry_date = serializers.DateTimeField(
+	#	format=None, input_formats=['YYYY-MM-DDTHH:mm:ss.sssZ'])
+
 	user = AccountSerializer(required=False)
 	categories = serializers.SlugRelatedField(many=True, slug_field='name', read_only=True)
 	file_type = serializers.SerializerMethodField('get_file_type')
@@ -133,6 +139,7 @@ class FileSerializer(serializers.ModelSerializer):
 			'pub_date', 
 			'expiry_date',
 			'zink_number',
+			'audience',
 			'categories',
 			'user',
 		)
@@ -160,6 +167,7 @@ class WebLinkSerializer(serializers.ModelSerializer):
 			'pub_date', 
 			'expiry_date',
 			'zink_number',
+			'audience',
 			'categories',
 			'user',
 		)
@@ -192,6 +200,7 @@ class CategorizedFileSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = CategorizedFile
 		fields = (
+			'id',
 			'file_resource',
 			'category',
 			'position',
@@ -207,6 +216,7 @@ class CategorizedPresentationSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = CategorizedPresentation
 		fields = (
+			'id',
 			'presentation',
 			'category',
 			'position',
@@ -222,6 +232,7 @@ class CategorizedWebLinkSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = CategorizedWebLink
 		fields = (
+			'id',
 			'weblink',
 			'category',
 			'position',
