@@ -130,6 +130,13 @@ app.factory('AuthenticationService', ['$http', '$cookies', function($http, $cook
 			register: function(email, password, country) {
 				var self = this;
 
+
+				return $http.post('/api/v1/accounts/', {
+					country: country,
+					password: password,
+					email: email
+				});
+/*
 				return $http.post('/api/v1/accounts/', {
 					country: country,
 					password: password,
@@ -139,10 +146,16 @@ app.factory('AuthenticationService', ['$http', '$cookies', function($http, $cook
 				}, function(errorResp) {
 					console.error('Epic failure');
 				});
+*/
 			},
 
 			login: function(email, password) {
 				var self = this;
+
+				return $http.post('/api/v1/login/', {
+					email: email, password: password
+				});
+				/*
 
 				return $http.post('/api/v1/login/', {
 					email: email, password: password
@@ -151,11 +164,14 @@ app.factory('AuthenticationService', ['$http', '$cookies', function($http, $cook
 					window.location = '/';
 				}, function(errorResp) {
 					console.log('Epic failure...');
-				});
+				});*/
 			},
 
 			logout: function() {
 				var self = this;
+
+				return $http.post('/api/v1/logout/');
+				/*
 
 				return $http.post('/api/v1/logout/')
 					.then(function(resp) {
@@ -166,6 +182,7 @@ app.factory('AuthenticationService', ['$http', '$cookies', function($http, $cook
 					}, function(errorResp) {
 						console.error('Error occured while logging out');
 					});
+				*/
 			},
 
 			getAuthenticatedUser: function() {

@@ -500,6 +500,7 @@ class AllCategorizedResourceByCategoryView(views.APIView):
 		try:
 			categoryID = int(self.request.GET['categoryID'])
 			country = self.request.GET['country']
+			audience = self.request.GET['audience']
 
 			c = Category.objects.get(pk=categoryID)
 		except (KeyError, Category.DoesNotExist):
@@ -508,17 +509,30 @@ class AllCategorizedResourceByCategoryView(views.APIView):
 					'message': 'Could not parse the request. Missing field(s)'
 				}, status=status.HTTP_400_BAD_REQUEST)
 
-		categorized_pres = [p for p in c.categorized_presentations.all() if (p.presentation.user.country == country)]
-		filtered_pres = [x for x in categorized_pres if x.presentation.is_active]
-		pSerializer = CategorizedPresentationSerializer(filtered_pres, many=True)
+		if audience in ['DEVELOPER', 'LILLY_USER']:
+			categorized_pres = [p for p in c.categorized_presentations.all() if (p.presentation.user.country == country)]
+			filtered_pres = [x for x in categorized_pres if x.presentation.is_active]
+			pSerializer = CategorizedPresentationSerializer(filtered_pres, many=True)
 
-		files = [f for f in c.categorized_files.all() if (f.file_resource.user.country == country)]
-		filtered_files = [x for x in files if x.file_resource.is_active]
-		fSerializer = CategorizedFileSerializer(filtered_files, many=True)
-		
-		links = [l for l in c.categorized_weblinks.all() if (l.weblink.user.country == country)]
-		filtered_links = [x for x in links if x.weblink.is_active]
-		lSerializer = CategorizedWebLinkSerializer(filtered_links, many=True)
+			files = [f for f in c.categorized_files.all() if (f.file_resource.user.country == country)]
+			filtered_files = [x for x in files if x.file_resource.is_active]
+			fSerializer = CategorizedFileSerializer(filtered_files, many=True)
+			
+			links = [l for l in c.categorized_weblinks.all() if (l.weblink.user.country == country)]
+			filtered_links = [x for x in links if x.weblink.is_active]
+			lSerializer = CategorizedWebLinkSerializer(filtered_links, many=True)
+		else:
+			categorized_pres = [p for p in c.categorized_presentations.all() if (p.presentation.user.country == country and p.presentation.audience == 'PUBLIC')]
+			filtered_pres = [x for x in categorized_pres if x.presentation.is_active]
+			pSerializer = CategorizedPresentationSerializer(filtered_pres, many=True)
+
+			files = [f for f in c.categorized_files.all() if (f.file_resource.user.country == country and f.file_resource.audience == 'PUBLIC')]
+			filtered_files = [x for x in files if x.file_resource.is_active]
+			fSerializer = CategorizedFileSerializer(filtered_files, many=True)
+			
+			links = [l for l in c.categorized_weblinks.all() if (l.weblink.user.country == country and l.weblink.audience == 'PUBLIC')]
+			filtered_links = [x for x in links if x.weblink.is_active]
+			lSerializer = CategorizedWebLinkSerializer(filtered_links, many=True)
 
 		return Response({
 			'presentations': pSerializer.data,

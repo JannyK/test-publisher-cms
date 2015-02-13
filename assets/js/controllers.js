@@ -27,7 +27,7 @@ ControlPanelApp.controllers = angular.module('publisherControllers', []);
  */
 ControlPanelApp.controllers
 	.controller('MainController', 
-		['AuthenticationService', '$location', function(AuthenticationService, $location) {
+		['AuthenticationService', '$location', 'toastr', function(AuthenticationService, $location, toastr) {
 
 		var self = this;
 
@@ -65,14 +65,29 @@ ControlPanelApp.controllers
 		};
 
 		self.logout = function() {
-			AuthenticationService.logout();
+			AuthenticationService.logout().then(function(resp) {
+				//redirect to loginView
+				AuthenticationService.unAuthenticate();
+				
+				toastr.success('Your are now successfully logged out', 'Thanks!');
+				window.location = '/';
+
+			}, function(errorResp) {
+				toastr.error('An error occured while logging out!', 'Logout Error!');
+			});
 		};
 
 	}])
  	.controller('RegistrationController', 
- 		['AuthenticationService', '$location', function(AuthenticationService, $location) {
+ 		['AuthenticationService', '$location', 'toastr', function(AuthenticationService, $location, toastr) {
 
  		var self = this;
+
+ 		self.delay = 0;
+		self.minDuration = 0;
+		self.message = "";
+		self.backdrop = true;
+		self.promise = null;
 
  		self.countries = [
 			{name: 'NORWAY', code: 'NO'},
@@ -85,7 +100,19 @@ ControlPanelApp.controllers
 		self.countryCode = "";
 		
 		self.register = function() {
-			AuthenticationService.register(self.email, self.password, self.countryCode);
+			self.message = 'Registering new user...';
+			self.promise = AuthenticationService.register(self.email, self.password, self.countryCode).then(function(resp) {
+
+				self.promise = AuthenticationService.login(self.email, self.password).then(function(resp) {
+					AuthenticationService.setAuthenticatedUser(resp.data);
+					window.location = '/';
+					//$location.url('#/files');
+				}, function(errorResp) {
+					toastr.error('Error authenticating: '+ errorResp.data.message, 'Authentication failed!');
+				});
+			}, function(errorResp) {
+				toastr.error('Error authenticating: '+ errorResp.data.message, 'Authentication failed!');
+			});
 		};
 
 		self.activate = function() {
@@ -98,9 +125,16 @@ ControlPanelApp.controllers
  	}])
 
  	.controller('LoginController', 
- 		['AuthenticationService', '$location', function(AuthenticationService, $location) {
+ 		['AuthenticationService', '$location', 'toastr', function(AuthenticationService, $location, toastr) {
 
  		var self = this;
+
+ 		//configure the busy loadingView
+ 		self.delay = 0;
+		self.minDuration = 0;
+		self.message = "";
+		self.backdrop = true;
+		self.promise = null;
 
  		self.activate = function() {
  			if (AuthenticationService.isAuthenticated()) {
@@ -109,7 +143,15 @@ ControlPanelApp.controllers
  		};
 
  		self.login = function() {
- 			AuthenticationService.login(self.email, self.password);
+ 			self.message = 'Authenticating...';
+
+ 			self.promise = AuthenticationService.login(self.email, self.password).then(function(resp) {
+
+				AuthenticationService.setAuthenticatedUser(resp.data);
+				window.location = '/';
+			}, function(errorResp) {
+				toastr.error('Error authenticating: '+ errorResp.data.message, 'Authentication failed!');
+			});
  		};
 
  		self.activate();
@@ -119,6 +161,7 @@ ControlPanelApp.controllers
  		//TODO
  		var self = this;
  		self.message = 'This is the dashboard: Content coming soon...';
+ 		window.location = '#/files';
  	}])
 
  	.controller('PresentationCreateController',
