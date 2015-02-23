@@ -11,12 +11,10 @@
     <div class="navbar-collapse collapse navbar-inverse-collapse">
         <ul class="nav navbar-nav navbar-right">
             {% if user.is_authenticated %}
-                <li><a href="#/{{ user.username }}">+{{ user.username }}</a></li>
-                <li><a href="#/{{ user.username }}/settings">Settings</a></li>
+                <li><a>Logged in as: {{ user.email }}</a></li>
                 <li><a href="javascript:void(0)" ng-click="mainCtrl.logout()">Logout</a></li>
             {% else %}
                 <li><a href="#/login" ng-show="mainCtrl.isCountrySetup">Login</a></li>
-                <li><a href="#/register" ng-show="mainCtrl.isCountrySetup">Register</a></li>
             {% endif %}
         </ul>
     </div>

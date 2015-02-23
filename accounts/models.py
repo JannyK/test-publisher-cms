@@ -76,3 +76,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
 	def get_short_name(self):
 		return self.first_name
 
+	def is_an_admin(self):
+		return self.user_type in ('DEVELOPER', 'LILLY_USER',)
+		
+

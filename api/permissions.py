@@ -10,7 +10,7 @@ class IsAccountOwner(permissions.BasePermission):
 class IsPresentationOwner(permissions.BasePermission):
 	def has_object_permission(self, request, view, p):
 		if request.user:
-			return p.user == request.user
+			return (p.user == request.user)
 		return False
 
 
@@ -32,4 +32,11 @@ class IsProductCategoryOwner(permissions.BasePermission):
 	def has_object_permission(self, request, view, c):
 		if request.user:
 			return c.country == request.user.country
+		return False
+
+
+class IsAdmin(permissions.BasePermission):
+	def has_object_permission(self, request, view, obj):
+		if request.user:
+			return request.user.is_an_admin()
 		return False

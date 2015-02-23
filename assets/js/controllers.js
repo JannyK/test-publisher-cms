@@ -910,6 +910,8 @@ ControlPanelApp.controllers
 	.controller('CategoryCreateController', 
 		['AuthenticationService', 'CorePublisherService', '$location', 'toastr', function(AuthenticationService, CorePublisherService, $location, toastr) {
 
+		var currentCountry = AuthenticationService.getSelectedCountry();
+
 		var self = this;
 		self.delay = 0;
 		self.minDuration = 0;
@@ -923,7 +925,8 @@ ControlPanelApp.controllers
  			name: '',
  			description: '',
  			picture: '',
- 			priority: 0
+ 			priority: 0,
+ 			country: currentCountry.code
  		};
 
  		self.create = function() {
@@ -937,6 +940,7 @@ ControlPanelApp.controllers
  				fd.append('priority', self.newCategory.priority);
  				fd.append('picture', self.newCategory.picture);
  				fd.append('icon', self.newCategory.icon);
+ 				fd.append('country', self.newCategory.country);
 
  				self.promise = CorePublisherService.newCategory(fd).then(function(resp) {
  					toastr.success('Product created successfully', 'Success!!');

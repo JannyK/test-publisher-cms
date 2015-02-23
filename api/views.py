@@ -35,6 +35,7 @@ from .permissions import (
 	IsFileOwner,
 	IsWebLinkOwner,
 	IsProductCategoryOwner,
+	IsAdmin
 )
 
 
@@ -50,7 +51,7 @@ class AccountViewSet(viewsets.ModelViewSet):
 			return (permissions.AllowAny(),)
 
 		#return (permissions.IsAuthenticated(), IsAccountOwner(),)
-		return (permissions.IsAuthenticated(),)
+		return (permissions.IsAuthenticated(), permissions.IsAdmin())
 
 	def create(self, request):
 		print 'REQUEST USER DATA: ', request.DATA
@@ -165,7 +166,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
 		if self.request.method in permissions.SAFE_METHODS:
 			return (permissions.AllowAny(),)
 
-		return (permissions.IsAuthenticated(), IsProductCategoryOwner(),)
+		return (permissions.IsAuthenticated(), IsAdmin(),)
 
 
 	def list(self, request, *args, **kwargs):
@@ -183,8 +184,17 @@ class CategoryViewSet(viewsets.ModelViewSet):
 		return Response(serializer.data)
 
 
-	def pre_save(self, obj):
-		obj.country = self.request.user.country
+	#def pre_save(self, obj):
+	#	try:
+	#		c = self.request.GET['country']
+	#	except KeyError:
+	#		return Response({
+	#			'status': 'Bad Request',
+	#			'message': 'Request parameters missing ...'
+	#			}, status=status.HTTP_400_BAD_REQUEST)
+#
+#		#obj.country = self.request.user.country
+#		obj.country = c
 
 
 
