@@ -51,7 +51,7 @@ class AccountViewSet(viewsets.ModelViewSet):
 			return (permissions.AllowAny(),)
 
 		#return (permissions.IsAuthenticated(), IsAccountOwner(),)
-		return (permissions.IsAuthenticated(), permissions.IsAdmin())
+		return (permissions.IsAuthenticated(), IsAdmin())
 
 	def create(self, request):
 		print 'REQUEST USER DATA: ', request.DATA
