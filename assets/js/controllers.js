@@ -163,102 +163,6 @@ ControlPanelApp.controllers
  		self.message = 'This is the dashboard: Content coming soon...';
  		window.location = '#/files';
  	}])
-
- 	.controller('PresentationCreateController',
- 		['AuthenticationService', 'CorePublisherService', '$location', 'toastr', function(AuthenticationService, CorePublisherService, $location, toastr) {
- 			var self = this;
-
- 			self.delay = 0;
-			self.minDuration = 0;
-			self.message = "";
-			self.backdrop = true;
-			self.promise = null;
-
- 			var selectedCountry = AuthenticationService.getSelectedCountry();
-
- 			self.isAuthenticated = AuthenticationService.isAuthenticated();
-	 		self.categories = [];
-
-	 		self.audiences = [
-				{name: 'Developers', code: 'DEVELOPER'},
-				{name: 'Lilly Users', code: 'LILLY_USER'},
-				{code: 'DEVELOPER_AND_LILLY', name: 'Developers & Lilly users'},
-				{code: 'PUBLIC', name: 'Public audience'}
-			];
-
-
-	 		self.presentationItem = {
-	 			title: '',
-	 			description: '',
-	 			thumbnail: '',
-	 			file: '',
-	 			pub_date: '',
-	 			expiry_date: '',
-	 			zink_number: 0,
-	 			categories: [],
-	 			audience: ''
-	 		};
-
-	 		self.today = new Date();
-	 		self.dateFormat = 'yyyy-MM-dd';
-	 		self.pubDatePickerOpened = false;
-	 		self.expiryDatePickerOpened = false;
-
-	 		self.openPubDatePicker = function($event) {
-			    $event.preventDefault();
-			    $event.stopPropagation();
-
-			    self.pubDatePickerOpened = true;
-			 };
-
-			 self.openExpiryDatePicker = function($event) {
-			    $event.preventDefault();
-			    $event.stopPropagation();
-
-			    self.expiryDatePickerOpened = true;
-			 };
-
-
-	 		//fetch all categories and make them availbale for use
-	 		self.message = "Loading Product Categories";
-	 		self.promise = CorePublisherService.allCategories(selectedCountry.code).then(function(resp) {
-	 			self.categories = resp.data;
-	 		}, function(errorResp) {
-	 			toastr.error('Error fetching product categories: '+ errorResp.data.detail, 'Error!');
-	 		});
-
-	 		self.create = function() {
-	 			
-	 			if (self.isAuthenticated) {
-
-	 				var fd = new FormData();
-
-	 				fd.append('title', self.presentationItem.title);
-	 				fd.append('description', self.presentationItem.description);
-	 				fd.append('thumbnail', self.presentationItem.thumbnail);
-	 				fd.append('file', self.presentationItem.file);
-	 				fd.append('pub_date', JSON.stringify(self.presentationItem.pub_date).replace('"', '').replace('"', '').trim());
-	 				fd.append('expiry_date', JSON.stringify(self.presentationItem.expiry_date).replace('"', '').replace('"', '').trim());
-	 				fd.append('zink_number', self.presentationItem.zink_number);
-	 				fd.append('categories', self.presentationItem.categories);
-	 				fd.append('audience', self.presentationItem.audience);
-
-	 				self.message = "Please while we're uploading your file...";
-	 				self.promise = CorePublisherService.newPresentation(fd).then(function(resp) {
-	 					toastr.success('Resource created successfully', 'Success!');
-	 					$location.url('/presentations');
-
-	 				}, function(errorResp) {
-	 					toastr.error('Error: '+ errorResp.data.detail, 'Error!');
-	 				});
-
-		 		} else {
-		 			//redirect to the login page
-		 			$location.url('/login');
-		 		}
-	 		};
- 	}])
-
 	.controller('FileCreateController', 
 		['AuthenticationService', 'CorePublisherService', '$location', 'toastr', function(AuthenticationService, CorePublisherService, $location, toastr) {
 			var self = this;
@@ -321,7 +225,6 @@ ControlPanelApp.controllers
 
 	 		self.create = function() {
 
-	 			console.log('File to send(PUB DATE JSON): '+ JSON.stringify(self.newFile.pub_date));
 	 			if (self.isAuthenticated) {
 
 	 				var fd = new FormData();
@@ -337,7 +240,7 @@ ControlPanelApp.controllers
 	 				fd.append('audience', self.newFile.audience);
 
 	 				self.message = "Please wait while we're uploading your file...";
-	 				self.promise = CorePublisherService.newFile(fd).then(function(resp) {
+	 				self.promise = CorePublisherService.newFile(fd, selectedCountry.code).then(function(resp) {
 	 					toastr.success('Resource created successfully!', 'Success!');
 	 					$location.url('/files');
 
@@ -429,7 +332,7 @@ ControlPanelApp.controllers
 	 				fd.append('audience', self.newLink.audience);
 
 	 				self.message = "Please wait a moment...";
-	 				self.promise = CorePublisherService.newWebLink(fd).then(function(resp) {
+	 				self.promise = CorePublisherService.newWebLink(fd, selectedCountry.code).then(function(resp) {
 	 					toastr.success('Resource created successfully!', 'Success!');
 	 					$location.url('/links');
 
@@ -443,35 +346,6 @@ ControlPanelApp.controllers
 		 		}
 	 		};
 	}])
-	
- 	.controller('PresentationListController', 
- 		['AuthenticationService', 'CorePublisherService', '$location', 'ngDialog', 'toastr', function(AuthenticationService, CorePublisherService, $location, ngDialog, toastr) {
-
- 		var self = this;
- 		self.delay = 0;
-		self.minDuration = 0;
-		self.message = "";
-		self.backdrop = true;
-		self.promise = null;
-
- 		var selectedCountry = AuthenticationService.getSelectedCountry();
-
- 		self.presentations = [];
-
- 		if (AuthenticationService.isAuthenticated()) {
-
-	 		//fetch all presentations
-	 		self.message = "fetching presentations";
-
-	 		self.promise = CorePublisherService.allPresentations(selectedCountry.code).then(function(resp) {
-	 			self.presentations = resp.data;
-	 		}, function(errorResp) {
-	 			//MessageNotificationService.error(errorResp.error);
-	 			toastr.error('Error fetching data: '+ errorResp.data.detail, 'Error!');
-	 		});
-	 	}
- 	}])
-
  	.controller('FileListController', ['AuthenticationService', 'CorePublisherService', '$location', 'toastr', function(AuthenticationService, CorePublisherService, $location, toastr) {
  		var self = this;
  		self.delay = 0;
@@ -513,128 +387,6 @@ ControlPanelApp.controllers
 	 			toastr.error('Error fetching data: '+ errorResp.data.detail, 'Error!');
 	 		});
 	 	}
- 	}])
-
- 	.controller('PresentationDetailController', 
- 		['AuthenticationService', 'CorePublisherService', '$location', '$routeParams', 'ngDialog', 'toastr', function(AuthenticationService, CorePublisherService, $location, $routeParams, ngDialog, toastr) {
-
- 			var self = this;
-
- 			self.delay = 0;
-			self.minDuration = 0;
-			self.message = "Updating...";
-			self.backdrop = true;
-			self.promise = null;
-
- 			var selectedCountry = AuthenticationService.getSelectedCountry();
-
- 			self.isAuthenticated = AuthenticationService.isAuthenticated();
- 			self.objectID = $routeParams.presentationId;
- 			self.object = {};
- 			self.categories = [];
-
- 			self.audiences = [
-				{name: 'Developers', code: 'DEVELOPER'},
-				{name: 'Lilly Users', code: 'LILLY_USER'},
-				{code: 'DEVELOPER_AND_LILLY', name: 'Developers & Lilly users'},
-				{code: 'PUBLIC', name: 'Public audience'}
-			];
-
-			self.today = new Date();
-	 		self.dateFormat = 'yyyy-MM-dd';
-	 		self.pubDatePickerOpened = false;
-	 		self.expiryDatePickerOpened = false;
-
-	 		self.openPubDatePicker = function($event) {
-			    $event.preventDefault();
-			    $event.stopPropagation();
-
-			    self.pubDatePickerOpened = true;
-			};
-
-			 self.openExpiryDatePicker = function($event) {
-			    $event.preventDefault();
-			    $event.stopPropagation();
-
-			    self.expiryDatePickerOpened = true;
-			};
-
- 			//fetch all categories and make them availbale for use
- 			self.message = "Fecthing product categories...";
-	 		self.promise = CorePublisherService.allCategories(selectedCountry.code).then(function(resp) {
-	 			self.categories = resp.data;
-	 		}, function(errorResp) {
-	 			toastr.warning('Product Categories not availbale: '+ errorResp.data.detail, 'Error!');
-	 		});
-
- 			self.retrieve = function(objID) {
- 				self.message = "Updating...";
- 				self.promise = CorePublisherService.fetchPresentation(objID).then(function(resp) {
- 					self.object = resp.data;
- 				}, function(errorResp) {
- 					toastr.error('Failed to load resource from the remote server: '+ errorResp.data.detail, 'Error!');
- 				});
- 			};
-
- 			self.update = function() {
-	 			if (self.isAuthenticated) {
-
-	 				var fd = new FormData();
-	 				//var isMultipart = false;
-
-	 				fd.append('title', self.object.title);
-	 				fd.append('description', self.object.description);
-
-	 				//Hack---> Append the file attribute only if updated
-	 				if (typeof(self.object.thumbnail) === 'object') {
-	 					console.log('SENDING MULTIPART');
-
-	 					fd.append('thumbnail', self.object.thumbnail);
-	 					//isMultipart = true;
-	 				}
-
-	 				if (typeof(self.object.file) === 'object') {
-	 					console.log('SENDING MULTIPART');
-	 					fd.append('file', self.object.file);
-	 				}
-
-	 				fd.append('pub_date', JSON.stringify(self.object.pub_date).replace('"', '').replace('"', '').trim());
-	 				fd.append('expiry_date', JSON.stringify(self.object.expiry_date).replace('"', '').replace('"', '').trim());
-	 				fd.append('zink_number', self.object.zink_number);
-	 				fd.append('categories', self.object.categories);
-	 				fd.append('audience', self.object.audience);
-
-	 				self.message = "Updating...";
-	 				self.promise = CorePublisherService.updatePresentation(self.objectID, fd).then(function(resp) {
-	 					toastr.success('Resource updated successfully!', 'Success!');
-
-	 				}, function(errorResp) {
-	 					toastr.error('An error occured while updating resource: '+ errorResp.data.detail, 'Error!');
-	 				});
-
-		 		} else {
-		 			//redirect to the login page
-		 			$location.url('#/login');
-		 		}
- 			};
-
- 			self.delete = function() {
- 				if (self.isAuthenticated) {
- 					self.message = "Deleting...";
-	 				self.promise = CorePublisherService.deletePresentation(self.objectID).then(function(resp) {
-	 					toastr.success('Resource updated successfully', 'Success!');
-	 					$location.url('/presentations');
-	 				}, function(errorResp) {
-	 					toastr.error('Failed deleting resource! Please try again later: '+ errorResp.data.detail, 'Error!');
-	 				});
-	 			} else {
-	 				toastr.warning('You are not allowed to perform this action', 'Warning!');
-	 			}
- 			};
-
- 			//fetch the object after instanciation
- 			self.retrieve(self.objectID);
-
  	}])
 
 	.controller('FileDetailController', 
@@ -725,7 +477,7 @@ ControlPanelApp.controllers
 	 				fd.append('audience', self.object.audience);
 
 	 				self.message = "Updating...";
-	 				self.promise = CorePublisherService.updateFile(self.objectID, fd).then(function(resp) {
+	 				self.promise = CorePublisherService.updateFile(self.objectID, fd, selectedCountry.code).then(function(resp) {
 	 					toastr.success('File updated successfully', 'Success!');
 	 				}, function(errorResp) {
 	 					toastr.error('An error occured while updating this file: '+ errorResp.data.detail, 'Error!');
@@ -843,7 +595,7 @@ ControlPanelApp.controllers
 	 				fd.append('audience', self.object.audience);
 
 	 				self.message = "Updating...";
-	 				self.promise = CorePublisherService.updateWeblink(self.objectID, fd).then(function(resp) {
+	 				self.promise = CorePublisherService.updateWeblink(self.objectID, fd, selectedCountry.code).then(function(resp) {
 	 					toastr.success('Link updated successfully', 'success!')
 
 	 				}, function(errorResp) {
@@ -972,7 +724,6 @@ ControlPanelApp.controllers
 		self.objectID = $routeParams.categoryId;
 		self.object = {};
 
-		self.categorizedPresentations = null;
 		self.categorizedFiles = null;
 		self.categorizedWeblinks = null;
 
@@ -1032,22 +783,6 @@ ControlPanelApp.controllers
 			}
 		};
 
-		self.getCategorizedPresentations = function() {
-			console.log('Fetching...');
-			if (self.categorizedPresentations === null) {
-				if (self.object !== null) {
-
-					self.msg = 'Fetching presentations in thie category';
-					self.promise = CorePublisherService.fetchCategorizedPresentations(self.objectID, self.selectedCountry.code).then(function(resp) {
-						
-						self.categorizedPresentations = resp.data;
-					}, function(errorResp) {
-						toastr.error('An error occured while fetching data: '+ errorResp.data.detail, 'Error');
-					});
-				}
-			}
-		};
-
 		self.getCategorizedFiles = function() {
 
 			console.log('Fetching...');
@@ -1089,20 +824,6 @@ ControlPanelApp.controllers
 
 				self.msg = 'Updating position of: '+ f.file_resource.title;
 				self.promise = CorePublisherService.updateFilePosition(f.id, {position: f.position}).then(function(resp) {
-					console.log('Update complete...');
-				}, function(errorResp) {
-					toastr.error('An error occured while updating position '+ errorResp.data.detail, 'Error');
-				});
-			}
-		};
-
-		self.updatePresentationsPositions = function() {
-
-			for (var i = 0; i < self.categorizedPresentations.length; i++) {
-				var f = self.categorizedPresentations[i];
-
-				self.msg = 'Updating position of: '+ f.presentation.title;
-				self.promise = CorePublisherService.updatePresentationPosition(f.id, {position: f.position}).then(function(resp) {
 					console.log('Update complete...');
 				}, function(errorResp) {
 					toastr.error('An error occured while updating position '+ errorResp.data.detail, 'Error');

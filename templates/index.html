@@ -10,21 +10,13 @@
 
   		<div class="container">
     		<div class="row">
-    			<div class="col-xs-3" ng-show="mainCtrl.isAuthenticated">
+    			<div class="col-xs-3" ng-show="mainCtrl.isAuthenticated" style="border: 1px solid #0E79AC; margin-top: 55px; border-radius: 10px; padding: 30px 10px;">
     				<ul class="nav nav-pills nav-stacked">
-  						<li><a href="#/files">Files</a></li>
-  						<li><a href="#/presentations">Presentations</a></li>
+
+  						<li><a href="#/files">All files</a></li>
   						<li><a href="#/links">Web links</a></li>
-  						<li class="dropdown">
-    						<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-      							Extras <span class="caret"></span>
-    						</a>
-    						<ul class="dropdown-menu">
-  								<li><a href="#/categories">Products/Categories</a></li>
-  								<li><a href="">Application variables</a></li>
-                  <li><a href="#/users">Users</a></li>
-    						</ul>
-  						</li>
+              <li><a href="#/categories">Products / Categories</a></li>
+              <li><a href="#/users">Registered users</a></li>
 					</ul>
     			</div>
       			<div class="col-xs-9" ng-view></div>

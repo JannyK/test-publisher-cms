@@ -11,9 +11,6 @@ var app = angular.module('ControlPanelApp',
 		$interpolateProvider.startSymbol('[[');
 		$interpolateProvider.endSymbol(']]');
 
-		//$locationProvider.html5Mode(true);
-		//$locationProvider.hashPrefix('!');
-
 		$routeProvider
 			.when('/', {
 				controller: 'MainController',
@@ -34,21 +31,6 @@ var app = angular.module('ControlPanelApp',
 				controller: 'DashboardController',
 				controllerAs: 'ctrl',
 				templateUrl: '/static/partials/dashboard.html'
-			})
-			.when('/presentations', {
-				controller: 'PresentationListController',
-				controllerAs: 'ctrl',
-				templateUrl: '/static/partials/presentations.html'
-			})
-			.when('/presentations/new', {
-				controller: 'PresentationCreateController',
-				controllerAs: 'ctrl',
-				templateUrl: '/static/partials/new-presentation.html'
-			})
-			.when('/presentations/:presentationId', {
-				controller: 'PresentationDetailController',
-				controllerAs: 'ctrl',
-				templateUrl: '/static/partials/detail-presentation.html'
 			})
 			.when('/links', {
 				controller: 'LinkListController',
@@ -136,17 +118,6 @@ app.factory('AuthenticationService', ['$http', '$cookies', function($http, $cook
 					password: password,
 					email: email
 				});
-/*
-				return $http.post('/api/v1/accounts/', {
-					country: country,
-					password: password,
-					email: email
-				}).then(function(resp) {
-					self.login(email, password);
-				}, function(errorResp) {
-					console.error('Epic failure');
-				});
-*/
 			},
 
 			login: function(email, password) {
@@ -155,34 +126,12 @@ app.factory('AuthenticationService', ['$http', '$cookies', function($http, $cook
 				return $http.post('/api/v1/login/', {
 					email: email, password: password
 				});
-				/*
-
-				return $http.post('/api/v1/login/', {
-					email: email, password: password
-				}).then(function(resp) {
-					self.setAuthenticatedUser(resp.data);
-					window.location = '/';
-				}, function(errorResp) {
-					console.log('Epic failure...');
-				});*/
 			},
 
 			logout: function() {
 				var self = this;
 
 				return $http.post('/api/v1/logout/');
-				/*
-
-				return $http.post('/api/v1/logout/')
-					.then(function(resp) {
-						//redirect to loginView
-						self.unAuthenticate();
-						window.location = '/';
-
-					}, function(errorResp) {
-						console.error('Error occured while logging out');
-					});
-				*/
 			},
 
 			getAuthenticatedUser: function() {
@@ -202,7 +151,6 @@ app.factory('AuthenticationService', ['$http', '$cookies', function($http, $cook
 			setSelectedCountry: function(country) {
 				$cookies.selectedCountry = JSON.stringify(country);
 				return true;
-				//window.location('/login');
 			},
 
 			isAuthenticated: function() {
@@ -228,10 +176,6 @@ app.factory('CorePublisherService', ['$http', function($http) {
 
 		allUsers: function() {
 			return $http.get('/api/v1/accounts/?format=json');
-		},
-
-		allPresentations: function(countryCode) {
-			return $http.get('/api/v1/presentations/?country=' +countryCode+ '&format=json');
 		},
 
 		allFiles: function(countryCode) {
@@ -277,30 +221,8 @@ app.factory('CorePublisherService', ['$http', function($http) {
 			return $http.delete('/api/v1/accounts/'+ uId + '/?format=json');
 		},
 
-		newPresentation: function(data) {
-			return $http.post('/api/v1/presentations/', data, {
-				transformRequest: angular.identity,
-				headers: {'Content-Type': undefined}
-			});
-		},
-
-		fetchPresentation: function(pID) {
-			return $http.get('/api/v1/presentations/' + pID + '/?format=json');
-		},
-
-		updatePresentation: function(pID, data) {
-			return $http.patch('/api/v1/presentations/' + pID + '/', data, {
-				transformRequest: angular.identity,
-				headers: {'Content-Type': undefined}
-			});
-		},
-
-		deletePresentation: function(pID) {
-			return $http.delete('/api/v1/presentations/' + pID + '/?format=json');
-		},
-
-		newFile: function(data) {
-			return $http.post('/api/v1/files/', data, {
+		newFile: function(data, country) {
+			return $http.post('/api/v1/files/?country='+ country, data, {
 				transformRequest: angular.identity,
 				headers: {'Content-Type': undefined}
 			});
@@ -310,8 +232,8 @@ app.factory('CorePublisherService', ['$http', function($http) {
 			return $http.get('/api/v1/files/' + fID + '/?format=json');
 		},
 
-		updateFile: function(fID, data) {
-			return $http.patch('/api/v1/files/' + fID + '/', data, {
+		updateFile: function(fID, data, country) {
+			return $http.patch('/api/v1/files/' + fID + '/?country='+ country, data, {
 				transformRequest: angular.identity,
 				headers: {'Content-Type': undefined}
 			});
@@ -321,8 +243,8 @@ app.factory('CorePublisherService', ['$http', function($http) {
 			return $http.delete('/api/v1/files/' + fID + '/?format=json');
 		},
 
-		newWebLink: function(data) {
-			return $http.post('/api/v1/links/', data, {
+		newWebLink: function(data, country) {
+			return $http.post('/api/v1/links/?country='+ country, data, {
 				transformRequest: angular.identity,
 				headers: {'Content-Type': undefined}
 			});
@@ -332,9 +254,9 @@ app.factory('CorePublisherService', ['$http', function($http) {
 			return $http.get('/api/v1/links/' + itemID + '/?format=json');
 		},
 
-		updateWeblink: function(itemID, data) {
+		updateWeblink: function(itemID, data, country) {
 
-			return $http.patch('/api/v1/links/' + itemID + '/', data, {
+			return $http.patch('/api/v1/links/' + itemID + '/?country='+ country, data, {
 				transformRequest: angular.identity,
 				headers: {'Content-Type': undefined}
 			});		
@@ -342,25 +264,6 @@ app.factory('CorePublisherService', ['$http', function($http) {
 
 		deleteWeblink: function(itemID) {
 			return $http.delete('/api/v1/links/' + itemID + '/?format=json');
-		},
-
-		//Fetch Items by country (from current logged user)
-		/*
-		getPresentations: function(user_country) {
-			return $http.get('/api/v1/accounts/' + user_country + 'presentations');
-		},
-
-		getFiles: function(user_country) {
-			return $http.get('/api/v1/accounts/' + user_country + 'files');
-		},
-
-		getWebLinks: function(user_country) {
-			return $http.get('/api/v1/accounts/' + user_country + 'links');
-		}
-		*/
-
-		fetchCategorizedPresentations: function(categoryId, country) {
-			return $http.get('/api/v1/categorized_presentations/?categoryId='+ categoryId +'&country='+ country +'&format=json');
 		},
 
 		fetchCategorizedFiles: function(categoryId, country) {
@@ -373,38 +276,11 @@ app.factory('CorePublisherService', ['$http', function($http) {
 		updateWeblinkPosition: function(id, data) {
 			return $http.patch('/api/v1/categorized_links/' + id + '/', data);
 		},
-		updatePresentationPosition: function(id, data) {
-			return $http.patch('/api/v1/categorized_presentations/' + id + '/', data);
-		},
 		updateFilePosition: function(id, data) {
 			return $http.patch('/api/v1/categorized_files/' + id + '/', data);
 		}
 	}
 }]);
-
-/*
-* Utility services: Snackbar
-* For displaying Message à la Google plus 
-*/
-
-app.factory('MessageNotificationService', ['$', '_', function($, _) {
-	return {
-		_snackbar: function(content, options) {
-			options = _.extends({timeout: 3000}, options);
-			options.content = content;
-
-			$.snackbar(options);
-		},
-
-		errorMessage: function(content, options) {
-			_snackbar('Error' + content, options);
-		},
-
-		show: function(content, options) {
-			_snackbar(content, options);
-		}
-	}
-}])
 
 /**
 * Custome directives
@@ -421,7 +297,7 @@ app.directive('fileField', ['$parse', function($parse) {
 			element.bind('change', function() {
 				$scope.$apply(function() {
 					fieldSetter($scope, element[0].files[0]);
-					console.log('FILE: ' + JSON.stringify(element[0].files[0]));
+					//console.log('FILE: ' + JSON.stringify(element[0].files[0]));
 				});
 			});
 		}

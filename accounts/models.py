@@ -77,6 +77,6 @@ class Account(AbstractBaseUser, PermissionsMixin):
 		return self.first_name
 
 	def is_an_admin(self):
-		return self.user_type in ('DEVELOPER', 'LILLY_USER',)
+		return self.user_type in ['DEVELOPER', 'LILLY_USER']
 		
 

@@ -54,7 +54,6 @@ class AccountViewSet(viewsets.ModelViewSet):
 		return (permissions.IsAuthenticated(), IsAdmin())
 
 	def create(self, request):
-		print 'REQUEST USER DATA: ', request.DATA
 		serializer = self.serializer_class(data=request.DATA)
 
 		if serializer.is_valid():
@@ -237,11 +236,17 @@ class PresentationViewSet(viewsets.ModelViewSet):
 		categories = self.request.DATA['categories']
 		obj.categories.clear()
 
-		for c in categories.split(','):
-			category = Category.objects.get(name=c)
-			CategorizedPresentation.objects.create(presentation=obj, category=category)
-			#obj.categories.add(category)
+		try:
+			country = self.request.GET['country']
+		except KeyError:
+			return Response({
+				'status': 'Bad Request',
+				'message': 'Request parameters missing ...'
+				}, status=status.HTTP_400_BAD_REQUEST)
 
+		for c in categories.split(','):
+			category = Category.objects.filter(name=c, country=country)[0]
+			CategorizedPresentation.objects.create(presentation=obj, category=category)
 		return super(PresentationViewSet, self).post_save(obj, created)
 
 
@@ -266,7 +271,7 @@ class FileViewSet(viewsets.ModelViewSet):
 		if self.request.method in permissions.SAFE_METHODS:
 			return (permissions.AllowAny(),)
 
-		return (permissions.IsAuthenticated(), IsFileOwner(),)
+		return (permissions.IsAuthenticated(), IsAdmin(),)
 
 	def list(self, request, *args, **kwargs):
 		try:
@@ -286,8 +291,6 @@ class FileViewSet(viewsets.ModelViewSet):
 
 
 	def create(self, request, *args, **kwargs):
-		print self.request.DATA 
-		print 'REQUEST POST: ', request.POST
 		return super(FileViewSet, self).create(request, *args, **kwargs)
 
 
@@ -301,10 +304,19 @@ class FileViewSet(viewsets.ModelViewSet):
 		categories = self.request.DATA['categories']
 		obj.categories.clear()
 
+		try:
+			country = self.request.GET['country']
+		except KeyError:
+			return Response({
+				'status': 'Bad Request',
+				'message': 'Request parameters missing ...'
+				}, status=status.HTTP_400_BAD_REQUEST)
+
+
 		for c in categories.split(','):
-			category = Category.objects.get(name=c)
+			category = Category.objects.filter(name=c, country=country)[0]
+
 			CategorizedFile.objects.create(file_resource=obj, category=category)
-			#obj.categories.add(category)
 
 		return super(FileViewSet, self).post_save(obj, created)
 
@@ -359,10 +371,18 @@ class WebLinkViewSet(viewsets.ModelViewSet):
 		categories = self.request.DATA['categories']
 		obj.categories.clear()
 
+		try:
+			country = self.request.GET['country']
+		except KeyError:
+			return Response({
+				'status': 'Bad Request',
+				'message': 'Request parameters missing ...'
+				}, status=status.HTTP_400_BAD_REQUEST)
+
+
 		for c in categories.split(','):
-			category = Category.objects.get(name=c)
+			category = Category.objects.filter(name=c, country=country)[0]
 			CategorizedWebLink.objects.create(weblink=obj, category=category)
-			#obj.categories.add(category)
 
 		return super(WebLinkViewSet, self).post_save(obj, created)
 
