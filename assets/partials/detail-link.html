@@ -89,6 +89,13 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="col-md-2 control-label" for="country">Country</label>
+                    <div class="col-md-10">
+                        <select disabled="disabled" class="form-control" ng-model="ctrl.object.country" ng-options="c.code as c.name for c in ctrl.countries"></select>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label for="categories" class="col-md-2 control-label">Select categories/products</label>
                     <div class="col-md-10">
                         <select multiple="" class="form-control" ng-model="ctrl.object.categories" ng-options="c.name as c.name for c in ctrl.categories">

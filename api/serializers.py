@@ -98,6 +98,7 @@ class PresentationSerializer(serializers.ModelSerializer):
 			'pub_date', 
 			'expiry_date',
 			'zink_number',
+			'country',
 			'audience',
 			'categories',
 			'user',
@@ -139,6 +140,7 @@ class FileSerializer(serializers.ModelSerializer):
 			'pub_date', 
 			'expiry_date',
 			'zink_number',
+			'country',
 			'audience',
 			'categories',
 			'user',
@@ -167,6 +169,7 @@ class WebLinkSerializer(serializers.ModelSerializer):
 			'pub_date', 
 			'expiry_date',
 			'zink_number',
+			'country',
 			'audience',
 			'categories',
 			'user',
@@ -180,18 +183,6 @@ class WebLinkSerializer(serializers.ModelSerializer):
 
 
 
-#class CategorizedFile(serializers.ModelSerializer):
-#	file_resource = FileSerializer(many=False)
-#	category = CategorySerializer(many=False)
-#
-#	class Meta:
-#		model = CategorizedFile
-#		fields = (
-#			'file_resource',
-#			'category',
-#			'position',
-#		)
-#		read_only_fields = ('id',)
 
 class CategorizedFileSerializer(serializers.ModelSerializer):
 	file_resource = FileSerializer(many=False)

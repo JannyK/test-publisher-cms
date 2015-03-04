@@ -221,8 +221,8 @@ app.factory('CorePublisherService', ['$http', function($http) {
 			return $http.delete('/api/v1/accounts/'+ uId + '/?format=json');
 		},
 
-		newFile: function(data, country) {
-			return $http.post('/api/v1/files/?country='+ country, data, {
+		newFile: function(data) {
+			return $http.post('/api/v1/files/', data, {
 				transformRequest: angular.identity,
 				headers: {'Content-Type': undefined}
 			});
@@ -232,8 +232,8 @@ app.factory('CorePublisherService', ['$http', function($http) {
 			return $http.get('/api/v1/files/' + fID + '/?format=json');
 		},
 
-		updateFile: function(fID, data, country) {
-			return $http.patch('/api/v1/files/' + fID + '/?country='+ country, data, {
+		updateFile: function(fID, data) {
+			return $http.patch('/api/v1/files/' + fID + '/?format=json', data, {
 				transformRequest: angular.identity,
 				headers: {'Content-Type': undefined}
 			});
@@ -244,7 +244,7 @@ app.factory('CorePublisherService', ['$http', function($http) {
 		},
 
 		newWebLink: function(data, country) {
-			return $http.post('/api/v1/links/?country='+ country, data, {
+			return $http.post('/api/v1/links/', data, {
 				transformRequest: angular.identity,
 				headers: {'Content-Type': undefined}
 			});
@@ -256,7 +256,7 @@ app.factory('CorePublisherService', ['$http', function($http) {
 
 		updateWeblink: function(itemID, data, country) {
 
-			return $http.patch('/api/v1/links/' + itemID + '/?country='+ country, data, {
+			return $http.patch('/api/v1/links/' + itemID + '/', data, {
 				transformRequest: angular.identity,
 				headers: {'Content-Type': undefined}
 			});		

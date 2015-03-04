@@ -50,6 +50,7 @@ class BaseEntry(models.Model):
 	pub_date = models.DateTimeField()
 	expiry_date = models.DateTimeField(blank=True)
 	zink_number = models.CharField(max_length=50, default="NOXXXX")
+	country = models.CharField(max_length=10, choices=COUNTRY_CHOICES, default='NO')
 
 	audience = models.CharField(max_length=50, choices=AUDIENCE_CHOICES, default='DEVELOPER')
 

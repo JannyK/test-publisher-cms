@@ -183,19 +183,6 @@ class CategoryViewSet(viewsets.ModelViewSet):
 		return Response(serializer.data)
 
 
-	#def pre_save(self, obj):
-	#	try:
-	#		c = self.request.GET['country']
-	#	except KeyError:
-	#		return Response({
-	#			'status': 'Bad Request',
-	#			'message': 'Request parameters missing ...'
-	#			}, status=status.HTTP_400_BAD_REQUEST)
-#
-#		#obj.country = self.request.user.country
-#		obj.country = c
-
-
 
 class PresentationViewSet(viewsets.ModelViewSet):
 	queryset = Presentation.objects.all().order_by('-pub_date')
@@ -236,16 +223,8 @@ class PresentationViewSet(viewsets.ModelViewSet):
 		categories = self.request.DATA['categories']
 		obj.categories.clear()
 
-		try:
-			country = self.request.GET['country']
-		except KeyError:
-			return Response({
-				'status': 'Bad Request',
-				'message': 'Request parameters missing ...'
-				}, status=status.HTTP_400_BAD_REQUEST)
-
 		for c in categories.split(','):
-			category = Category.objects.filter(name=c, country=country)[0]
+			category = Category.objects.filter(name=c, country=obj.country)[0]
 			CategorizedPresentation.objects.create(presentation=obj, category=category)
 		return super(PresentationViewSet, self).post_save(obj, created)
 
@@ -282,8 +261,8 @@ class FileViewSet(viewsets.ModelViewSet):
 				'message': 'Request parameters missing ...'
 				}, status=status.HTTP_400_BAD_REQUEST)
 
-		queryset = self.queryset.filter(user__country=c)
-		filtered_queryset = [x for x in queryset if x.is_active]
+		qset = self.queryset.filter(country=c)
+		filtered_queryset = [x for x in qset if x.is_active]
 
 		serializer = self.serializer_class(filtered_queryset, many=True)
 
@@ -301,21 +280,12 @@ class FileViewSet(viewsets.ModelViewSet):
 
 
 	def post_save(self, obj, created=False):
+
 		categories = self.request.DATA['categories']
 		obj.categories.clear()
 
-		try:
-			country = self.request.GET['country']
-		except KeyError:
-			return Response({
-				'status': 'Bad Request',
-				'message': 'Request parameters missing ...'
-				}, status=status.HTTP_400_BAD_REQUEST)
-
-
 		for c in categories.split(','):
-			category = Category.objects.filter(name=c, country=country)[0]
-
+			category = Category.objects.filter(name=c, country=obj.country)[0]
 			CategorizedFile.objects.create(file_resource=obj, category=category)
 
 		return super(FileViewSet, self).post_save(obj, created)
@@ -371,17 +341,8 @@ class WebLinkViewSet(viewsets.ModelViewSet):
 		categories = self.request.DATA['categories']
 		obj.categories.clear()
 
-		try:
-			country = self.request.GET['country']
-		except KeyError:
-			return Response({
-				'status': 'Bad Request',
-				'message': 'Request parameters missing ...'
-				}, status=status.HTTP_400_BAD_REQUEST)
-
-
 		for c in categories.split(','):
-			category = Category.objects.filter(name=c, country=country)[0]
+			category = Category.objects.filter(name=c, country=obj.country)[0]
 			CategorizedWebLink.objects.create(weblink=obj, category=category)
 
 		return super(WebLinkViewSet, self).post_save(obj, created)
@@ -414,15 +375,15 @@ class ResourceByCategoryView(views.APIView):
 
 		c = Category.objects.get(pk=categoryID)
 
-		pres = [p for p in c.presentation_set.all() if (p.user.country == country)]
+		pres = [p for p in c.presentation_set.all() if (p.country == country)]
 		filtered_pres = [x for x in pres if x.is_active]
 		pSerializer = PresentationSerializer(filtered_pres, many=True)
 
-		files = [f for f in c.file_set.all() if (f.user.country == country)]
+		files = [f for f in c.file_set.all() if (f.country == country)]
 		filtered_files = [x for x in files if x.is_active]
 		fSerializer = FileSerializer(filtered_files, many=True)
 
-		links = [l for l in c.weblink_set.all() if (l.user.country == country)]
+		links = [l for l in c.weblink_set.all() if (l.country == country)]
 		filtered_links = [x for x in links if x.is_active]
 		lSerializer = WebLinkSerializer(filtered_links, many=True)
 
@@ -457,7 +418,7 @@ class CategorizedFileViewSet(viewsets.ModelViewSet):
 				}, status=status.HTTP_400_BAD_REQUEST)
 
 
-		queryset = self.queryset.filter(file_resource__user__country=c, category=category)
+		queryset = self.queryset.filter(file_resource__country=c, category=category)
 		filtered_queryset = [x for x in queryset if x.file_resource.is_active]
 
 		serializer = self.serializer_class(filtered_queryset, many=True)
@@ -486,7 +447,7 @@ class CategorizedPresentationViewSet(viewsets.ModelViewSet):
 				'message': 'Request parameters missing...'
 				}, status=status.HTTP_400_BAD_REQUEST)
 
-		queryset = self.queryset.filter(presentation__user__country=c, category=category)
+		queryset = self.queryset.filter(presentation__country=c, category=category)
 		filtered_queryset = [x for x in queryset if x.presentation.is_active]
 
 		serializer = self.serializer_class(filtered_queryset, many=True)
@@ -516,13 +477,12 @@ class CategorizedWebLinkViewSet(viewsets.ModelViewSet):
 				'message': 'Request parameters missing...'
 				}, status=status.HTTP_400_BAD_REQUEST)
 
-		queryset = self.queryset.filter(weblink__user__country=c, category=category)
+		queryset = self.queryset.filter(weblink__country=c, category=category)
 		filtered_queryset = [x for x in queryset if x.weblink.is_active]
 
 		serializer = self.serializer_class(filtered_queryset, many=True)
 
 		return Response(serializer.data)
-
 
 
 class AllCategorizedResourceByCategoryView(views.APIView):
@@ -540,27 +500,27 @@ class AllCategorizedResourceByCategoryView(views.APIView):
 				}, status=status.HTTP_400_BAD_REQUEST)
 
 		if audience in ['DEVELOPER', 'LILLY_USER']:
-			categorized_pres = [p for p in c.categorized_presentations.all() if (p.presentation.user.country == country)]
+			categorized_pres = [p for p in c.categorized_presentations.all() if (p.presentation.country == country)]
 			filtered_pres = [x for x in categorized_pres if x.presentation.is_active]
 			pSerializer = CategorizedPresentationSerializer(filtered_pres, many=True)
 
-			files = [f for f in c.categorized_files.all() if (f.file_resource.user.country == country)]
+			files = [f for f in c.categorized_files.all() if (f.file_resource.country == country)]
 			filtered_files = [x for x in files if x.file_resource.is_active]
 			fSerializer = CategorizedFileSerializer(filtered_files, many=True)
 			
-			links = [l for l in c.categorized_weblinks.all() if (l.weblink.user.country == country)]
+			links = [l for l in c.categorized_weblinks.all() if (l.weblink.country == country)]
 			filtered_links = [x for x in links if x.weblink.is_active]
 			lSerializer = CategorizedWebLinkSerializer(filtered_links, many=True)
 		else:
-			categorized_pres = [p for p in c.categorized_presentations.all() if (p.presentation.user.country == country and p.presentation.audience == 'PUBLIC')]
+			categorized_pres = [p for p in c.categorized_presentations.all() if (p.presentation.country == country and p.presentation.audience == 'PUBLIC')]
 			filtered_pres = [x for x in categorized_pres if x.presentation.is_active]
 			pSerializer = CategorizedPresentationSerializer(filtered_pres, many=True)
 
-			files = [f for f in c.categorized_files.all() if (f.file_resource.user.country == country and f.file_resource.audience == 'PUBLIC')]
+			files = [f for f in c.categorized_files.all() if (f.file_resource.country == country and f.file_resource.audience == 'PUBLIC')]
 			filtered_files = [x for x in files if x.file_resource.is_active]
 			fSerializer = CategorizedFileSerializer(filtered_files, many=True)
 			
-			links = [l for l in c.categorized_weblinks.all() if (l.weblink.user.country == country and l.weblink.audience == 'PUBLIC')]
+			links = [l for l in c.categorized_weblinks.all() if (l.weblink.country == country and l.weblink.audience == 'PUBLIC')]
 			filtered_links = [x for x in links if x.weblink.is_active]
 			lSerializer = CategorizedWebLinkSerializer(filtered_links, many=True)
 

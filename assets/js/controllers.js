@@ -172,7 +172,7 @@ ControlPanelApp.controllers
 			self.backdrop = true;
 			self.promise = null;
 
-			var selectedCountry = AuthenticationService.getSelectedCountry();
+			self.selectedCountry = AuthenticationService.getSelectedCountry();
 
 			self.isAuthenticated = AuthenticationService.isAuthenticated();
 			self.categories = [];
@@ -180,8 +180,13 @@ ControlPanelApp.controllers
 			self.audiences = [
 				{name: 'Developers', code: 'DEVELOPER'},
 				{name: 'Lilly Users', code: 'LILLY_USER'},
-				{code: 'DEVELOPER_AND_LILLY', name: 'Developers & Lilly users'},
 				{code: 'PUBLIC', name: 'Public audience'}
+			];
+
+			self.countries = [
+				{name: 'norway', code: 'NO'},
+				{name: 'sweden', code: 'SE'},
+				{name: 'danmark', code: 'DK'}
 			];
 
 			self.newFile = {
@@ -192,6 +197,7 @@ ControlPanelApp.controllers
 	 			pub_date: '',
 	 			expiry_date: '',
 	 			zink_number: 0,
+	 			country: self.selectedCountry.code,
 	 			categories: [],
 	 			audience: ''
 	 		};
@@ -217,7 +223,7 @@ ControlPanelApp.controllers
 
 	 		//fetch all categories and make them availbale for use
 	 		self.message = "Fetching product categories...";
-	 		self.promise = CorePublisherService.allCategories(selectedCountry.code).then(function(resp) {
+	 		self.promise = CorePublisherService.allCategories(self.selectedCountry.code).then(function(resp) {
 	 			self.categories = resp.data;
 	 		}, function(errorResp) {
 	 			toastr.error('Error fetching product categories: '+ errorResp.data.detail, 'Error!');
@@ -236,11 +242,12 @@ ControlPanelApp.controllers
 	 				fd.append('pub_date', JSON.stringify(self.newFile.pub_date).replace('"', '').replace('"', '').trim());
 	 				fd.append('expiry_date', JSON.stringify(self.newFile.expiry_date).replace('"', '').replace('"', '').trim());
 	 				fd.append('zink_number', self.newFile.zink_number);
+	 				fd.append('country', self.newFile.country);
 	 				fd.append('categories', self.newFile.categories);
 	 				fd.append('audience', self.newFile.audience);
 
 	 				self.message = "Please wait while we're uploading your file...";
-	 				self.promise = CorePublisherService.newFile(fd, selectedCountry.code).then(function(resp) {
+	 				self.promise = CorePublisherService.newFile(fd).then(function(resp) {
 	 					toastr.success('Resource created successfully!', 'Success!');
 	 					$location.url('/files');
 
@@ -265,15 +272,20 @@ ControlPanelApp.controllers
 			self.backdrop = true;
 			self.promise = null;
 
-			var selectedCountry = AuthenticationService.getSelectedCountry();
+			self.selectedCountry = AuthenticationService.getSelectedCountry();
 			self.isAuthenticated = AuthenticationService.isAuthenticated();
 			self.categories = [];
 
 			self.audiences = [
 				{name: 'Developers', code: 'DEVELOPER'},
 				{name: 'Lilly Users', code: 'LILLY_USER'},
-				{code: 'DEVELOPER_AND_LILLY', name: 'Developers & Lilly users'},
 				{code: 'PUBLIC', name: 'Public audience'}
+			];
+
+			self.countries = [
+				{name: 'norway', code: 'NO'},
+				{name: 'sweden', code: 'SE'},
+				{name: 'danmark', code: 'DK'}
 			];
 
 			self.newLink = {
@@ -284,6 +296,7 @@ ControlPanelApp.controllers
 	 			pub_date: '',
 	 			expiry_date: '',
 	 			zink_number: 0,
+	 			country: self.selectedCountry.code,
 	 			categories: [],
 	 			audience: ''
 	 		};
@@ -309,7 +322,7 @@ ControlPanelApp.controllers
 
 	 		//fetch all categories and make them availbale for use
 	 		self.message = "Fatching product categories...";
-	 		CorePublisherService.allCategories(selectedCountry.code).then(function(resp) {
+	 		CorePublisherService.allCategories(self.selectedCountry.code).then(function(resp) {
 	 			self.categories = resp.data;
 	 		}, function(errorResp) {
 	 			toastr.error('Product categories not availbale: '+ errorResp.data.detail, 'Error!');
@@ -328,11 +341,12 @@ ControlPanelApp.controllers
 	 				fd.append('pub_date', JSON.stringify(self.newLink.pub_date).replace('"', '').replace('"', '').trim());
 	 				fd.append('expiry_date', JSON.stringify(self.newLink.expiry_date).replace('"', '').replace('"', '').trim());
 	 				fd.append('zink_number', self.newLink.zink_number);
+	 				fd.append('country', self.newLink.country);
 	 				fd.append('categories', self.newLink.categories);
 	 				fd.append('audience', self.newLink.audience);
 
 	 				self.message = "Please wait a moment...";
-	 				self.promise = CorePublisherService.newWebLink(fd, selectedCountry.code).then(function(resp) {
+	 				self.promise = CorePublisherService.newWebLink(fd).then(function(resp) {
 	 					toastr.success('Resource created successfully!', 'Success!');
 	 					$location.url('/links');
 
@@ -400,18 +414,24 @@ ControlPanelApp.controllers
 			self.backdrop = true;
 			self.promise = null;
 
- 			var selectedCountry = AuthenticationService.getSelectedCountry();
+ 			self.selectedCountry = AuthenticationService.getSelectedCountry();
 
  			self.isAuthenticated = AuthenticationService.isAuthenticated();
  			self.objectID = $routeParams.fileId;
  			self.object = {};
+
  			self.categories = [];
 
  			self.audiences = [
 				{name: 'Developers', code: 'DEVELOPER'},
 				{name: 'Lilly Users', code: 'LILLY_USER'},
-				{code: 'DEVELOPER_AND_LILLY', name: 'Developers & Lilly users'},
 				{code: 'PUBLIC', name: 'Public audience'}
+			];
+
+			self.countries = [
+				{name: 'norway', code: 'NO'},
+				{name: 'sweden', code: 'SE'},
+				{name: 'danmark', code: 'DK'}
 			];
 
 			self.today = new Date();
@@ -435,7 +455,7 @@ ControlPanelApp.controllers
 
  			//fetch all categories and make them availbale for use
  			self.message = "Fetching product categories...";
-	 		self.promise = CorePublisherService.allCategories(selectedCountry.code).then(function(resp) {
+	 		self.promise = CorePublisherService.allCategories(self.selectedCountry.code).then(function(resp) {
 	 			self.categories = resp.data;
 	 		}, function(errorResp) {
 	 			toastr.warning('Product categories not available!', 'Warning!');
@@ -473,11 +493,12 @@ ControlPanelApp.controllers
 	 				fd.append('pub_date', JSON.stringify(self.object.pub_date).replace('"', '').replace('"', '').trim());
 	 				fd.append('expiry_date', JSON.stringify(self.object.expiry_date).replace('"', '').replace('"', '').trim());
 	 				fd.append('zink_number', self.object.zink_number);
+	 				fd.append('country', self.object.country);
 	 				fd.append('categories', self.object.categories);
 	 				fd.append('audience', self.object.audience);
 
 	 				self.message = "Updating...";
-	 				self.promise = CorePublisherService.updateFile(self.objectID, fd, selectedCountry.code).then(function(resp) {
+	 				self.promise = CorePublisherService.updateFile(self.objectID, fd).then(function(resp) {
 	 					toastr.success('File updated successfully', 'Success!');
 	 				}, function(errorResp) {
 	 					toastr.error('An error occured while updating this file: '+ errorResp.data.detail, 'Error!');
@@ -520,7 +541,7 @@ ControlPanelApp.controllers
 			self.backdrop = true;
 			self.promise = null;
 
- 			var selectedCountry = AuthenticationService.getSelectedCountry();
+ 			self.selectedCountry = AuthenticationService.getSelectedCountry();
 
  			self.isAuthenticated = AuthenticationService.isAuthenticated();
  			self.objectID = $routeParams.linkID;
@@ -529,8 +550,13 @@ ControlPanelApp.controllers
  			self.audiences = [
 				{name: 'Developers', code: 'DEVELOPER'},
 				{name: 'Lilly Users', code: 'LILLY_USER'},
-				{code: 'DEVELOPER_AND_LILLY', name: 'Developers & Lilly users'},
 				{code: 'PUBLIC', name: 'Public audience'}
+			];
+
+			self.countries = [
+				{name: 'norway', code: 'NO'},
+				{name: 'sweden', code: 'SE'},
+				{name: 'danmark', code: 'DK'}
 			];
 
 			self.today = new Date();
@@ -556,7 +582,7 @@ ControlPanelApp.controllers
 
  			//fetch all categories and make them availbale for use
  			self.message = "Fetching product categories...";
-	 		self.promise = CorePublisherService.allCategories(selectedCountry.code).then(function(resp) {
+	 		self.promise = CorePublisherService.allCategories(self.selectedCountry.code).then(function(resp) {
 	 			self.categories = resp.data;
 	 		}, function(errorResp) {
 	 			toastr.warning('Product categories not availbale: '+ errorResp.data.detail, 'warning');
@@ -591,11 +617,12 @@ ControlPanelApp.controllers
 	 				fd.append('pub_date', JSON.stringify(self.object.pub_date).replace('"', '').replace('"', '').trim());
 	 				fd.append('expiry_date', JSON.stringify(self.object.expiry_date).replace('"', '').replace('"', '').trim());
 	 				fd.append('zink_number', self.object.zink_number);
+	 				fd.append('country', self.object.country);
 	 				fd.append('categories', self.object.categories);
 	 				fd.append('audience', self.object.audience);
 
 	 				self.message = "Updating...";
-	 				self.promise = CorePublisherService.updateWeblink(self.objectID, fd, selectedCountry.code).then(function(resp) {
+	 				self.promise = CorePublisherService.updateWeblink(self.objectID, fd).then(function(resp) {
 	 					toastr.success('Link updated successfully', 'success!')
 
 	 				}, function(errorResp) {
