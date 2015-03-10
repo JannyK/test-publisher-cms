@@ -1,10 +1,10 @@
-<div class="row">
-    <div class="col-xs-6 col-xs-offset-6">
-        <h1>Login</h1>
 
+<div class="row">
+    <div id="login-box">
+        <h1>Login</h1>
         <div cg-busy="{promise:ctrl.promise,templateUrl:ctrl.templateUrl,message:ctrl.message,backdrop:ctrl.backdrop,delay:ctrl.delay,minDuration:ctrl.minDuration}" class="well">
             <form role="form" ng-submit="ctrl.login()">
-                <div class="alert alert-danger" ng-show="error" ng-bind="error"></div>
+                <!--<div class="alert alert-danger" ng-show="error" ng-bind="error"></div>-->
 
                 <div class="form-group">
                     <label for="login__email">Email</label>
@@ -20,8 +20,6 @@
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>
-
-            <!--<span>Don't have an account? </span> <a class="link pull-right" href="#">Register here!</a>-->
         </div>
     </div>
 </div>

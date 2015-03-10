@@ -1,0 +1,14 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html ng-app="ControlPanelApp">
+	<head>
+  		<title>Lilly Publisher Control Panel 2.0</title>
+  		{% include 'css.html' %}
+	</head>
+
+	<body ng-controller="MainController as mainCtrl">
+  		{% include 'navbar.html' %}
+  		<div class="container" ng-view></div>
+  		{% include 'js.html' %}
+	</body>
+</html>

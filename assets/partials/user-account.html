@@ -1,0 +1,105 @@
+<div class="row">
+    <div class="col-xs-3" style="border: 1px solid #0E79AC; margin-top: 55px; border-radius: 10px; padding: 30px 10px;">
+        <ul class="nav nav-pills nav-stacked">
+            <li><a href="#/files">All files</a></li>
+            <li><a href="#/links">Web links</a></li>
+            <li><a href="#/categories">Products / Categories</a></li>
+            <li ng-show="ctrl.currentUser.is_admin"><a href="#/users">Registered users</a></li>
+            <li><a href="#/accounts/[[ ctrl.object.id ]]/">User account</a></li>
+        </ul>
+    </div>
+    <div class="col-xs-9">
+        <!-- Insert content here-->
+        <div class="row">
+            <div class="col-xs-12">
+                <ul class="breadcrumb">
+                    <li><a href="#/">Home</a></li>
+                    <li class="active">accounts / [[ ctrl.object.email ]]</li>
+                </ul>
+            </div>
+        </div>
+
+        <div cg-busy="{promise:ctrl.promise,templateUrl:ctrl.templateUrl,message:ctrl.message,backdrop:ctrl.backdrop,delay:ctrl.delay,minDuration:ctrl.minDuration}" class="row">
+            <div class="col-xs-12">
+
+                <form class="form-horizontal" ng-submit="ctrl.update()">
+                    <fieldset>
+                        <legend>User Account</legend>
+                        <div class="form-group">
+                            <label for="email" class="col-md-2 control-label">Email</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" id="email" placeholder="User Email" ng-model="ctrl.object.email" disabled="disabled">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="first_name" class="col-md-2 control-label">First Name</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" id="first_name" placeholder="First Name" ng-model="ctrl.object.first_name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="last_name" class="col-md-2 control-label">Last Name</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" id="last_name" placeholder="Last Name" ng-model="ctrl.object.last_name">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="user_type">User group</label>
+                            <div class="col-md-10">
+                                <select disabled="disabled" class="form-control" ng-model="ctrl.object.user_type" ng-options="g.code as g.name for g in ctrl.user_groups"></select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-10 col-md-offset-2">
+                                <a class="btn btn-default" href="#/files">Return</a>
+                                <input type="submit" value="Update profile" class="btn btn-primary">
+                                <a class="btn btn-default pull-right" ng-click="ctrl.changePassword()">Change password</a>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/ng-template" id="changePasswordTemplateID">
+    <h3>Change password:<h3>
+    <form class="form-horizontal" name="form" ng-submit="confirmNewPassword()" cg-busy="{promise:promise,templateUrl:templateUrl,message:message,backdrop:backdrop,delay:delay,minDuration:minDuration}">
+        <div class="form-group">
+            <label for="old_password" class="col-md-2 control-label">Actual password</label>
+            <div class="col-md-10">
+                <input type="password" class="form-control" id="old_password" name="old_password" placeholder="Actual password" ng-model="fd.oldPassword" required>
+                <span class="help-block" style="color: red;" ng-show="form.old_password.$dirty && form.old_password.$invalid">This field is required</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="new_password" class="col-md-2 control-label">New password</label>
+            <div class="col-md-10">
+                <input type="password" class="form-control" id="new_password" name="new_password" placeholder="New password" ng-model="fd.newPassword" required>
+                <span class="help-block" style="color: red;" ng-show="form.new_password.$dirty && form.new_password.$invalid">This field is required</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="confirm_new_password" class="col-md-2 control-label">Confirm new password</label>
+            <div class="col-md-10">
+                <input type="password" class="form-control" id="confirm_new_password" name="confirm_new_password" placeholder="Confirm new password" ng-model="fd.confirmNewPassword" required>
+                <span class="help-block" style="color: red;" ng-show="form.confirm_new_password.$dirty && form.confirm_new_password.$invalid">This field is required</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-10 col-md-offset-2">
+                <input type="submit" value="Update" class="btn btn-primary" ng-disabled="form.old_password.$dirty && form.old_password.$invalid ||
+  form.new_password.$dirty && form.new_password.$invalid || form.confirm_new_password.$dirty && form.confirm_new_password.$invalid">
+            </div>
+        </div>
+    </form>
+</script>
+
+
+
+
+

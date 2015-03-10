@@ -27,6 +27,11 @@ var app = angular.module('ControlPanelApp',
 				controllerAs: 'ctrl',
 				templateUrl: '/static/partials/login.html'
 			})
+			.when('/select-country', {
+				controller: 'CountryListController',
+				controllerAs: 'ctrl',
+				templateUrl: '/static/partials/country-list.html'
+			})
 			.when('/dashboard', {
 				controller: 'DashboardController',
 				controllerAs: 'ctrl',
@@ -91,8 +96,13 @@ var app = angular.module('ControlPanelApp',
 				controller: 'UserDetailController',
 				controllerAs: 'ctrl',
 				templateUrl: '/static/partials/user-details.html'
-			}).
-			otherwise({
+			})
+			.when('/accounts/:uId', {
+				controller: 'UserAccountController',
+				controllerAs: 'ctrl',
+				templateUrl: '/static/partials/user-account.html'
+			})
+			.otherwise({
 				redirectTo: '/'
 			});
 	}]);
@@ -216,6 +226,9 @@ app.factory('CorePublisherService', ['$http', function($http) {
 		},
 		updateUser: function(uId, data) {
 			return $http.patch('/api/v1/accounts/'+ uId +'/', data);
+		},
+		updateUserPassword: function(uId, data) {
+			return $http.post('/api/v1/change-password/?uid='+ uId, data);
 		},
 		deleteUser: function(uId) {
 			return $http.delete('/api/v1/accounts/'+ uId + '/?format=json');

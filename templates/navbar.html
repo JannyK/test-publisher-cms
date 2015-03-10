@@ -10,12 +10,7 @@
     </div>
     <div class="navbar-collapse collapse navbar-inverse-collapse">
         <ul class="nav navbar-nav navbar-right">
-            {% if user.is_authenticated %}
-                <li><a>Logged in as: {{ user.email }}</a></li>
-                <li><a href="javascript:void(0)" ng-click="mainCtrl.logout()">Logout</a></li>
-            {% else %}
-                <li><a href="#/login" ng-show="mainCtrl.isCountrySetup">Login</a></li>
-            {% endif %}
+            <li><a ng-click="mainCtrl.logout()">Logout</a></li>
         </ul>
     </div>
 </nav>

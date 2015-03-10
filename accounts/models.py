@@ -1,4 +1,7 @@
+from django.conf import settings
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.contrib.auth.models import (
 	BaseUserManager,
 	AbstractBaseUser,
@@ -6,6 +9,8 @@ from django.contrib.auth.models import (
 	Group,
 	Permission,
 )
+
+from rest_framework.authtoken.models import Token
 
 COUNTRY_CHOICES = (
 	('NO', 'NORGE'),
@@ -26,11 +31,12 @@ class AccountManager(BaseUserManager):
 		if not email:
 			raise ValueError('Users must have a valid email address.')
 
-		if not kwargs.get('country'):
-			raise ValueError('Users must have a valid country')
+		#if not kwargs.get('country'):
+		#	raise ValueError('Users must have a valid country')
 
 		user = self.model(
-			email=self.normalize_email(email), country=kwargs['country']
+			#email=self.normalize_email(email), country=kwargs['country']
+			email=self.normalize_email(email)
 		)
 
 		user.set_password(password)
@@ -42,6 +48,7 @@ class AccountManager(BaseUserManager):
 		user = self.create_user(email, password, **kwargs)
 
 		user.is_admin = True
+		user.is_staff = True
 		user.save()
 
 		return user
@@ -49,22 +56,23 @@ class AccountManager(BaseUserManager):
 
 class Account(AbstractBaseUser, PermissionsMixin):
 	email = models.EmailField(unique=True)
-	country = models.CharField(max_length=40, choices=COUNTRY_CHOICES, default='NO')
+	#country = models.CharField(max_length=40, choices=COUNTRY_CHOICES, default='NO')
 	user_type = models.CharField(max_length=40, choices=USER_GROUPS, default='DEVELOPER')
 	first_name = models.CharField(max_length=40, blank=True)
 	last_name = models.CharField(max_length=40, blank=True)
 
 	is_admin = models.BooleanField(default=False)
+	is_staff = models.BooleanField(default=False)
 	created_at = models.DateTimeField(auto_now_add=True)
 	updated_at = models.DateTimeField(auto_now=True)
 
 	objects = AccountManager()
 
 	USERNAME_FIELD = 'email'
-	REQUIRED_FIELDS = ['country']
+	#REQUIRED_FIELDS = ['country']
 
 	def __unicode__(self):
-		return '%s (%s)' % (self.email, self.country)
+		return '%s (%s)' % (self.email,)
 
 	def save(self, *args, **kwargs):
 		super(Account, self).save(*args, **kwargs)
@@ -80,3 +88,10 @@ class Account(AbstractBaseUser, PermissionsMixin):
 		return self.user_type in ['DEVELOPER', 'LILLY_USER']
 		
 
+
+
+#Create API TOKEN FOR EVERY REGISTERED USERS
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_api_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)

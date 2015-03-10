@@ -1,10 +1,25 @@
 <div class="row">
-	<div class="col-xs-12">
-		<ul class="breadcrumb">
-	  		<li class="active">Home</li>
-		</ul>
-	</div>
-</div>
-<div class="row">
-	<h6>{{ ctrl.message }}</h6>
+    <div class="col-xs-3" style="border: 1px solid #0E79AC; margin-top: 55px; border-radius: 10px; padding: 30px 10px;">
+        <ul class="nav nav-pills nav-stacked">
+            <li><a href="#/files">All files</a></li>
+            <li><a href="#/links">Web links</a></li>
+            <li><a href="#/categories">Products / Categories</a></li>
+            <li ng-show="ctrl.currentUser.is_admin"><a href="#/users">Registered users</a></li>
+            <li><a href="#/accounts/[[ ctrl.currentUser.id ]]/">User account</a></li>
+        </ul>
+    </div>
+    <div class="col-xs-9">
+        <!-- Insert content here-->
+        <div class="row">
+			<div class="col-xs-12">
+				<ul class="breadcrumb">
+			  		<li class="active">Home</li>
+				</ul>
+			</div>
+		</div>
+		<div class="row">
+			<h6>{{ ctrl.message }}</h6>
+		</div>
+
+    </div>
 </div>

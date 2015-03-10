@@ -1,178 +1,193 @@
 <div class="row">
-    <div class="col-xs-12">
-        <ul class="breadcrumb">
-            <li><a href="#/">Home</a></li>
-            <li><a href="#/categories">Product Categories</a></li>
-            <li class="active">Details</li>
+    <div class="col-xs-3" style="border: 1px solid #0E79AC; margin-top: 55px; border-radius: 10px; padding: 30px 10px;">
+        <ul class="nav nav-pills nav-stacked">
+            <li><a href="#/files">All files</a></li>
+            <li><a href="#/links">Web links</a></li>
+            <li><a href="#/categories">Products / Categories</a></li>
+            <li ng-show="ctrl.currentUser.is_admin"><a href="#/users">Registered users</a></li>
+            <li><a href="#/accounts/[[ ctrl.currentUser.id ]]/">User account</a></li>
         </ul>
     </div>
-</div>
+    <div class="col-xs-9">
+        <!-- Insert content here-->
+        <div class="row">
+            <div class="col-xs-12">
+                <ul class="breadcrumb">
+                    <li><a href="#/">Home</a></li>
+                    <li><a href="#/categories">Product Categories</a></li>
+                    <li class="active">Details</li>
+                </ul>
+            </div>
+        </div>
 
-<div cg-busy="{promise:ctrl.promise,templateUrl:ctrl.templateUrl,message:ctrl.message,backdrop:ctrl.backdrop,delay:ctrl.delay,minDuration:ctrl.minDuration}" class="row">
-    <div class="col-xs-12">
+        <div cg-busy="{promise:ctrl.promise,templateUrl:ctrl.templateUrl,message:ctrl.message,backdrop:ctrl.backdrop,delay:ctrl.delay,minDuration:ctrl.minDuration}" class="row">
+            <div class="col-xs-12">
 
 
-        <accordion close-others="false">
-            <accordion-group heading="[[ ctrl.object.name ]]" is-open="true" is-disabled="false">
-                <form class="form-horizontal" ng-submit="ctrl.update()">
-                    <fieldset>
+                <accordion close-others="false">
+                    <accordion-group heading="[[ ctrl.object.name ]]" is-open="true" is-disabled="false">
+                        <form class="form-horizontal" ng-submit="ctrl.update()">
+                            <fieldset>
 
-                        <div class="form-group" style="margin-top: 30px;">
-                            <label for="title" class="col-md-2 control-label">Name</label>
-                            <div class="col-md-8">
-                                <input type="text" class="form-control" id="title" placeholder="Product title" ng-model="ctrl.object.name">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="description" class="col-md-2 control-label">Description</label>
-                            <div class="col-md-8">
-                                <textarea class="form-control" rows="3" id="description" ng-model="ctrl.object.description"></textarea>
-                                <span class="help-block" style="font-size: 8px;">A brief description of the product category</span>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="priority" class="col-md-2 control-label">Priority</label>
-                            <div class="col-md-8">
-                                <input type="text" class="form-control" rows="3" id="priority" ng-model="ctrl.object.priority">
-                                <span class="help-block" style="font-size: 8px;">The position on the app Menu</span>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="thumbnail" class="col-md-2 control-label">Picture</label>
-                            <img src="" class="col-md-2">
-                            <div class="col-md-6">
-                                <input type="file" class="form-control" id="thumbnail" file-field="ctrl.object.picture">
-                            </div>
-                            <!--<span class="help-block" style="font-size: 8px;">Select an image to use as thumbnail</span>-->
-                        </div>
-
-                        <div class="form-group">
-                            <label for="icon" class="col-md-2 control-label">Product icon</label>
-                            <img src="" class="col-md-2">
-                            <div class="col-md-6">
-                                <input type="file" class="form-control" id="icon" file-field="ctrl.object.icon">
-                            </div>
-                            <!--<span class="help-block" style="font-size: 8px;">Select an image to use as menu icon</span>-->
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-8 col-md-offset-2">
-                                <a class="btn btn-default" href="#/categories">Return</a>
-                                <input type="submit" value="Submit" class="btn btn-primary">
-                                <a class="btn btn-danger pull-right" ng-click="ctrl.delete()">Delete</a>
-                            </div>
-                        </div>
-                    </fieldset>
-                </form>
-            </accordion-group>
-
-            <accordion-group heading="Resources in this category">
-
-                <tabset justified="true">
-                    <tab heading="Files" ng-click="ctrl.getCategorizedFiles()">
-                        <ul class="list-group custom-list">
-                            <li class="list-group-item custom-item" ng-repeat="f in ctrl.categorizedFiles">
-                                <img src="https://controlpanel-dev.s3.amazonaws.com/[[ f.file_resource.thumbnail ]]" class="item-thumbnail" width="140" height="100">
-
-                                <div class="item-infos">
-                                    <p class="item-title"><a href="#/files/[[ f.file_resource.id ]]">[[ f.file_resource.title | limitTo : 60 ]]</a></p>
-
-                                    <p class="info-item">
-                                        <span class="info-title">Pub Date: </span><span class="info">[[ f.file_resource.pub_date | date:medium ]]</span>
-                                    </p>
-                                    <p>
-                                        <span class="info-title">Expiry Date: </span><span class="info">[[ f.file_resource.expiry_date | date:medium ]]</span>
-                                    </p>
-                                    <p>
-                                        <span class="info-title">Categories/Products: </span><span class="info">[[ f.file_resource.categories.join(" | ")]]</span>
-                                    </p>
-
+                                <div class="form-group" style="margin-top: 30px;">
+                                    <label for="title" class="col-md-2 control-label">Name</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" id="title" placeholder="Product title" ng-model="ctrl.object.name">
+                                    </div>
                                 </div>
-                                <span>Position: </span>
-                                <div class="stepper" rn-stepper ng-model="f.position" min="1" max="100"></div>
-                        
-                            </li>
-                        </ul>
 
-                        <div class="row">
-                            <div class="col-md-12" style="margin-top:10px; margin-bottom:10px;">
-                                <a class="btn btn-small btn-default pull-right" ng-click="ctrl.updateFilesPositions()" style="margin-right:23px;">Update</a>
-                            </div>
-                        </div>
-                    </tab>
-
-                    <tab heading="Presentations" ng-click="ctrl.getCategorizedPresentations()">
-                        <ul class="list-group custom-list">
-                            <li class="list-group-item custom-item" ng-repeat="p in ctrl.categorizedPresentations">
-                                <img src="https://controlpanel-dev.s3.amazonaws.com/[[ p.presentation.thumbnail ]]" class="item-thumbnail" width="140" height="100">
-
-                                <div class="item-infos">
-                                    <p class="item-title"><a href="#/presentations/[[ p.presentation.id ]]">[[ p.presentation.title | limitTo : 60 ]]</a></p>
-
-                                    <p class="info-item">
-                                        <span class="info-title">Pub Date: </span><span class="info">[[ p.presentation.pub_date | date:medium ]]</span>
-                                    </p>
-                                    <p>
-                                        <span class="info-title">Expiry Date: </span><span class="info">[[ p.presentation.expiry_date | date:medium ]]</span>
-                                    </p>
-                                    <p>
-                                        <span class="info-title">Categories/Products: </span><span class="info">[[ p.presentation.categories.join(" | ")]]</span>
-                                    </p>
-
+                                <div class="form-group">
+                                    <label for="description" class="col-md-2 control-label">Description</label>
+                                    <div class="col-md-8">
+                                        <textarea class="form-control" rows="3" id="description" ng-model="ctrl.object.description"></textarea>
+                                        <span class="help-block" style="font-size: 8px;">A brief description of the product category</span>
+                                    </div>
                                 </div>
-                                <span>Position: </span>
-                                <div class="stepper" rn-stepper ng-model="p.position" min="1" max="100"></div>
-                        
-                            </li>
-                        </ul>
 
-                        <div class="row">
-                            <div class="col-md-12" style="margin-top:10px; margin-bottom:10px;">
-                                <a class="btn btn-small btn-default pull-right" ng-click="ctrl.updatePresentationsPositions()" style="margin-right:23px;">Update</a>
-                            </div>
-                        </div>
-
-                    </tab>
-
-                    <tab heading="Web Links" ng-click="ctrl.getCategorizedWeblinks()">
-                        <ul class="list-group custom-list">
-                            <li class="list-group-item custom-item" ng-repeat="l in ctrl.categorizedWeblinks">
-                                <img src="https://controlpanel-dev.s3.amazonaws.com/[[ l.weblink.thumbnail ]]" class="item-thumbnail" width="140" height="100">
-
-                                <div class="item-infos">
-                                    <p class="item-title"><a href="#/links/[[ l.weblink.id ]]">[[ l.weblink.title | limitTo : 60 ]]</a></p>
-
-                                    <p class="info-item">
-                                        <span class="info-title">Pub Date: </span><span class="info">[[ l.weblink.pub_date | date:medium ]]</span>
-                                    </p>
-                                    <p>
-                                        <span class="info-title">Expiry Date: </span><span class="info">[[ l.weblink.expiry_date | date:medium ]]</span>
-                                    </p>
-                                    <p>
-                                        <span class="info-title">Categories/Products: </span><span class="info">[[ l.weblink.categories.join(" | ")]]</span>
-                                    </p>
-
+                                <div class="form-group">
+                                    <label for="priority" class="col-md-2 control-label">Priority</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" rows="3" id="priority" ng-model="ctrl.object.priority">
+                                        <span class="help-block" style="font-size: 8px;">The position on the app Menu</span>
+                                    </div>
                                 </div>
-                                <span>Position: </span>
-                                <div class="stepper" rn-stepper ng-model="l.position" min="1" max="100"></div>
-                        
-                            </li>
-                        </ul>
 
-                        <div class="row">
-                            <div class="col-md-12" style="margin-top:10px; margin-bottom:10px;">
-                                <a class="btn btn-small btn-default pull-right" ng-click="ctrl.updateWeblinksPositions()" style="margin-right:23px;">Update</a>
-                            </div>
-                        </div>
+                                <div class="form-group">
+                                    <label for="thumbnail" class="col-md-2 control-label">Picture</label>
+                                    <img src="" class="col-md-2">
+                                    <div class="col-md-6">
+                                        <input type="file" class="form-control" id="thumbnail" file-field="ctrl.object.picture">
+                                    </div>
+                                    <!--<span class="help-block" style="font-size: 8px;">Select an image to use as thumbnail</span>-->
+                                </div>
 
-                    </tab>
-                </tabset>
-            </accordion-group>
-            
-        </accordion>
+                                <div class="form-group">
+                                    <label for="icon" class="col-md-2 control-label">Product icon</label>
+                                    <img src="" class="col-md-2">
+                                    <div class="col-md-6">
+                                        <input type="file" class="form-control" id="icon" file-field="ctrl.object.icon">
+                                    </div>
+                                    <!--<span class="help-block" style="font-size: 8px;">Select an image to use as menu icon</span>-->
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-8 col-md-offset-2">
+                                        <a class="btn btn-default" href="#/categories">Return</a>
+                                        <input type="submit" value="Submit" class="btn btn-primary">
+                                        <a class="btn btn-danger pull-right" ng-click="ctrl.delete()">Delete</a>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </accordion-group>
+
+                    <accordion-group heading="Resources in this category">
+
+                        <tabset justified="true">
+                            <tab heading="Files" ng-click="ctrl.getCategorizedFiles()">
+                                <ul class="list-group custom-list">
+                                    <li class="list-group-item custom-item" ng-repeat="f in ctrl.categorizedFiles">
+                                        <img src="[[ f.file_resource.thumbnail ]]" class="item-thumbnail" width="140" height="100">
+
+                                        <div class="item-infos">
+                                            <p class="item-title"><a href="#/files/[[ f.file_resource.id ]]">[[ f.file_resource.title | limitTo : 60 ]]</a></p>
+
+                                            <p class="info-item">
+                                                <span class="info-title">Pub Date: </span><span class="info">[[ f.file_resource.pub_date | date:medium ]]</span>
+                                            </p>
+                                            <p>
+                                                <span class="info-title">Expiry Date: </span><span class="info">[[ f.file_resource.expiry_date | date:medium ]]</span>
+                                            </p>
+                                            <p>
+                                                <span class="info-title">Categories/Products: </span><span class="info">[[ f.file_resource.categories.join(" | ")]]</span>
+                                            </p>
+
+                                        </div>
+                                        <span>Position: </span>
+                                        <div class="stepper" rn-stepper ng-model="f.position" min="1" max="100"></div>
+                                
+                                    </li>
+                                </ul>
+
+                                <div class="row">
+                                    <div class="col-md-12" style="margin-top:10px; margin-bottom:10px;">
+                                        <a class="btn btn-small btn-default pull-right" ng-click="ctrl.updateFilesPositions()" style="margin-right:23px;">Update</a>
+                                    </div>
+                                </div>
+                            </tab>
+
+                            <tab heading="Presentations" ng-click="ctrl.getCategorizedPresentations()">
+                                <ul class="list-group custom-list">
+                                    <li class="list-group-item custom-item" ng-repeat="p in ctrl.categorizedPresentations">
+                                        <img src="[[ p.presentation.thumbnail ]]" class="item-thumbnail" width="140" height="100">
+
+                                        <div class="item-infos">
+                                            <p class="item-title"><a href="#/presentations/[[ p.presentation.id ]]">[[ p.presentation.title | limitTo : 60 ]]</a></p>
+
+                                            <p class="info-item">
+                                                <span class="info-title">Pub Date: </span><span class="info">[[ p.presentation.pub_date | date:medium ]]</span>
+                                            </p>
+                                            <p>
+                                                <span class="info-title">Expiry Date: </span><span class="info">[[ p.presentation.expiry_date | date:medium ]]</span>
+                                            </p>
+                                            <p>
+                                                <span class="info-title">Categories/Products: </span><span class="info">[[ p.presentation.categories.join(" | ")]]</span>
+                                            </p>
+
+                                        </div>
+                                        <span>Position: </span>
+                                        <div class="stepper" rn-stepper ng-model="p.position" min="1" max="100"></div>
+                                
+                                    </li>
+                                </ul>
+
+                                <div class="row">
+                                    <div class="col-md-12" style="margin-top:10px; margin-bottom:10px;">
+                                        <a class="btn btn-small btn-default pull-right" ng-click="ctrl.updatePresentationsPositions()" style="margin-right:23px;">Update</a>
+                                    </div>
+                                </div>
+
+                            </tab>
+
+                            <tab heading="Web Links" ng-click="ctrl.getCategorizedWeblinks()">
+                                <ul class="list-group custom-list">
+                                    <li class="list-group-item custom-item" ng-repeat="l in ctrl.categorizedWeblinks">
+                                        <img src="[[ l.weblink.thumbnail ]]" class="item-thumbnail" width="140" height="100">
+
+                                        <div class="item-infos">
+                                            <p class="item-title"><a href="#/links/[[ l.weblink.id ]]">[[ l.weblink.title | limitTo : 60 ]]</a></p>
+
+                                            <p class="info-item">
+                                                <span class="info-title">Pub Date: </span><span class="info">[[ l.weblink.pub_date | date:medium ]]</span>
+                                            </p>
+                                            <p>
+                                                <span class="info-title">Expiry Date: </span><span class="info">[[ l.weblink.expiry_date | date:medium ]]</span>
+                                            </p>
+                                            <p>
+                                                <span class="info-title">Categories/Products: </span><span class="info">[[ l.weblink.categories.join(" | ")]]</span>
+                                            </p>
+
+                                        </div>
+                                        <span>Position: </span>
+                                        <div class="stepper" rn-stepper ng-model="l.position" min="1" max="100"></div>
+                                
+                                    </li>
+                                </ul>
+
+                                <div class="row">
+                                    <div class="col-md-12" style="margin-top:10px; margin-bottom:10px;">
+                                        <a class="btn btn-small btn-default pull-right" ng-click="ctrl.updateWeblinksPositions()" style="margin-right:23px;">Update</a>
+                                    </div>
+                                </div>
+
+                            </tab>
+                        </tabset>
+                    </accordion-group>
+                    
+                </accordion>
+
+            </div>
+        </div>
 
     </div>
 </div>

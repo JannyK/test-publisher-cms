@@ -18,6 +18,12 @@ AUDIENCE_CHOICES = (
 	('PUBLIC', 'Public audience'),
 )
 
+DEVICE_TARGETS = (
+	('PHONE', 'PHONE'),
+	('TABLET', 'TABLET'),
+	('ALL', 'ALL'),
+)
+
 class Category(models.Model):
 	name = models.CharField(max_length=40)
 	description = models.TextField(blank=True)
@@ -51,7 +57,7 @@ class BaseEntry(models.Model):
 	expiry_date = models.DateTimeField(blank=True)
 	zink_number = models.CharField(max_length=50, default="NOXXXX")
 	country = models.CharField(max_length=10, choices=COUNTRY_CHOICES, default='NO')
-
+	target_device = models.CharField(max_length=25, choices=DEVICE_TARGETS, default='ALL')
 	audience = models.CharField(max_length=50, choices=AUDIENCE_CHOICES, default='DEVELOPER')
 
 	objects = BaseEntryManager()
@@ -85,22 +91,6 @@ class BaseEntry(models.Model):
 
 
 
-class Presentation(BaseEntry):
-	categories = models.ManyToManyField(Category, through="CategorizedPresentation", blank=True)
-	file = models.FileField(upload_to='presentation_files')
-	file_size = models.PositiveIntegerField(default=0)
-
-	def save(self, *args, **kwargs):
-		if self.file:
-			self.file_size = self.file.size 
-
-		super(Presentation, self).save(*args, **kwargs)
-
-
-	class Meta:
-		ordering = ('created',)
-
-
 class File(BaseEntry):
 	categories = models.ManyToManyField(Category, through="CategorizedFile", blank=True)
 	file = models.FileField(upload_to='files')
@@ -128,13 +118,6 @@ class WebLink(BaseEntry):
 class CategorizedFile(models.Model):
 	category = models.ForeignKey(Category, related_name="categorized_files")
 	file_resource = models.ForeignKey(File)
-	position = models.PositiveIntegerField(default=1)
-
-
-
-class CategorizedPresentation(models.Model):
-	category = models.ForeignKey(Category, related_name="categorized_presentations")
-	presentation = models.ForeignKey(Presentation)
 	position = models.PositiveIntegerField(default=1)
 
 

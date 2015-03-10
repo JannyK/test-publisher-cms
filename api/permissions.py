@@ -2,16 +2,9 @@ from rest_framework import permissions
 
 class IsAccountOwner(permissions.BasePermission):
 	def has_object_permission(self, request, view, account):
-		if request.user:
-			return account == request.user
-		return False
-
-
-class IsPresentationOwner(permissions.BasePermission):
-	def has_object_permission(self, request, view, p):
-		if request.user:
-			return (p.user == request.user)
-		return False
+		if request.user.is_staff:
+			return True
+		return account == request.user
 
 
 class IsFileOwner(permissions.BasePermission):
@@ -36,7 +29,5 @@ class IsProductCategoryOwner(permissions.BasePermission):
 
 
 class IsAdmin(permissions.BasePermission):
-	def has_object_permission(self, request, view, obj):
-		if request.user:
-			return request.user.is_an_admin()
-		return False
+	def has_permission(self, request, view):
+		return request.user.is_an_admin()
