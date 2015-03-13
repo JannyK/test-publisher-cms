@@ -55,7 +55,7 @@ class BaseEntry(models.Model):
 	created = models.DateTimeField(auto_now_add=True)
 	pub_date = models.DateTimeField()
 	expiry_date = models.DateTimeField(blank=True)
-	zink_number = models.CharField(max_length=50, default="NOXXXX")
+	zink_number = models.CharField(max_length=50, default="", blank=True)
 	country = models.CharField(max_length=10, choices=COUNTRY_CHOICES, default='NO')
 	target_device = models.CharField(max_length=25, choices=DEVICE_TARGETS, default='ALL')
 	audience = models.CharField(max_length=50, choices=AUDIENCE_CHOICES, default='DEVELOPER')
