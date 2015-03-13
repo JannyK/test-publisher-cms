@@ -17,6 +17,7 @@ from publisher.models import (
 	File,
 	CategorizedFile,
 	CategorizedWebLink,
+	ApplicationVariable,
 )
 
 from .serializers import (
@@ -26,6 +27,7 @@ from .serializers import (
 	WebLinkSerializer,
 	CategorizedWebLinkSerializer,
 	CategorizedFileSerializer,
+	ApplicationVariableSerializer,
 )
 from .permissions import (
 	IsAccountOwner, 
@@ -193,6 +195,7 @@ class MobileClientLoginView(views.APIView):
 				}, status=status.HTTP_401_UNAUTHORIZED)
 
 
+
 class LogoutView(views.APIView):
 	#permission_classes = (permissions.IsAuthenticated,)
 	def post(self, request, format=None):
@@ -227,6 +230,54 @@ class CategoryViewSet(viewsets.ModelViewSet):
 		queryset = self.queryset.filter(country=c)
 		serializer = self.serializer_class(queryset, many=True, context={'request': request})
 
+		return Response(serializer.data)
+
+
+class ApplicationVariableViewSet(viewsets.ModelViewSet):
+	queryset = ApplicationVariable.objects.all()
+	serializer_class = ApplicationVariableSerializer
+
+	def get_permissions(self):
+		if self.request.method in permissions.SAFE_METHODS:
+			return (permissions.IsAuthenticated(),)
+		return (permissions.IsAuthenticated(), IsAdmin(),)
+
+	def list(self, request, *args, **kwargs):
+		try:
+			c = request.GET['country']
+		except KeyError:
+			return Response({
+				'status': 'Bad Request',
+				'message': 'Request parameters missing ...'
+			}, status=status.HTTP_400_BAD_REQUEST)
+
+		qset = self.queryset.filter(country=c)
+		serializer = self.serializer_class(qset, many=True)
+
+		return Response(serializer.data)
+
+
+class ApplicationVariableByNameView(views.APIView):
+	def get(self, request, format=None):
+
+		try:
+			c = request.GET['country']
+			n = request.GET['variableName']
+		except KeyError:
+			return Response({
+				'status': 'Bad Request',
+				'message': 'Request parameters missing ...'
+			}, status=status.HTTP_400_BAD_REQUEST)
+
+		try:
+			av = ApplicationVariable.objects.get(variable_name=n, country=c)
+		except ApplicationVariable.DoesNotExist:
+			return Response({
+				'status': 'Not Found',
+				'message': 'Could not find an Application Variable with specified params...'
+			}, status=status.HTTP_404_NOT_FOUND)
+
+		serializer = ApplicationVariableSerializer(av)
 		return Response(serializer.data)
 
 

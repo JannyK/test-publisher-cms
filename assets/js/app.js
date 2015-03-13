@@ -77,6 +77,21 @@ var app = angular.module('ControlPanelApp',
 				controllerAs: 'ctrl',
 				templateUrl: '/static/partials/detail-category.html'
 			})
+			.when('/application-variables', {
+				controller: 'ApplicationVariableListController',
+				controllerAs: 'ctrl',
+				templateUrl: '/static/partials/app-variables.html'
+			})
+			.when('/application-variables/new', {
+				controller: 'ApplicationVariableCreateController',
+				controllerAs: 'ctrl',
+				templateUrl: '/static/partials/new-app-variable.html'
+			})
+			.when('/application-variables/:variableID', {
+				controller: 'ApplicationVariableDetailController',
+				controllerAs: 'ctrl',
+				templateUrl: '/static/partials/app-variable-detail.html'
+			})
 			.when('/users', {
 				controller: 'UserListController',
 				controllerAs: 'ctrl',
@@ -179,6 +194,10 @@ app.factory('CorePublisherService', ['$http', function($http) {
 			return $http.get('/api/v1/links/?country=' +countryCode+ '&format=json');
 		},
 
+		allApplicationVariables: function(countryCode) {
+			return $http.get('/api/v1/application-variables/?country=' +countryCode+ '&format=json');	
+		},
+
 		newCategory: function(data) {
 			return $http.post('/api/v1/categories/', data, {
 				transformRequest: angular.identity,
@@ -233,6 +252,20 @@ app.factory('CorePublisherService', ['$http', function($http) {
 				transformRequest: angular.identity,
 				headers: {'Content-Type': undefined}
 			});
+		},
+		newApplicationVariable: function(data) {
+			return $http.post('/api/v1/application-variables/', data);
+		},
+
+		fetchApplicationVariable: function(vID) {
+			return $http.get('/api/v1/application-variables/' + vID + '/?format=json');
+		},
+		updateApplicationVariable: function(vId, data) {
+			return $http.patch('/api/v1/application-variables/'+ vId +'/', data);
+		},
+
+		deleteApplicationVariable: function(vID) {
+			return $http.delete('/api/v1/application-variables/' + vID + '/?format=json');
 		},
 
 		deleteFile: function(fID) {

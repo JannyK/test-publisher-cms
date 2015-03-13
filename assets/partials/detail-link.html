@@ -5,7 +5,8 @@
             <li><a href="#/links">Web links</a></li>
             <li><a href="#/categories">Products / Categories</a></li>
             <li ng-show="ctrl.currentUser.is_admin"><a href="#/users">Registered users</a></li>
-            <li><a href="#/accounts/[[ ctrl.currentUser.id ]]/">User account</a></li>
+            <li><a href="#/accounts/[[ ctrl.currentUser.id ]]/">My account</a></li>
+            <li><a href="#/application-variables">Application Variables</a></li>
         </ul>
     </div>
     <div class="col-xs-9">
@@ -62,6 +63,14 @@
                                 <input type="url" class="form-control" id="link" placeholder="URL" ng-model="ctrl.object.link" required>
                             </div>
                         </div>
+
+                        <div class="form-group">
+                            <label for="third_party" class="col-md-2 control-label">Is third party link? </label>
+                            <div class="col-md-10">
+                                <input type="checkbox" ng-model="ctrl.object.is_third_party">
+                            </div>
+                        </div>
+
 
                         <div class="form-group">
                             <label for="pub_data" class="col-md-2 control-label">Publication date</label>

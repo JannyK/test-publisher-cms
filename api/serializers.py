@@ -11,7 +11,21 @@ from publisher.models import (
 	WebLink,
 	CategorizedFile,
 	CategorizedWebLink,
+	ApplicationVariable,
 )
+
+class ApplicationVariableSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = ApplicationVariable
+		fields = (
+			'id',
+			'variable_name',
+			'value',
+			'country',
+		)
+
+		read_only_fields = ('id',)
+
 
 class AccountSerializer(serializers.ModelSerializer):
 	password = serializers.CharField(source='password', write_only=True, required=False)
@@ -166,6 +180,7 @@ class WebLinkSerializer(serializers.ModelSerializer):
 			'thumbnail', 
 			'thumbnail_url',
 			'link', 
+			'is_third_party',
 			'created', 
 			'pub_date', 
 			'expiry_date',

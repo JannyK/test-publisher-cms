@@ -220,6 +220,50 @@ ControlPanelApp.controllers
 	 		};
 	}])
 
+	.controller('ApplicationVariableCreateController', 
+		['AuthenticationService', 'CorePublisherService', '$location', 'toastr', function(AuthenticationService, CorePublisherService, $location, toastr) {
+			var self = this;
+			self.delay = 0;
+			self.minDuration = 0;
+			self.message = "";
+			self.backdrop = true;
+			self.promise = null;
+
+			self.selectedCountry = AuthenticationService.getSelectedCountry();
+			self.isAuthenticated = AuthenticationService.isAuthenticated();
+
+			self.countries = [
+				{name: 'norway', code: 'NO'},
+				{name: 'sweden', code: 'SE'},
+				{name: 'danmark', code: 'DK'}
+			];
+
+			self.newVariable = {
+	 			variable_name: '',
+	 			value: '',
+	 			country: self.selectedCountry.code,
+	 		};
+
+	 		self.create = function() {
+
+	 			if (self.isAuthenticated) {
+
+	 				self.message = "Creating application variable";
+	 				self.promise = CorePublisherService.newApplicationVariable(self.newVariable).then(function(resp) {
+	 					toastr.success('Application variable created successfully!', 'Success!');
+	 					$location.url('/application-variables');
+
+	 				}, function(errorResp) {
+	 					toastr.error('Error: '+ errorResp.data.detail, 'Error!');
+	 				});
+
+		 		} else {
+		 			//redirect to the login page
+		 			$location.url('/login');
+		 		}
+	 		};
+	}])
+
 	.controller('LinkCreateController', 
 		['AuthenticationService', 'CorePublisherService', '$location', 'toastr', function(AuthenticationService, CorePublisherService, $location, toastr) {
 			var self = this;
@@ -260,6 +304,7 @@ ControlPanelApp.controllers
 		 			description: '',
 		 			thumbnail: '',
 		 			link: '',
+		 			is_third_party: true,
 		 			pub_date: '',
 		 			expiry_date: '',
 		 			zink_number: 0,
@@ -312,6 +357,8 @@ ControlPanelApp.controllers
 	 				fd.append('description', self.newLink.description);
 	 				fd.append('thumbnail', self.newLink.thumbnail);
 	 				fd.append('link', self.newLink.link);
+	 				fd.append('is_third_party', self.newLink.is_third_party);
+
 	 				fd.append('pub_date', JSON.stringify(self.newLink.pub_date).replace('"', '').replace('"', '').trim());
 	 				fd.append('expiry_date', JSON.stringify(self.newLink.expiry_date).replace('"', '').replace('"', '').trim());
 	 				fd.append('zink_number', self.newLink.zink_number);
@@ -354,6 +401,31 @@ ControlPanelApp.controllers
 	 			self.files = resp.data;
 	 		}, function(errorResp) {
 	 			toastr.error('Error fetching data: '+ errorResp.data.detail, 'Error!');
+	 		});
+	 	}else{
+	 		$location.url('/login');
+	 	}
+ 	}])
+
+ 	.controller('ApplicationVariableListController', ['AuthenticationService', 'CorePublisherService', '$location', 'toastr', function(AuthenticationService, CorePublisherService, $location, toastr) {
+ 		var self = this;
+ 		self.variables = [];
+
+ 		if (AuthenticationService.isAuthenticated()) {
+
+	 		self.delay = 0;
+			self.minDuration = 0;
+			self.message = "Fetching...";
+			self.backdrop = true;
+			self.promise = null;
+
+	 		var selectedCountry = AuthenticationService.getSelectedCountry();
+	 		self.currentUser = AuthenticationService.getAuthenticatedUser();
+
+	 		self.promise = CorePublisherService.allApplicationVariables(selectedCountry.code).then(function(resp) {
+	 			self.variables = resp.data;
+	 		}, function(errorResp) {
+	 			toastr.error('Error fetching application variables: '+ errorResp.data.detail, 'Error!');
 	 		});
 	 	}else{
 	 		$location.url('/login');
@@ -608,6 +680,7 @@ ControlPanelApp.controllers
 	 				fd.append('title', self.object.title);
 	 				fd.append('description', self.object.description);
 	 				fd.append('link', self.object.link);
+	 				fd.append('is_third_party', self.object.is_third_party);
 
 	 				//Hack---> Append the file attribute only if updated
 	 				if (typeof(self.object.thumbnail) === 'object') {
@@ -658,6 +731,77 @@ ControlPanelApp.controllers
  					return self.object.categories.indexOf(c.id) > -1;
  				}
  				return false;
+ 			};
+
+ 			//fetch the object after instanciation
+ 			self.retrieve(self.objectID);
+ 	}])
+
+	.controller('ApplicationVariableDetailController', 
+ 		['AuthenticationService', 'CorePublisherService', '$location', '$routeParams', 'ngDialog','toastr', function(AuthenticationService, CorePublisherService, $location, $routeParams, ngDialog, toastr) {
+
+ 			var self = this;
+ 			self.delay = 0;
+			self.minDuration = 0;
+			self.message = "Updating...";
+			self.backdrop = true;
+			self.promise = null;
+
+ 			self.selectedCountry = AuthenticationService.getSelectedCountry();
+
+ 			self.isAuthenticated = AuthenticationService.isAuthenticated();
+ 			self.currentUser = AuthenticationService.getAuthenticatedUser();
+ 			self.objectID = $routeParams.variableID;
+
+ 	
+
+			self.countries = [
+				{name: 'norway', code: 'NO'},
+				{name: 'sweden', code: 'SE'},
+				{name: 'danmark', code: 'DK'}
+			];
+
+ 			self.object = {};
+
+ 			self.retrieve = function(objID) {
+ 				self.message = "Fetching variable...";
+ 				self.promise = CorePublisherService.fetchApplicationVariable(objID).then(function(resp) {
+ 					self.object = resp.data;
+ 				}, function(errorResp) {
+ 					toastr.error('Failed fetching application variable: '+ errorResp.data.detail, 'Error!');
+ 				});
+ 			};
+
+ 			self.update = function() {
+	 			if (self.isAuthenticated) {
+
+	 				self.message = "Updating...";
+	 				self.promise = CorePublisherService.updateApplicationVariable(self.objectID, self.object).then(function(resp) {
+	 					toastr.success('Application variable updated successfully', 'success!')
+
+	 				}, function(errorResp) {
+	 					toastr.error('Failed to update application variable:'+ errorResp.data.detail, 'Error!');
+	 				});
+
+		 		} else {
+		 			//redirect to the login page
+		 			$location.url('/login');
+		 		}
+ 			};
+
+ 			self.delete = function() {
+ 				if (self.isAuthenticated) {
+ 					self.message = "Deleting";
+	 				self.promise = CorePublisherService.deleteApplicationVariable(self.objectID).then(function(resp) {
+	 					toastr.success('Application variable deleted successfully', 'Success');
+	 					$location.url('/application-variables');
+
+	 				}, function(errorResp) {
+	 					toastr.error('Error occured while deleting...:'+ errorResp.data.detail, 'Error!');
+	 				});
+	 			} else {
+	 				toastr.warning('You are allowed to perform this action', 'Warning!');
+	 			}
  			};
 
  			//fetch the object after instanciation

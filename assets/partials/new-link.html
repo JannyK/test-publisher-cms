@@ -5,7 +5,8 @@
             <li><a href="#/links">Web links</a></li>
             <li><a href="#/categories">Products / Categories</a></li>
             <li ng-show="ctrl.currentUser.is_admin"><a href="#/users">Registered users</a></li>
-            <li><a href="#/accounts/[[ ctrl.currentUser.id ]]/">User account</a></li>
+            <li><a href="#/accounts/[[ ctrl.currentUser.id ]]/">My account</a></li>
+            <li><a href="#/application-variables">Application Variables</a></li>
         </ul>
     </div>
     <div class="col-xs-9">
@@ -13,7 +14,7 @@
         <div class="row">
             <div class="col-xs-12">
                 <ul class="breadcrumb">
-                    <li><a href="#">Home</a></li>
+                    <li><a href="#/">Home</a></li>
                     <li><a href="#/links">Links</a></li>
                     <li class="active">new weblink</li>
                 </ul>
@@ -52,6 +53,13 @@
                             <label for="link" class="col-md-2 control-label">Link</label>
                             <div class="col-md-10">
                                 <input type="url" class="form-control" id="link" placeholder="URL" ng-model="ctrl.newLink.link" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="third_party" class="col-md-2 control-label">Is third party link? </label>
+                            <div class="col-md-10">
+                                <input type="checkbox" ng-model="ctrl.newLink.is_third_party">
                             </div>
                         </div>
 
@@ -97,7 +105,6 @@
                             </div>
                         </div>
 
-
                         <div class="form-group">
                             <label class="col-md-2 control-label" for="country">Country</label>
                             <div class="col-md-10">
@@ -105,7 +112,6 @@
                             </div>
                         </div>
 
-                        
                         <div class="form-group">
                             <label for="categpries" class="col-md-2 control-label">Select categories/products</label>
                             <div class="col-md-10">
@@ -121,7 +127,6 @@
                             </div>
                         </div>
 
-
                         <div class="form-group">
                             <div class="col-md-10 col-md-offset-2">
                                 <a class="btn btn-default" href="#/link">Cancel</a>
@@ -135,10 +140,3 @@
 
     </div>
 </div>
-
-
-
-
-
-
-

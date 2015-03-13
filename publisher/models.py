@@ -77,7 +77,6 @@ class BaseEntry(models.Model):
 			return self.pub_date <= timezone.now()
 
 
-
 	def __str__(self):
 		return 'Entry: %s' % (self.title,)
 
@@ -109,6 +108,7 @@ class File(BaseEntry):
 class WebLink(BaseEntry):
 	categories = models.ManyToManyField(Category, through="CategorizedWebLink", blank=True)
 	link = models.URLField(max_length=255)
+	is_third_party = models.BooleanField(default=False)
 
 	class Meta:
 		ordering = ('created',)
@@ -126,3 +126,13 @@ class CategorizedWebLink(models.Model):
 	category = models.ForeignKey(Category, related_name="categorized_weblinks")
 	weblink = models.ForeignKey(WebLink)
 	position = models.PositiveIntegerField(default=1)
+
+
+class ApplicationVariable(models.Model):
+	variable_name = models.CharField(max_length=255, unique=True)
+	value = models.CharField(max_length=255)
+	country = models.CharField(max_length=10, default='NO', choices=COUNTRY_CHOICES)
+
+	def __str__(self):
+		return 'Application Variable: %s with Value: %s' % (
+			self.variable_name, self.value)
