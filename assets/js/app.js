@@ -17,11 +17,6 @@ var app = angular.module('ControlPanelApp',
 				controllerAs: 'ctrl',
 				templateUrl: '/static/partials/start.html'
 			})
-			.when('/register', {
-				controller: 'RegistrationController',
-				controllerAs: 'ctrl',
-				templateUrl: '/static/partials/register.html'
-			})
 			.when('/login', {
 				controller: 'LoginController',
 				controllerAs: 'ctrl',
@@ -118,18 +113,6 @@ var app = angular.module('ControlPanelApp',
 app.factory('AuthenticationService', ['$http', '$cookies', function($http, $cookies) {
 
 		return {
-
-			register: function(email, password, country) {
-				var self = this;
-
-
-				return $http.post('/api/v1/accounts/', {
-					country: country,
-					password: password,
-					email: email
-				});
-			},
-
 			login: function(email, password) {
 				var self = this;
 

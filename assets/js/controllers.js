@@ -58,51 +58,6 @@ ControlPanelApp.controllers
 			}
 		};
 	}])
- 	.controller('RegistrationController', 
- 		['AuthenticationService', '$location', 'toastr', function(AuthenticationService, $location, toastr) {
-
- 		var self = this;
-
- 		self.delay = 0;
-		self.minDuration = 0;
-		self.message = "";
-		self.backdrop = true;
-		self.promise = null;
-
- 		self.countries = [
-			{name: 'NORWAY', code: 'NO'},
-			{name: 'SWEDEN', code: 'SE'},
-			{name: 'DANMARK', code: 'DK'}
-		];
-
-		self.email = "";
-		self.password = "";
-		self.countryCode = "";
-		
-		self.register = function() {
-			self.message = 'Registering new user...';
-			self.promise = AuthenticationService.register(self.email, self.password, self.countryCode).then(function(resp) {
-
-				self.promise = AuthenticationService.login(self.email, self.password).then(function(resp) {
-					AuthenticationService.setAuthenticatedUser(resp.data);
-					window.location = '/';
-				}, function(errorResp) {
-					toastr.error('Error authenticating: '+ errorResp.data.message, 'Authentication failed!');
-				});
-			}, function(errorResp) {
-				toastr.error('Error authenticating: '+ errorResp.data.message, 'Authentication failed!');
-			});
-		};
-
-		self.activate = function() {
-			if (AuthenticationService.isAuthenticated()) {
-				$location.url('/');
-			};
-		};
-
-		self.activate();
- 	}])
-
  	.controller('LoginController', 
  		['AuthenticationService', '$location', 'toastr', function(AuthenticationService, $location, toastr) {
 

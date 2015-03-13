@@ -28,7 +28,7 @@
                         <div class="form-group">
                             <label for="email" class="col-md-2 control-label">Email</label>
                             <div class="col-md-10">
-                                <input type="text" class="form-control" id="email" placeholder="User Email" ng-model="ctrl.newUser.email">
+                                <input type="text" class="form-control" id="email" placeholder="User Email" ng-model="ctrl.newUser.email" required>
                             </div>
                         </div>
                         <div class="form-group">
@@ -47,21 +47,21 @@
                         <div class="form-group">
                             <label class="col-md-2 control-label" for="user_type">User group</label>
                             <div class="col-md-10">
-                                <select class="form-control" ng-model="ctrl.newUser.user_type" ng-options="g.code as g.name for g in ctrl.user_groups"></select>
+                                <select class="form-control" ng-model="ctrl.newUser.user_type" ng-options="g.code as g.name for g in ctrl.user_groups" required></select>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="password" class="col-md-2 control-label">Password</label>
                             <div class="col-md-10">
-                                <input type="password" class="form-control" id="password" placeholder="Password" ng-model="ctrl.newUser.password">
+                                <input type="password" class="form-control" id="password" placeholder="Password" ng-model="ctrl.newUser.password" required>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="confirm_password" class="col-md-2 control-label">Confirm password</label>
                             <div class="col-md-10">
-                                <input type="password" class="form-control" id="confirm_password" placeholder="Confirm password" ng-model="ctrl.newUser.confirm_password">
+                                <input type="password" class="form-control" id="confirm_password" placeholder="Confirm password" ng-model="ctrl.newUser.confirm_password" required>
                             </div>
                         </div>
 

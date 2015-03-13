@@ -29,14 +29,14 @@
                         <div class="form-group">
                             <label for="title" class="col-md-2 control-label">Title</label>
                             <div class="col-md-10">
-                                <input type="text" class="form-control" id="title" placeholder="File title" ng-model="ctrl.object.title">
+                                <input type="text" class="form-control" id="title" placeholder="File title" ng-model="ctrl.object.title" required>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="description" class="col-md-2 control-label">Description</label>
                             <div class="col-md-10">
-                                <textarea class="form-control" rows="3" id="description" ng-model="ctrl.object.description"></textarea>
+                                <textarea class="form-control" rows="3" id="description" ng-model="ctrl.object.description" required></textarea>
                                 <span class="help-block">A brief description of the presentation.</span>
                             </div>
                         </div>
@@ -91,21 +91,21 @@
                         <div class="form-group">
                             <label for="zink_number" class="col-md-2 control-label">Zink Number</label>
                             <div class="col-md-10">
-                                <input type="text" class="form-control datePicker" id="zink_number" placeholder="Zink Number" ng-model="ctrl.object.zink_number">
+                                <input type="text" class="form-control datePicker" id="zink_number" placeholder="Zink Number" ng-model="ctrl.object.zink_number" required>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-md-2 control-label" for="device">Target device</label>
                             <div class="col-md-10">
-                                <select class="form-control" ng-model="ctrl.object.target_device" ng-options="d.code as d.name for d in ctrl.devices"></select>
+                                <select class="form-control" ng-model="ctrl.object.target_device" ng-options="d.code as d.name for d in ctrl.devices" required></select>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-md-2 control-label" for="country">Country</label>
                             <div class="col-md-10">
-                                <select disabled="disabled" class="form-control" ng-model="ctrl.object.country" ng-options="c.code as c.name for c in ctrl.countries"></select>
+                                <select disabled="disabled" class="form-control" ng-model="ctrl.object.country" ng-options="c.code as c.name for c in ctrl.countries" required></select>
                             </div>
                         </div>
 
@@ -113,7 +113,7 @@
                         <div class="form-group">
                             <label for="categpries" class="col-md-2 control-label">Select categories/products</label>
                             <div class="col-md-10">
-                                <select multiple="" class="form-control" ng-model="ctrl.object.categories" ng-options="c.name as c.name for c in ctrl.categories">
+                                <select multiple="" class="form-control" ng-model="ctrl.object.categories" ng-options="c.name as c.name for c in ctrl.categories" required>
                                 </select>
                             </div>
                         </div>
@@ -122,7 +122,7 @@
                         <div class="form-group">
                             <label class="col-md-2 control-label" for="audience">Audience</label>
                             <div class="col-md-10">
-                                <select name="audience" class="form-control" ng-model="ctrl.object.audience" ng-options="a.code as a.name for a in ctrl.audiences"></select>
+                                <select name="audience" class="form-control" ng-model="ctrl.object.audience" ng-options="a.code as a.name for a in ctrl.audiences" required></select>
                             </div>
                         </div>
 

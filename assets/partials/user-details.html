@@ -29,7 +29,7 @@
                         <div class="form-group">
                             <label for="email" class="col-md-2 control-label">Email</label>
                             <div class="col-md-10">
-                                <input type="text" class="form-control" id="email" placeholder="User Email" ng-model="ctrl.object.email" disabled="disabled">
+                                <input type="text" class="form-control" id="email" placeholder="User Email" ng-model="ctrl.object.email" disabled="disabled" required>
                             </div>
                         </div>
                         <div class="form-group">
@@ -54,7 +54,7 @@
                         <div class="form-group">
                             <label class="col-md-2 control-label" for="user_type">User group</label>
                             <div class="col-md-10">
-                                <select class="form-control" ng-model="ctrl.object.user_type" ng-options="g.code as g.name for g in ctrl.user_groups"></select>
+                                <select class="form-control" ng-model="ctrl.object.user_type" ng-options="g.code as g.name for g in ctrl.user_groups" required></select>
                             </div>
                         </div>
 
@@ -71,9 +71,3 @@
         </div>
     </div>
 </div>
-
-
-
-
-
-
