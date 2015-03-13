@@ -129,7 +129,7 @@ class CategorizedWebLink(models.Model):
 
 
 class ApplicationVariable(models.Model):
-	variable_name = models.CharField(max_length=255, unique=True)
+	variable_name = models.CharField(max_length=255)
 	value = models.CharField(max_length=255)
 	country = models.CharField(max_length=10, default='NO', choices=COUNTRY_CHOICES)
 
