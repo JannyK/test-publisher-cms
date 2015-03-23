@@ -2,8 +2,6 @@ import json
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import update_session_auth_hash
 from django.utils.decorators import method_decorator
-from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework.decorators import permission_classes
@@ -213,11 +211,20 @@ class CategoryViewSet(viewsets.ModelViewSet):
 	serializer_class = CategorySerializer
 	parser_classes = (FormParser, MultiPartParser,)
 
+
 	def get_permissions(self):
 		if self.request.method in permissions.SAFE_METHODS:
 			return (permissions.IsAuthenticated(),)
 
 		return (permissions.IsAuthenticated(), IsAdmin(),)
+
+
+	#Logout user if not on secure connection
+	def dispatch(self, request, *args, **kwargs):
+		if not request.is_secure():
+			logout(request)
+
+		return super(CategoryViewSet, self).dispatch(request, *args, **kwargs)
 
 
 	def list(self, request, *args, **kwargs):
@@ -244,6 +251,13 @@ class ApplicationVariableViewSet(viewsets.ModelViewSet):
 			return (permissions.IsAuthenticated(),)
 		return (permissions.IsAuthenticated(), IsAdmin(),)
 
+	#Logout user if not on secure connection
+	def dispatch(self, request, *args, **kwargs):
+		if not request.is_secure():
+			logout(request)
+
+		return super(ApplicationVariableViewSet, self).dispatch(request, *args, **kwargs)
+
 	def list(self, request, *args, **kwargs):
 		try:
 			c = request.GET['country']
@@ -260,6 +274,14 @@ class ApplicationVariableViewSet(viewsets.ModelViewSet):
 
 
 class ApplicationVariableByNameView(views.APIView):
+
+	#Logout user if not on secure connection
+	def dispatch(self, request, *args, **kwargs):
+		if not request.is_secure():
+			logout(request)
+
+		return super(ApplicationVariableByNameView, self).dispatch(request, *args, **kwargs)
+
 	def get(self, request, format=None):
 
 		try:
@@ -300,7 +322,6 @@ class FileViewSet(viewsets.ModelViewSet):
 	def dispatch(self, request, *args, **kwargs):
 		if not request.is_secure():
 			logout(request)
-			return HttpResponseRedirect(reverse('home'))
 
 		return super(FileViewSet, self).dispatch(request, *args, **kwargs)
 
@@ -367,6 +388,14 @@ class WebLinkViewSet(viewsets.ModelViewSet):
 		return (permissions.IsAuthenticated(), IsAdmin(),)
 
 
+	#Logout user if not on secure connection
+	def dispatch(self, request, *args, **kwargs):
+		if not request.is_secure():
+			logout(request)
+
+		return super(WeblinkViewSet, self).dispatch(request, *args, **kwargs)
+
+
 	def list(self, request, *args, **kwargs):
 		try:
 			c = request.GET['country']
@@ -410,6 +439,15 @@ class WebLinkViewSet(viewsets.ModelViewSet):
 
 
 class ResourceByCategoryView(views.APIView):
+
+	#Logout user if not on secure connection
+	def dispatch(self, request, *args, **kwargs):
+		if not request.is_secure():
+			logout(request)
+
+		return super(ResourceByCategoryView, self).dispatch(request, *args, **kwargs)
+
+
 	def get(self, request, *args, **kwargs):
 		try:
 			categoryID = int(self.request.GET['categoryID'])
@@ -447,6 +485,15 @@ class CategorizedFileViewSet(viewsets.ModelViewSet):
 		return (permissions.IsAuthenticated(),)
 
 
+	#Logout user if not on secure connection
+	def dispatch(self, request, *args, **kwargs):
+		if not request.is_secure():
+			logout(request)
+
+		return super(CategorizedFileViewSet, self).dispatch(request, *args, **kwargs)
+
+
+
 	def list(self, request, *args, **kwargs):
 		try:
 			c = request.GET['country']
@@ -478,6 +525,15 @@ class CategorizedWebLinkViewSet(viewsets.ModelViewSet):
 			return (permissions.IsAuthenticated(),)
 		return (permissions.IsAuthenticated(),)
 
+
+	#Logout user if not on secure connection
+	def dispatch(self, request, *args, **kwargs):
+		if not request.is_secure():
+			logout(request)
+
+		return super(CategorizedWebLinkViewSet, self).dispatch(request, *args, **kwargs)
+
+
 	def list(self, request, *args, **kwargs):
 		try:
 			c = request.GET['country']
@@ -499,6 +555,14 @@ class CategorizedWebLinkViewSet(viewsets.ModelViewSet):
 
 
 class AllCategorizedResourceByCategoryView(views.APIView):
+
+	#Logout user if not on secure connection
+	def dispatch(self, request, *args, **kwargs):
+		if not request.is_secure():
+			logout(request)
+
+		return super(AllCategorizedResourceByCategoryView, self).dispatch(request, *args, **kwargs)
+
 	def get(self, request, *args, **kwargs):
 		try:
 			categoryID = int(self.request.GET['categoryID'])
