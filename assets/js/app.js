@@ -3,6 +3,9 @@
 
 var app = angular.module('ControlPanelApp', 
 	['ngAnimate', 'ngRoute', 'ngCookies', 'ngDialog', 'cgBusy', 'toastr', 'ui.bootstrap', 'revolunet.stepper', 'publisherControllers'])
+	.run(function($rootScope) {
+		$rootScope.isAuthenticated = false;
+	})
 	.config(['$routeProvider', '$locationProvider', '$httpProvider', '$interpolateProvider', function($routeProvider, $locationProvider, $httpProvider, $interpolateProvider) {
 
 		$httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -187,11 +190,11 @@ app.factory('CorePublisherService', ['$http', function($http) {
 		},
 
 		allFiles: function(countryCode) {
-			return $http.get('/api/v1/files/?country=' +countryCode+ '&format=json');
+			return $http.get('/api/v1/files/?country=' +countryCode+ '&origin=web&format=json');
 		},
 
 		allWebLinks: function(countryCode) {
-			return $http.get('/api/v1/links/?country=' +countryCode+ '&format=json');
+			return $http.get('/api/v1/links/?country=' +countryCode+ '&origin=web&format=json');
 		},
 
 		allApplicationVariables: function(countryCode) {

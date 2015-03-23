@@ -55,7 +55,9 @@
                         <div class="form-group">
                             <label class="col-md-2 control-label" for="user_type">User group</label>
                             <div class="col-md-10">
-                                <select class="form-control" ng-model="ctrl.object.user_type" ng-options="g.code as g.name for g in ctrl.user_groups" required></select>
+                                <select class="form-control" ng-model="ctrl.object.user_type" ng-options="g.code as g.name for g in ctrl.user_groups" required>
+                                    <option></option>
+                                </select>
                             </div>
                         </div>
 

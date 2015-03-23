@@ -10,7 +10,7 @@
     </div>
     <div class="navbar-collapse collapse navbar-inverse-collapse">
         <ul class="nav navbar-nav navbar-right">
-            <li><a ng-click="mainCtrl.logout()">Logout</a></li>
+            <li ng-show="isAuthenticated"><a ng-click="mainCtrl.logout()">Logout</a></li>
         </ul>
     </div>
 </nav>

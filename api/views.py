@@ -293,6 +293,15 @@ class FileViewSet(viewsets.ModelViewSet):
 
 		return (permissions.IsAuthenticated(), IsAdmin(),)
 
+
+	#Logout user if not on secure connection
+	def dispatch(self, request, *args, **kwargs):
+		if not request.is_secure():
+			logout(request)
+
+		return super(FileViewSet, self).dispatch(request, *args, **kwargs)
+
+
 	def list(self, request, *args, **kwargs):
 		try:
 			c = request.GET['country']
@@ -303,7 +312,16 @@ class FileViewSet(viewsets.ModelViewSet):
 				}, status=status.HTTP_400_BAD_REQUEST)
 
 		qset = self.queryset.filter(country=c)
-		filtered_queryset = [x for x in qset if x.is_active]
+
+		try:
+			origin = request.GET['origin']
+			if origin == 'web':
+				filtered_queryset = [x for x in qset]
+			else:
+				filtered_queryset = []
+		except KeyError:
+			#request coming from mobile app
+			filtered_queryset = [x for x in qset if x.is_active]
 
 		serializer = self.serializer_class(filtered_queryset, many=True, context={'request': request})
 
@@ -356,7 +374,16 @@ class WebLinkViewSet(viewsets.ModelViewSet):
 				}, status=status.HTTP_400_BAD_REQUEST)
 
 		qset = self.queryset.filter(country=c)
-		filtered_queryset = [x for x in qset if x.is_active]
+
+		try:
+			origin = request.GET['origin']
+			if origin == 'web':
+				filtered_queryset = [x for x in qset]
+			else:
+				filtered_queryset = []
+		except KeyError:
+			#request coming from mobile app
+			filtered_queryset = [x for x in qset if x.is_active]
 
 		serializer = self.serializer_class(filtered_queryset, many=True, context={'request': request})
 

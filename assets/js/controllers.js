@@ -27,7 +27,7 @@ ControlPanelApp.controllers = angular.module('publisherControllers', []);
  */
 ControlPanelApp.controllers
 	.controller('MainController', 
-		['AuthenticationService', '$location', 'toastr', function(AuthenticationService, $location, toastr) {
+		['AuthenticationService', '$location', 'toastr', '$rootScope', function(AuthenticationService, $location, toastr, $rootScope) {
 
 		var self = this;
 		self.isAuthenticated = false;
@@ -50,6 +50,7 @@ ControlPanelApp.controllers
 					AuthenticationService.unAuthenticate();
 					
 					toastr.success('Your are now successfully logged out', 'Thanks!');
+					$rootScope.isAuthenticated = false;
 					window.location = '/';
 
 				}, function(errorResp) {
@@ -59,7 +60,7 @@ ControlPanelApp.controllers
 		};
 	}])
  	.controller('LoginController', 
- 		['AuthenticationService', '$location', 'toastr', function(AuthenticationService, $location, toastr) {
+ 		['AuthenticationService', '$location', 'toastr', '$rootScope', function(AuthenticationService, $location, toastr, $rootScope) {
 
  		var self = this;
 
@@ -82,6 +83,7 @@ ControlPanelApp.controllers
  			self.promise = AuthenticationService.login(self.email, self.password).then(function(resp) {
 
 				AuthenticationService.setAuthenticatedUser(resp.data);
+				$rootScope.isAuthenticated = true;
 				$location.url('/select-country');
 			}, function(errorResp) {
 				toastr.error('Error authenticating: '+ errorResp.data.message, 'Authentication failed!');
