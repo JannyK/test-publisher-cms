@@ -393,7 +393,7 @@ class WebLinkViewSet(viewsets.ModelViewSet):
 		if not request.is_secure():
 			logout(request)
 
-		return super(WeblinkViewSet, self).dispatch(request, *args, **kwargs)
+		return super(WebLinkViewSet, self).dispatch(request, *args, **kwargs)
 
 
 	def list(self, request, *args, **kwargs):
