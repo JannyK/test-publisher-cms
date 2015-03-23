@@ -298,7 +298,6 @@ class FileViewSet(viewsets.ModelViewSet):
 	def dispatch(self, request, *args, **kwargs):
 		if not request.is_secure():
 			logout(request)
-			return HttpResponseRedirect('http://pure-chamber-7616.herokuapp.com/#/login')
 
 		return super(FileViewSet, self).dispatch(request, *args, **kwargs)
 
