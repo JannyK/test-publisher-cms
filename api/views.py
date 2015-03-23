@@ -2,6 +2,8 @@ import json
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import update_session_auth_hash
 from django.utils.decorators import method_decorator
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework.decorators import permission_classes
@@ -298,6 +300,7 @@ class FileViewSet(viewsets.ModelViewSet):
 	def dispatch(self, request, *args, **kwargs):
 		if not request.is_secure():
 			logout(request)
+			return HttpResponseRedirect(reverse('home'))
 
 		return super(FileViewSet, self).dispatch(request, *args, **kwargs)
 
