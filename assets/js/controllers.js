@@ -93,7 +93,7 @@ ControlPanelApp.controllers
  		self.activate();
  	}])
 
- 	.controller('CountryListController', ['AuthenticationService', '$location', function(AuthenticationService, $location) {
+ 	.controller('CountryListController', ['AuthenticationService', '$location', '$rootScope', function(AuthenticationService, $location, $rootScope) {
  		var self = this;
 
  		self.countries = [
@@ -104,6 +104,9 @@ ControlPanelApp.controllers
 
  		self.setCurrentCountry = function(country) {
 			AuthenticationService.setSelectedCountry(country);
+			$rootScope.hasActiveCountrySelected = true;
+			$rootScope.currentCountry = country;
+			
 			$location.url('/files');
 		};
  	}])

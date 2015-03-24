@@ -41,7 +41,6 @@
                                     <label for="description" class="col-md-2 control-label">Description</label>
                                     <div class="col-md-8">
                                         <textarea class="form-control" rows="3" id="description" ng-model="ctrl.object.description"></textarea>
-                                        <span class="help-block" style="font-size: 8px;">A brief description of the product category</span>
                                     </div>
                                 </div>
 
@@ -55,7 +54,7 @@
 
                                 <div class="form-group">
                                     <label for="thumbnail" class="col-md-2 control-label">Picture</label>
-                                    <img src="" class="col-md-2">
+                                    <img src="[[ ctrl.object.picture_url ]]" class="col-md-2" style="width: 100px; margin-right:21px;">
                                     <div class="col-md-6">
                                         <input type="file" class="form-control" id="thumbnail" file-field="ctrl.object.picture">
                                     </div>
@@ -64,7 +63,7 @@
 
                                 <div class="form-group">
                                     <label for="icon" class="col-md-2 control-label">Product icon</label>
-                                    <img src="" class="col-md-2">
+                                    <img src="[[ ctrl.object.icon_url ]]" class="col-md-2" style="width: 75px; margin-right:47px;">
                                     <div class="col-md-6">
                                         <input type="file" class="form-control" id="icon" file-field="ctrl.object.icon">
                                     </div>
@@ -88,7 +87,7 @@
                             <tab heading="Files" ng-click="ctrl.getCategorizedFiles()">
                                 <ul class="list-group custom-list">
                                     <li class="list-group-item custom-item" ng-repeat="f in ctrl.categorizedFiles">
-                                        <img src="[[ f.file_resource.thumbnail ]]" class="item-thumbnail" width="140" height="100">
+                                        <img src="[[ f.file_resource.thumbnail_url ]]" class="item-thumbnail" width="140" height="100">
 
                                         <div class="item-infos">
                                             <p class="item-title"><a href="#/files/[[ f.file_resource.id ]]">[[ f.file_resource.title | limitTo : 60 ]]</a></p>
@@ -117,43 +116,10 @@
                                 </div>
                             </tab>
 
-                            <tab heading="Presentations" ng-click="ctrl.getCategorizedPresentations()">
-                                <ul class="list-group custom-list">
-                                    <li class="list-group-item custom-item" ng-repeat="p in ctrl.categorizedPresentations">
-                                        <img src="[[ p.presentation.thumbnail ]]" class="item-thumbnail" width="140" height="100">
-
-                                        <div class="item-infos">
-                                            <p class="item-title"><a href="#/presentations/[[ p.presentation.id ]]">[[ p.presentation.title | limitTo : 60 ]]</a></p>
-
-                                            <p class="info-item">
-                                                <span class="info-title">Pub Date: </span><span class="info">[[ p.presentation.pub_date | date:medium ]]</span>
-                                            </p>
-                                            <p>
-                                                <span class="info-title">Expiry Date: </span><span class="info">[[ p.presentation.expiry_date | date:medium ]]</span>
-                                            </p>
-                                            <p>
-                                                <span class="info-title">Categories/Products: </span><span class="info">[[ p.presentation.categories.join(" | ")]]</span>
-                                            </p>
-
-                                        </div>
-                                        <span>Position: </span>
-                                        <div class="stepper" rn-stepper ng-model="p.position" min="1" max="100"></div>
-                                
-                                    </li>
-                                </ul>
-
-                                <div class="row">
-                                    <div class="col-md-12" style="margin-top:10px; margin-bottom:10px;">
-                                        <a class="btn btn-small btn-default pull-right" ng-click="ctrl.updatePresentationsPositions()" style="margin-right:23px;">Update</a>
-                                    </div>
-                                </div>
-
-                            </tab>
-
                             <tab heading="Web Links" ng-click="ctrl.getCategorizedWeblinks()">
                                 <ul class="list-group custom-list">
                                     <li class="list-group-item custom-item" ng-repeat="l in ctrl.categorizedWeblinks">
-                                        <img src="[[ l.weblink.thumbnail ]]" class="item-thumbnail" width="140" height="100">
+                                        <img src="[[ l.weblink.thumbnail_url ]]" class="item-thumbnail" width="140" height="100">
 
                                         <div class="item-infos">
                                             <p class="item-title"><a href="#/links/[[ l.weblink.id ]]">[[ l.weblink.title | limitTo : 60 ]]</a></p>

@@ -5,6 +5,8 @@ var app = angular.module('ControlPanelApp',
 	['ngAnimate', 'ngRoute', 'ngCookies', 'ngDialog', 'cgBusy', 'toastr', 'ui.bootstrap', 'revolunet.stepper', 'publisherControllers'])
 	.run(function($rootScope) {
 		$rootScope.isAuthenticated = false;
+		$rootScope.hasActiveCountrySelected = false;
+		$rootScope.currentCountry = null;
 	})
 	.config(['$routeProvider', '$locationProvider', '$httpProvider', '$interpolateProvider', function($routeProvider, $locationProvider, $httpProvider, $interpolateProvider) {
 

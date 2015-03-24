@@ -38,26 +38,41 @@
                             <label for="description" class="col-md-2 control-label">Description</label>
                             <div class="col-md-10">
                                 <textarea class="form-control" rows="3" id="description" ng-model="ctrl.object.description" required></textarea>
-                                <span class="help-block">A brief description of the presentation.</span>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="thumbnail" class="col-md-2 control-label">Thumbnail</label>
-                            <img src="" class="col-md-5">
-                            <div class="col-md-5">
-                                <input type="file" class="form-control" id="thumbnail" file-field="ctrl.object.thumbnail">
+
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <img src="[[ ctrl.object.thumbnail_url ]]" style="width:70px; margin-bottom:10px;" class="pull-right">
                             </div>
-                            <span class="help-block">Select an image to use as thumbnail</span>
+
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label for="thumbnail" class="col-md-2 control-label">Change Thumbnail?</label>
+                                    <div class="col-md-10">
+                                        <input type="file" class="form-control" id="thumbnail" file-field="ctrl.object.thumbnail">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="file" class="col-md-2 control-label">File</label>
-                            <img src="" class="col-md-5">
-                            <div class="col-md-5">
-                                <input type="file" class="form-control" id="file" placeholder="Attach the file" file-field="ctrl.object.file">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <label class="label-default pull-right" style="margin-top:10px;">Current file: [[ ctrl.object.file ]]</label>
+                            </div>
+
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label for="file" class="col-md-2 control-label">Update File?</label>
+                                    <div class="col-md-10">
+                                        <input type="file" class="form-control" id="file" placeholder="Attach the file" file-field="ctrl.object.file">
+                                    </div>
+                                    
+                                </div>
                             </div>
                         </div>
+
 
                         <div class="form-group">
                             <label for="pub_data" class="col-md-2 control-label">Publication date</label>

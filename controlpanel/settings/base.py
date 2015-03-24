@@ -193,11 +193,5 @@ SECURE_BROWSER_XSS_FILTER = True
 SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
 
-
-
-
-
-
-
 # Allow all host headers
 ALLOWED_HOSTS = ['*']

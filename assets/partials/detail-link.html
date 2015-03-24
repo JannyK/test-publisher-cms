@@ -38,13 +38,12 @@
                             <label for="description" class="col-md-2 control-label">Description</label>
                             <div class="col-md-10">
                                 <textarea class="form-control" rows="3" id="description" ng-model="ctrl.object.description" required></textarea>
-                                <span class="help-block">A brief description.</span>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-xs-6">
-                                <img src="">
+                                <img src="[[ ctrl.object.thumbnail_url ]]" style="width:70px; margin-bottom:10px;" class="pull-right">
                             </div>
 
                             <div class="col-xs-6">
