@@ -1,0 +1,34 @@
+<VirtualHost *:80>
+  ServerName 52.16.228.5
+  DocumentRoot /home/ubuntu/50to80off/
+
+  Alias /admin_media /usr/local/lib/python2.7/dist-packages/django/contrib/admin/media
+  Alias /media /usr/local/lib/python2.7/dist-packages/django/contrib/admin/media
+  <Location /admin_media>
+    Options All
+    AllowOverride All
+    Require all granted
+  </Location>
+
+  Alias /static/img /home/ubuntu/50to80off/static/img
+  Alias /static/css/compiled /home/ubuntu/50to80off/assets/stylesheet
+  Alias /static/css /home/ubuntu/50to80off/static/css
+  Alias /static /home/ubuntu/50to80off/assets
+  Alias /assets /home/ubuntu/50to80off/assets
+
+  WSGIDaemonProcess ubuntu user=ubuntu group=ubuntu processes=1 threads=10
+  WSGIProcessGroup ubuntu
+  WSGIScriptAlias / /home/ubuntu/50to80off/wsgi.py
+
+  <Directory /home/ubuntu/50to80off/>
+    Require all granted
+  </Directory>
+
+  <Directory /home/ubuntu/50to80off/static/>
+    Require all granted
+  </Directory>
+
+  <Directory /home/ubuntu/50to80off/assets/>
+    Require all granted
+  </Directory>
+</VirtualHost>
