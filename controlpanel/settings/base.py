@@ -25,7 +25,7 @@ AUTH_USER_MODEL = 'accounts.Account'
 SECRET_KEY = 'fj(jcj!ns6%)(b#mf^y-^frlq6n*h!%8wltr-irjxu(eg@xtkf'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', False)
+DEBUG = os.environ.get('DEBUG', True)
 
 TEMPLATE_DEBUG = DEBUG
 
