@@ -41,13 +41,13 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'djangosecure',
     'rest_framework',
     'rest_framework.authtoken',
     'compressor',
-    'storages',
+    #'storages', //Depending on wether you use aws s3 for serving static files or not
     'accounts',
     'publisher',
-    'djangosecure',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -61,39 +61,21 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-#REST_FRAMEWORK = {
-#    'DEFAULT_PERMISSION_CLASSES': (
-#        'rest_framework.permissions.IsAuthenticated',
-#    )
-#}
-
-#TEMPLATE_CONTEXT_PROCESSOR += (
- #   'django.core.context_processors.media',
-#)
-
 ROOT_URLCONF = 'controlpanel.urls'
-
 WSGI_APPLICATION = 'controlpanel.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
-import dj_database_url
-
-DATABASES = {}
-
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#    }
-#}
-
-#DATABASES = {
-#    'default': dj_database_url.config(
-#        default='sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
-#    )
-#}
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'REPLACE_WITH_DB_NAME',
+        'USER': 'REPLACE_WITH_DB_USER',
+        'PASSWORD': 'REPLACE_WITH_USER_PASSWORD',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
@@ -108,26 +90,10 @@ USE_L10N = True
 
 USE_TZ = False
 
-DATABASES['default'] = dj_database_url.config()
-DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
-
-
-# Add to your settings file
-#CONTENT_TYPES = ['image', 'video']
-# 2.5MB - 2621440
-# 5MB - 5242880
-# 10MB - 10485760
-# 20MB - 20971520
-# 50MB - 5242880
-# 100MB 104857600
-# 250MB - 214958080
-# 500MB - 429916160
-MAX_UPLOAD_SIZE = "104857600"
-
 # STORAGES CONFIG
-AWS_ACCESS_KEY_ID = 'AKIAILO2HWO3ZGPDYBYA'
-AWS_SECRET_ACCESS_KEY = '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'
-AWS_STORAGE_BUCKET_NAME = 'controlpanel-dev'
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', None)
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', None)
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', None)
 AWS_AUTO_CREATE_BUCKET = True
 AWS_QUERYSTRING_AUTH = False
 
@@ -140,25 +106,19 @@ AWS_HEADERS = {
 
 # See: http://django-storages.readthedocs.org/en/latest/backends/amazon-S3.html#settings
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-#STATICFILES_STORAGE = DEFAULT_FILE_STORAGE
+#STATICFILES_STORAGE = DEFAULT_FILE_STORAGE5
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 MEDIA_ROOT = root('..', 'uploads')
-#MEDIA_URL = '/media/'
-STATIC_URL = 'https://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
-
-
-STATIC_URL = '/static/'
+STATIC_URL = '/static'
 STATIC_ROOT = root('..', 'staticfiles')
-#STATIC_URL = 'https://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 ADMIN_MEDIA_PREFIX = '/static/admin'
 
 STATICFILES_DIRS = (
     root('..', 'assets'),
-    #root('..', 'release/assets'),
 )
 
 STATICFILES_FINDERS = (
@@ -181,9 +141,9 @@ REST_FRAMEWORK = {
     )
 }
 
-
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 SECURE_SSL_REDIRECT = True
 SECURE_HSTS_SECONDS = 10
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
