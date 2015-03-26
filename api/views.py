@@ -220,11 +220,11 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
 
 	#Logout user if not on secure connection
-	def dispatch(self, request, *args, **kwargs):
-		if not request.is_secure():
-			logout(request)
-
-		return super(CategoryViewSet, self).dispatch(request, *args, **kwargs)
+	#def dispatch(self, request, *args, **kwargs):
+	#	if not request.is_secure():
+	#		logout(request)
+#
+#		return super(CategoryViewSet, self).dispatch(request, *args, **kwargs)
 
 
 	def list(self, request, *args, **kwargs):
@@ -252,11 +252,11 @@ class ApplicationVariableViewSet(viewsets.ModelViewSet):
 		return (permissions.IsAuthenticated(), IsAdmin(),)
 
 	#Logout user if not on secure connection
-	def dispatch(self, request, *args, **kwargs):
-		if not request.is_secure():
-			logout(request)
-
-		return super(ApplicationVariableViewSet, self).dispatch(request, *args, **kwargs)
+	#def dispatch(self, request, *args, **kwargs):
+	#	if not request.is_secure():
+	#		logout(request)
+#
+#		return super(ApplicationVariableViewSet, self).dispatch(request, *args, **kwargs)
 
 	def list(self, request, *args, **kwargs):
 		try:
@@ -276,11 +276,11 @@ class ApplicationVariableViewSet(viewsets.ModelViewSet):
 class ApplicationVariableByNameView(views.APIView):
 
 	#Logout user if not on secure connection
-	def dispatch(self, request, *args, **kwargs):
-		if not request.is_secure():
-			logout(request)
-
-		return super(ApplicationVariableByNameView, self).dispatch(request, *args, **kwargs)
+	#def dispatch(self, request, *args, **kwargs):
+	#	if not request.is_secure():
+	#		logout(request)
+#
+#		return super(ApplicationVariableByNameView, self).dispatch(request, *args, **kwargs)
 
 	def get(self, request, format=None):
 
@@ -319,11 +319,11 @@ class FileViewSet(viewsets.ModelViewSet):
 
 
 	#Logout user if not on secure connection
-	def dispatch(self, request, *args, **kwargs):
-		if not request.is_secure():
-			logout(request)
-
-		return super(FileViewSet, self).dispatch(request, *args, **kwargs)
+	#def dispatch(self, request, *args, **kwargs):
+	#	if not request.is_secure():
+	#		logout(request)
+#
+#		return super(FileViewSet, self).dispatch(request, *args, **kwargs)
 
 
 	def list(self, request, *args, **kwargs):
@@ -389,11 +389,11 @@ class WebLinkViewSet(viewsets.ModelViewSet):
 
 
 	#Logout user if not on secure connection
-	def dispatch(self, request, *args, **kwargs):
-		if not request.is_secure():
-			logout(request)
-
-		return super(WebLinkViewSet, self).dispatch(request, *args, **kwargs)
+	#def dispatch(self, request, *args, **kwargs):
+	#	if not request.is_secure():
+	#		logout(request)
+#
+#		return super(WebLinkViewSet, self).dispatch(request, *args, **kwargs)
 
 
 	def list(self, request, *args, **kwargs):
@@ -441,11 +441,11 @@ class WebLinkViewSet(viewsets.ModelViewSet):
 class ResourceByCategoryView(views.APIView):
 
 	#Logout user if not on secure connection
-	def dispatch(self, request, *args, **kwargs):
-		if not request.is_secure():
-			logout(request)
-
-		return super(ResourceByCategoryView, self).dispatch(request, *args, **kwargs)
+	#def dispatch(self, request, *args, **kwargs):
+	#	if not request.is_secure():
+	#		logout(request)
+#
+#		return super(ResourceByCategoryView, self).dispatch(request, *args, **kwargs)
 
 
 	def get(self, request, *args, **kwargs):
@@ -486,11 +486,11 @@ class CategorizedFileViewSet(viewsets.ModelViewSet):
 
 
 	#Logout user if not on secure connection
-	def dispatch(self, request, *args, **kwargs):
-		if not request.is_secure():
-			logout(request)
-
-		return super(CategorizedFileViewSet, self).dispatch(request, *args, **kwargs)
+	#def dispatch(self, request, *args, **kwargs):
+	#	if not request.is_secure():
+	#		logout(request)
+#
+#		return super(CategorizedFileViewSet, self).dispatch(request, *args, **kwargs)
 
 
 
@@ -527,11 +527,11 @@ class CategorizedWebLinkViewSet(viewsets.ModelViewSet):
 
 
 	#Logout user if not on secure connection
-	def dispatch(self, request, *args, **kwargs):
-		if not request.is_secure():
-			logout(request)
-
-		return super(CategorizedWebLinkViewSet, self).dispatch(request, *args, **kwargs)
+	#def dispatch(self, request, *args, **kwargs):
+	#	if not request.is_secure():
+	#		logout(request)
+#
+#		return super(CategorizedWebLinkViewSet, self).dispatch(request, *args, **kwargs)
 
 
 	def list(self, request, *args, **kwargs):
@@ -557,11 +557,11 @@ class CategorizedWebLinkViewSet(viewsets.ModelViewSet):
 class AllCategorizedResourceByCategoryView(views.APIView):
 
 	#Logout user if not on secure connection
-	def dispatch(self, request, *args, **kwargs):
-		if not request.is_secure():
-			logout(request)
-
-		return super(AllCategorizedResourceByCategoryView, self).dispatch(request, *args, **kwargs)
+	#def dispatch(self, request, *args, **kwargs):
+	#	if not request.is_secure():
+	#		logout(request)
+#
+#		return super(AllCategorizedResourceByCategoryView, self).dispatch(request, *args, **kwargs)
 
 	def get(self, request, *args, **kwargs):
 		try:
