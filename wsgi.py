@@ -12,5 +12,6 @@ import django
 django.setup()
 
 import django.core.handlers.wsgi
+from dj_static import Cling, MediaCling
 
-application = django.core.handlers.wsgi.WSGIHandler()
+application = Cling(django.core.handlers.wsgi.WSGIHandler())
