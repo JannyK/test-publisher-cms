@@ -99,21 +99,21 @@ USE_L10N = True
 USE_TZ = False
 
 # STORAGES CONFIG
-AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', None)
-AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', None)
-AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', None)
-AWS_AUTO_CREATE_BUCKET = True
-AWS_QUERYSTRING_AUTH = False
+#AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', None)
+#AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', None)
+#AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', None)
+#AWS_AUTO_CREATE_BUCKET = True
+#WS_QUERYSTRING_AUTH = False
 
 # AWS cache settings, don't change unless you know what you're doing:
-AWS_EXPIREY = 60 * 60 * 24 * 7
-AWS_HEADERS = {
-    'Cache-Control': 'max-age=%d, s-maxage=%d, must-revalidate' % (AWS_EXPIREY,
-        AWS_EXPIREY)
-}
+#AWS_EXPIREY = 60 * 60 * 24 * 7
+#AWS_HEADERS = {
+#    'Cache-Control': 'max-age=%d, s-maxage=%d, must-revalidate' % (AWS_EXPIREY,
+#        AWS_EXPIREY)
+#}
 
 # See: http://django-storages.readthedocs.org/en/latest/backends/amazon-S3.html#settings
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+#DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 #STATICFILES_STORAGE = DEFAULT_FILE_STORAGE5
 
 
