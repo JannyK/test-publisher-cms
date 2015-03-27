@@ -77,14 +77,6 @@ DATABASES = {
     }
 }
 
-#DATABASES = {
- #   'default': {
-  #      'ENGINE': 'django.db.backends.sqlite3',
-   #     'NAME': root('..', 'db.sqlite3')
-   # }
-#}
-
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
 
@@ -121,8 +113,9 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 MEDIA_ROOT = root('..', 'uploads')
-STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
 STATIC_ROOT = root('..', 'staticfiles')
+STATIC_URL = '/static/'
 ADMIN_MEDIA_PREFIX = '/static/admin'
 
 STATICFILES_DIRS = (
